@@ -1,0 +1,4330 @@
+name: Business
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/business/organizations
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Organizations
+
+        Manage business organizations, memberships, and role assignments.
+      subgroupDescription: ''
+      title: 'List Organizations'
+      description: 'List all organizations that the authenticated user belongs to.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "name": "Dialog Analytics Group",
+                "status": "active",
+                "created_by": 2,
+                "current_user_role": "owner",
+                "created_at": "2026-10-17T12:00:00.000000Z"
+              }
+            ]
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/business/organizations
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Organizations
+
+        Manage business organizations, memberships, and role assignments.
+      subgroupDescription: ''
+      title: 'Create Organization'
+      description: 'Create a new organization. The authenticated user automatically becomes the OWNER.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'The legal or display name of the business organization. Must not be greater than 255 characters.'
+        required: true
+        example: 'Dialog Analytics Group'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Dialog Analytics Group'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "organization": {
+              "id": 1,
+              "name": "Dialog Analytics Group",
+              "status": "active",
+              "created_by": 2,
+              "current_user_role": "owner",
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "The name field is required.",
+              "fields": {
+                "name": ["The name field is required."]
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Organizations
+
+        Manage business organizations, memberships, and role assignments.
+      subgroupDescription: ''
+      title: 'Get Organization'
+      description: 'Retrieve details of a specific organization. Requires membership in the organization or platform admin role.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      organization: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "organization": {
+              "id": 1,
+              "name": "Dialog Analytics Group",
+              "status": "active",
+              "created_by": 2,
+              "current_user_role": "owner",
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 403
+        content: |-
+          {
+            "error": {
+              "code": "FORBIDDEN",
+              "message": "This action is unauthorized.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/business/organizations/{organization_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Organizations
+
+        Manage business organizations, memberships, and role assignments.
+      subgroupDescription: ''
+      title: 'Update Organization'
+      description: 'Update organization details. Requires OWNER or MANAGER role in the organization.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      organization: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Updated display name for the organization. Must not be greater than 255 characters.'
+        required: true
+        example: 'Dialog Analytics Worldwide'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Dialog Analytics Worldwide'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "organization": {
+              "id": 1,
+              "name": "Dialog Analytics Worldwide",
+              "status": "active",
+              "created_by": 2,
+              "current_user_role": "owner",
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 403
+        content: |-
+          {
+            "error": {
+              "code": "FORBIDDEN",
+              "message": "This action is unauthorized.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Surveys
+
+        Manage organization surveys, metadata, localized titles, and lifecycles.
+      subgroupDescription: ''
+      title: 'List Surveys'
+      description: 'List all surveys belonging to the given organization. Returns paginated list of surveys.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      organization: 1
+    queryParameters:
+      page:
+        custom: []
+        name: page
+        description: 'Page number for pagination.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      page: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "organization_id": 1,
+                "status": "draft",
+                "default_locale": "uz",
+                "locales": ["uz", "ru", "en"],
+                "title": {
+                  "uz": "Mijozlar qoniqishi so‘rovi",
+                  "ru": "Опрос удовлетворенности клиентов",
+                  "en": "Customer Satisfaction Survey"
+                },
+                "description": null,
+                "welcome_message": null,
+                "thank_you_message": null,
+                "internal_note": "Q4 Survey",
+                "published_at": null,
+                "closed_at": null,
+                "archived_at": null,
+                "created_at": "2026-10-17T12:00:00.000000Z"
+              }
+            ],
+            "links": {
+              "first": "http://localhost:8000/api/v1/business/organizations/1/surveys?page=1",
+              "last": "http://localhost:8000/api/v1/business/organizations/1/surveys?page=1",
+              "prev": null,
+              "next": null
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 1,
+              "per_page": 20,
+              "to": 1,
+              "total": 1
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Surveys
+
+        Manage organization surveys, metadata, localized titles, and lifecycles.
+      subgroupDescription: ''
+      title: 'Create Draft Survey'
+      description: 'Create a new draft survey within an organization. Selected locales must be a subset of [uz, ru, en], and default_locale must belong to selected locales.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      organization: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      default_locale:
+        custom: []
+        name: default_locale
+        description: 'The default survey language. Must be one of the selected locales: uz, ru, en.'
+        required: true
+        example: uz
+        type: string
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      locales:
+        custom: []
+        name: locales
+        description: ''
+        required: true
+        example:
+          - en
+        type: 'string[]'
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      title:
+        custom: []
+        name: title
+        description: 'Localized survey title map. Must contain non-empty strings for all selected survey locales.'
+        required: true
+        example:
+          uz: 'Mijozlar qoniqishi so‘rovi'
+          ru: 'Опрос удовлетворенности клиентов'
+          en: 'Customer Satisfaction Survey'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Optional localized survey subtitle/description map.'
+        required: false
+        example:
+          uz: 'Xizmatlar sifatini yaxshilash bo‘yicha fikringiz'
+          ru: 'Ваше мнение для улучшения качества сервиса'
+          en: 'Your feedback to improve service quality'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      welcome_message:
+        custom: []
+        name: welcome_message
+        description: 'Optional greeting displayed to respondents prior to answering.'
+        required: false
+        example:
+          uz: 'Assalomu alaykum! So‘rovnomamizga xush kelibsiz.'
+          ru: 'Добро пожаловать в наш опрос!'
+          en: 'Welcome to our satisfaction survey!'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      thank_you_message:
+        custom: []
+        name: thank_you_message
+        description: 'Optional completion message displayed after submission.'
+        required: false
+        example:
+          uz: 'Ishtirokingiz uchun katta rahmat!'
+          ru: 'Спасибо за участие!'
+          en: 'Thank you for your valuable participation!'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      internal_note:
+        custom: []
+        name: internal_note
+        description: 'Internal note for researchers (not visible to respondents). Must not be greater than 5000 characters.'
+        required: false
+        example: 'Q4 2026 Customer Satisfaction Track'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      default_locale: uz
+      locales:
+        - en
+      title:
+        uz: 'Mijozlar qoniqishi so‘rovi'
+        ru: 'Опрос удовлетворенности клиентов'
+        en: 'Customer Satisfaction Survey'
+      description:
+        uz: 'Xizmatlar sifatini yaxshilash bo‘yicha fikringiz'
+        ru: 'Ваше мнение для улучшения качества сервиса'
+        en: 'Your feedback to improve service quality'
+      welcome_message:
+        uz: 'Assalomu alaykum! So‘rovnomamizga xush kelibsiz.'
+        ru: 'Добро пожаловать в наш опрос!'
+        en: 'Welcome to our satisfaction survey!'
+      thank_you_message:
+        uz: 'Ishtirokingiz uchun katta rahmat!'
+        ru: 'Спасибо за участие!'
+        en: 'Thank you for your valuable participation!'
+      internal_note: 'Q4 2026 Customer Satisfaction Track'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "organization_id": 1,
+              "status": "draft",
+              "default_locale": "uz",
+              "locales": ["uz", "ru", "en"],
+              "title": {
+                "uz": "Mijozlar qoniqishi so‘rovi",
+                "ru": "Опрос удовлетворенности клиентов",
+                "en": "Customer Satisfaction Survey"
+              },
+              "description": null,
+              "welcome_message": null,
+              "thank_you_message": null,
+              "internal_note": "Q4 Survey",
+              "published_at": null,
+              "closed_at": null,
+              "archived_at": null,
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "The title.uz field is required.",
+              "fields": {
+                "title.uz": ["Title is required for selected locale: uz"]
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Surveys
+
+        Manage organization surveys, metadata, localized titles, and lifecycles.
+      subgroupDescription: ''
+      title: 'Get Survey Details'
+      description: 'Fetch complete survey hierarchy including pages, questions, and options.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "organization_id": 1,
+              "status": "draft",
+              "default_locale": "uz",
+              "locales": ["uz", "ru", "en"],
+              "title": {
+                "uz": "Mijozlar qoniqishi so‘rovi",
+                "ru": "Опрос удовлетворенности клиентов",
+                "en": "Customer Satisfaction Survey"
+              },
+              "pages": [
+                {
+                  "id": 1,
+                  "position": 1,
+                  "title": {"uz": "Xizmatlardan foydalanish", "ru": "Использование сервисов", "en": "Service Usage"},
+                  "questions": [
+                    {
+                      "id": 1,
+                      "type": "single_choice",
+                      "title": {"uz": "Savol matni", "ru": "Текст вопроса", "en": "Question text"},
+                      "is_required": true,
+                      "position": 1,
+                      "options": [
+                        {"id": 1, "label": {"uz": "Ha", "ru": "Да", "en": "Yes"}, "position": 1}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Surveys
+
+        Manage organization surveys, metadata, localized titles, and lifecycles.
+      subgroupDescription: ''
+      title: 'Update Survey'
+      description: 'Update metadata, title, or locales of a draft survey. Surveys in active, closed, or archived status cannot be edited.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      default_locale:
+        custom: []
+        name: default_locale
+        description: 'The default survey language. Allowed values: uz, ru, en.'
+        required: false
+        example: uz
+        type: string
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      locales:
+        custom: []
+        name: locales
+        description: ''
+        required: false
+        example:
+          - ru
+        type: 'string[]'
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      title:
+        custom: []
+        name: title
+        description: 'Localized survey title map keyed by language code.'
+        required: false
+        example:
+          uz: 'Mijozlar qoniqishi so‘rovi (Yangilangan)'
+          ru: 'Опрос удовлетворенности клиентов (Обновленный)'
+          en: 'Customer Satisfaction Survey (Updated)'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Optional localized survey subtitle/description map.'
+        required: false
+        example:
+          uz: 'Xizmatlar sifatini oshirish bo‘yicha fikrlar'
+          ru: 'Мнения для улучшения качества сервиса'
+          en: 'Feedback to improve service quality'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      welcome_message:
+        custom: []
+        name: welcome_message
+        description: 'Optional greeting displayed to respondents.'
+        required: false
+        example:
+          uz: 'Xush kelibsiz!'
+          ru: 'Добро пожаловать!'
+          en: Welcome!
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      thank_you_message:
+        custom: []
+        name: thank_you_message
+        description: 'Optional message displayed after completion.'
+        required: false
+        example:
+          uz: Rahmat!
+          ru: Спасибо!
+          en: 'Thank you!'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      internal_note:
+        custom: []
+        name: internal_note
+        description: 'Internal note for researchers. Must not be greater than 5000 characters.'
+        required: false
+        example: 'Reviewed with stakeholders.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      default_locale: uz
+      locales:
+        - ru
+      title:
+        uz: 'Mijozlar qoniqishi so‘rovi (Yangilangan)'
+        ru: 'Опрос удовлетворенности клиентов (Обновленный)'
+        en: 'Customer Satisfaction Survey (Updated)'
+      description:
+        uz: 'Xizmatlar sifatini oshirish bo‘yicha fikrlar'
+        ru: 'Мнения для улучшения качества сервиса'
+        en: 'Feedback to improve service quality'
+      welcome_message:
+        uz: 'Xush kelibsiz!'
+        ru: 'Добро пожаловать!'
+        en: Welcome!
+      thank_you_message:
+        uz: Rahmat!
+        ru: Спасибо!
+        en: 'Thank you!'
+      internal_note: 'Reviewed with stakeholders.'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "organization_id": 1,
+              "status": "draft",
+              "default_locale": "uz",
+              "locales": ["uz", "ru", "en"],
+              "title": {"uz": "Mijozlar qoniqishi so‘rovi (Yangilangan)"}
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "SURVEY_NOT_EDITABLE",
+              "message": "Survey cannot be modified in its current status: active.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Surveys
+
+        Manage organization surveys, metadata, localized titles, and lifecycles.
+      subgroupDescription: ''
+      title: 'Delete Survey'
+      description: 'Permanently delete a survey. Only draft surveys or surveys requesting changes can be deleted. Active surveys cannot be deleted.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Survey deleted successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "SURVEY_NOT_EDITABLE",
+              "message": "Survey cannot be modified in its current status: active.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/results/summary'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Results & Analytics
+
+        Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
+      subgroupDescription: ''
+      title: 'Survey Summary Metrics'
+      description: 'Returns high-level metrics: total starts, completions, in-progress count, and completion rate percentage.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey_id": 1,
+            "started_count": 10,
+            "completed_count": 8,
+            "in_progress_count": 2,
+            "completion_rate": 80.0
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/results/questions/{question_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Results & Analytics
+
+        Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
+      subgroupDescription: ''
+      title: 'Question Response Aggregates'
+      description: 'Returns distribution counts and percentages for choice options, or average rating score and count for rating questions.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      question_id: 1
+      organization: 1
+      survey: 1
+      question: 1
+    queryParameters:
+      locale:
+        custom: []
+        name: locale
+        description: 'Optional locale to label choice options. Defaults to survey default_locale.'
+        required: false
+        example: uz
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      locale: uz
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "question_id": 1,
+            "type": "single_choice",
+            "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
+            "total_answers": 8,
+            "options": [
+              {
+                "id": 1,
+                "label": "Har kuni",
+                "count": 6,
+                "percentage": 75.0
+              },
+              {
+                "id": 2,
+                "label": "Haftada bir necha marta",
+                "count": 2,
+                "percentage": 25.0
+              }
+            ]
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/participations'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Results & Analytics
+
+        Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
+      subgroupDescription: ''
+      title: 'List Participations'
+      description: 'List all respondent participations for the survey with pagination and status filtering.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters:
+      status:
+        custom: []
+        name: status
+        description: 'Filter by status (in_progress, completed, abandoned).'
+        required: false
+        example: completed
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'Page number.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      status: completed
+      page: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "current_page": 1,
+            "data": [
+              {
+                "id": 1,
+                "survey_id": 1,
+                "user_id": 3,
+                "locale": "uz",
+                "status": "completed",
+                "started_at": "2026-10-17T10:00:00.000000Z",
+                "completed_at": "2026-10-17T10:05:00.000000Z",
+                "user": {
+                  "id": 3,
+                  "name": "Anvar Alimov",
+                  "email": "respondent@dialog.uz"
+                }
+              }
+            ],
+            "total": 1,
+            "per_page": 20
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/participations/{participation_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Results & Analytics
+
+        Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
+      subgroupDescription: ''
+      title: 'Respondent Participation Detail'
+      description: "Retrieve individual respondent's answers across all questions in the survey."
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation_id:
+        custom: []
+        name: participation_id
+        description: 'The ID of the participation.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      participation:
+        custom: []
+        name: participation
+        description: 'The ID of the participation session.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      participation_id: 1
+      organization: 1
+      survey: 1
+      participation: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "participation": {
+              "id": 1,
+              "status": "completed",
+              "locale": "uz",
+              "started_at": "2026-10-17T10:00:00.000000Z",
+              "completed_at": "2026-10-17T10:05:00.000000Z",
+              "user": {
+                "id": 3,
+                "name": "Anvar Alimov",
+                "email": "respondent@dialog.uz"
+              },
+              "answers": [
+                {
+                  "question_id": 1,
+                  "question_title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
+                  "type": "single_choice",
+                  "text_value": "Har kuni",
+                  "number_value": null,
+                  "selected_options": [
+                    {"id": 1, "label": "Har kuni"}
+                  ]
+                }
+              ]
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/results/export'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Results & Analytics
+
+        Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
+      subgroupDescription: ''
+      title: 'Export Results CSV'
+      description: 'Download completed survey responses as a CSV spreadsheet.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters:
+      locale:
+        custom: []
+        name: locale
+        description: 'Optional locale for question and option headers. Defaults to survey default_locale.'
+        required: false
+        example: uz
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      locale: uz
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "description": "Returns raw text/csv attachment"
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/submit-review'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Submit Survey for Review'
+      description: 'Submit a completed draft survey to the platform moderation queue. Validates translation completeness and question structure.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "pending_review",
+              "title": {"uz": "Mijozlar qoniqishi so‘rovi"}
+            },
+            "message": "Survey submitted for review successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "Survey must have at least one page with questions before submitting.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/publish'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Publish Survey'
+      description: 'Activate an APPROVED survey so that respondents can participate. Once published, survey structure becomes immutable.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "active",
+              "published_at": "2026-10-17T12:00:00.000000Z"
+            },
+            "message": "Survey published and activated successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "INVALID_STATUS_TRANSITION",
+              "message": "Survey must be in APPROVED status to publish.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/pause'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Pause Survey'
+      description: 'Temporarily pause an ACTIVE survey. Existing in-progress respondents can finish, but no new participations can be started.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "paused"
+            },
+            "message": "Survey paused successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/resume'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Resume Survey'
+      description: 'Resume a PAUSED survey back to ACTIVE status.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "active"
+            },
+            "message": "Survey resumed successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/close'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Close Survey'
+      description: 'Permanently close an ACTIVE or PAUSED survey to all responses.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "closed",
+              "closed_at": "2026-10-17T12:00:00.000000Z"
+            },
+            "message": "Survey closed successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/archive'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Lifecycle
+
+        Manage survey status transitions: submit for review, publish, pause, resume, close, and archive.
+      subgroupDescription: ''
+      title: 'Archive Survey'
+      description: 'Archive a CLOSED survey. Archived surveys are kept read-only for reporting and historic reference.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "archived",
+              "archived_at": "2026-10-17T12:00:00.000000Z"
+            },
+            "message": "Survey archived successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/preview'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Preview
+
+        Stateless survey preview and test-validation endpoints. Allows business users to preview survey flow in any supported locale without polluting production statistics.
+      subgroupDescription: ''
+      title: 'Preview Survey'
+      description: 'Previews the survey flow and initial page in the requested locale. Makes zero database writes.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters:
+      locale:
+        custom: []
+        name: locale
+        description: 'Survey locale to preview (must be one of survey locales: uz, ru, en). Defaults to survey default_locale.'
+        required: false
+        example: uz
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      locale: uz
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "draft",
+              "locale": "uz",
+              "title": "Mijozlar qoniqishi so‘rovi",
+              "description": "Xizmatlarimiz sifatini oshirish bo‘yicha fikringiz muhim",
+              "welcome_message": "Assalomu alaykum!",
+              "thank_you_message": "Tashakkur!"
+            },
+            "current_step": {
+              "page": {
+                "id": 1,
+                "title": "Xizmatlardan foydalanish",
+                "description": null,
+                "position": 1,
+                "questions": [
+                  {
+                    "id": 1,
+                    "type": "single_choice",
+                    "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
+                    "description": null,
+                    "is_required": true,
+                    "position": 1,
+                    "options": [
+                      {"id": 1, "label": "Har kuni", "position": 1}
+                    ]
+                  }
+                ]
+              },
+              "is_first_page": true,
+              "is_last_page": false,
+              "next": {
+                "type": "page",
+                "page_id": 2
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/preview/pages/{page_id}/validate'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Preview
+
+        Stateless survey preview and test-validation endpoints. Allows business users to preview survey flow in any supported locale without polluting production statistics.
+      subgroupDescription: ''
+      title: 'Validate Step in Preview'
+      description: 'Test-validates answers for a specific page in preview mode without recording responses in the database.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page being validated.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      page_id: 1
+      organization: 1
+      survey: 1
+      page: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      locale:
+        custom: []
+        name: locale
+        description: 'The preview locale.'
+        required: false
+        example: uz
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      answers:
+        custom: []
+        name: answers
+        description: 'Map of question IDs to answer objects.'
+        required: true
+        example:
+          1:
+            option_id: 1
+        type: object
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      locale: uz
+      answers:
+        1:
+          option_id: 1
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "valid": true,
+            "current_step": {
+              "page": {
+                "id": 1,
+                "title": "Xizmatlardan foydalanish",
+                "position": 1
+              },
+              "is_first_page": true,
+              "is_last_page": false,
+              "next": {
+                "type": "page",
+                "page_id": 2
+              }
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "This question is required.",
+              "fields": {
+                "answers.1": ["This question is required."]
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/pages'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Pages)
+
+        Manage survey pages, localized page titles/descriptions, and page sequence.
+      subgroupDescription: ''
+      title: 'Add Page to Survey'
+      description: 'Appends a new page to the draft survey. Automatically assigns the next sequential position.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        custom: []
+        name: title
+        description: 'Optional localized title map for the page.'
+        required: false
+        example:
+          uz: 'Xizmatlardan foydalanish'
+          ru: 'Использование сервисов'
+          en: 'Service Usage'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Optional localized explanatory instructions for the page.'
+        required: false
+        example:
+          uz: 'Iltimos, barcha savollarga xolis javob bering.'
+          ru: 'Пожалуйста, ответьте на все вопросы.'
+          en: 'Please answer all questions objectively.'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      title:
+        uz: 'Xizmatlardan foydalanish'
+        ru: 'Использование сервисов'
+        en: 'Service Usage'
+      description:
+        uz: 'Iltimos, barcha savollarga xolis javob bering.'
+        ru: 'Пожалуйста, ответьте на все вопросы.'
+        en: 'Please answer all questions objectively.'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "page": {
+              "id": 2,
+              "survey_id": 1,
+              "position": 2,
+              "title": {"uz": "Baholash", "ru": "Оценка", "en": "Rating"},
+              "description": null,
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/business/organizations/{organization_id}/pages/{page_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Pages)
+
+        Manage survey pages, localized page titles/descriptions, and page sequence.
+      subgroupDescription: ''
+      title: 'Update Page'
+      description: 'Update page title or description. Survey must be editable (draft or changes requested).'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      page_id: 1
+      organization: 1
+      page: 2
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        custom: []
+        name: title
+        description: 'Updated localized title map for the page.'
+        required: false
+        example:
+          uz: 'Baholash va takliflar'
+          ru: 'Оценка и предложения'
+          en: 'Rating & Feedback'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Updated localized page instructions.'
+        required: false
+        example:
+          uz: 'Yakuniy bahoni bering.'
+          ru: 'Поставьте итоговую оценку.'
+          en: 'Provide your final rating.'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      title:
+        uz: 'Baholash va takliflar'
+        ru: 'Оценка и предложения'
+        en: 'Rating & Feedback'
+      description:
+        uz: 'Yakuniy bahoni bering.'
+        ru: 'Поставьте итоговую оценку.'
+        en: 'Provide your final rating.'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "page": {
+              "id": 2,
+              "survey_id": 1,
+              "position": 2,
+              "title": {"uz": "Baholash va takliflar"},
+              "description": null
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/business/organizations/{organization_id}/pages/{page_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Pages)
+
+        Manage survey pages, localized page titles/descriptions, and page sequence.
+      subgroupDescription: ''
+      title: 'Delete Page'
+      description: 'Deletes a page and all its questions and options. A survey must retain at least one page.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      page_id: 1
+      organization: 1
+      page: 2
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Page deleted successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "CANNOT_DELETE_LAST_PAGE",
+              "message": "Survey must contain at least one page.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/pages/reorder'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Pages)
+
+        Manage survey pages, localized page titles/descriptions, and page sequence.
+      subgroupDescription: ''
+      title: 'Reorder Pages'
+      description: 'Update sequential positions of pages for a survey. Expects an array containing all page IDs in desired sequence.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      survey_id: 1
+      organization: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      pages:
+        custom: []
+        name: pages
+        description: ''
+        required: true
+        example:
+          - 16
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      pages:
+        - 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Pages reordered successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/pages/{page_id}/questions'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Questions)
+
+        Manage survey questions, types, localized labels, validation settings, and sequencing.
+      subgroupDescription: ''
+      title: 'Add Question to Page'
+      description: 'Create a new question within a survey page. Supported types: single_choice, multiple_choice, rating, short_text, long_text.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      page_id: 1
+      organization: 1
+      page: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
+        custom: []
+        name: type
+        description: 'Question type enum. Supported values: single_choice, multiple_choice, rating, short_text, long_text.'
+        required: true
+        example: single_choice
+        type: string
+        enumValues:
+          - single_choice
+          - multiple_choice
+          - short_text
+          - long_text
+          - rating
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      title:
+        custom: []
+        name: title
+        description: 'Localized question title map keyed by survey language codes.'
+        required: true
+        example:
+          uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
+          ru: 'Как часто вы пользуетесь нашим сервисом?'
+          en: 'How often do you use our service?'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Optional localized helper text or subtitle for the question.'
+        required: false
+        example:
+          uz: 'Faqat bitta variantni tanlang'
+          ru: 'Выберите один вариант'
+          en: 'Select one option only'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      is_required:
+        custom: []
+        name: is_required
+        description: 'Whether the respondent must answer this question before progressing.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      settings:
+        custom: []
+        name: settings
+        description: 'Type-specific configuration: for rating: {"min": 1, "max": 5}; for multiple_choice: {"min_choices": 1, "max_choices": 3}; for text: {"min_length": 5, "max_length": 500}.'
+        required: false
+        example:
+          min: 1
+          max: 5
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      type: single_choice
+      title:
+        uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
+        ru: 'Как часто вы пользуетесь нашим сервисом?'
+        en: 'How often do you use our service?'
+      description:
+        uz: 'Faqat bitta variantni tanlang'
+        ru: 'Выберите один вариант'
+        en: 'Select one option only'
+      is_required: true
+      settings:
+        min: 1
+        max: 5
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "question": {
+              "id": 1,
+              "page_id": 1,
+              "type": "single_choice",
+              "title": {
+                "uz": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
+                "ru": "Как часто вы пользуетесь нашим сервисом?",
+                "en": "How often do you use our service?"
+              },
+              "description": null,
+              "is_required": true,
+              "position": 1,
+              "settings": null,
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/business/organizations/{organization_id}/questions/{question_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Questions)
+
+        Manage survey questions, types, localized labels, validation settings, and sequencing.
+      subgroupDescription: ''
+      title: 'Update Question'
+      description: 'Update question properties, localized titles, and type-specific settings. Survey must be editable.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      question_id: 1
+      organization: 1
+      question: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
+        custom: []
+        name: type
+        description: 'Question type enum: single_choice, multiple_choice, rating, short_text, long_text.'
+        required: false
+        example: single_choice
+        type: string
+        enumValues:
+          - single_choice
+          - multiple_choice
+          - short_text
+          - long_text
+          - rating
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      title:
+        custom: []
+        name: title
+        description: 'Updated localized question title map.'
+        required: false
+        example:
+          uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)'
+          ru: 'Как часто вы пользуетесь нашим сервисом? (Обновлено)'
+          en: 'How often do you use our service? (Updated)'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Updated localized description or instructions.'
+        required: false
+        example:
+          uz: 'Iltimos, aniq javob bering.'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      is_required:
+        custom: []
+        name: is_required
+        description: 'Mandatory answer requirement toggle.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      settings:
+        custom: []
+        name: settings
+        description: 'Type-specific configuration settings.'
+        required: false
+        example:
+          min: 1
+          max: 5
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      type: single_choice
+      title:
+        uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)'
+        ru: 'Как часто вы пользуетесь нашим сервисом? (Обновлено)'
+        en: 'How often do you use our service? (Updated)'
+      description:
+        uz: 'Iltimos, aniq javob bering.'
+      is_required: true
+      settings:
+        min: 1
+        max: 5
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "question": {
+              "id": 1,
+              "page_id": 1,
+              "type": "single_choice",
+              "title": {
+                "uz": "Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)"
+              },
+              "is_required": true,
+              "position": 1
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/business/organizations/{organization_id}/questions/{question_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Questions)
+
+        Manage survey questions, types, localized labels, validation settings, and sequencing.
+      subgroupDescription: ''
+      title: 'Delete Question'
+      description: 'Delete a question and its options from the draft survey.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      question_id: 1
+      organization: 1
+      question: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Question deleted successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/questions/{question_id}/duplicate'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Questions)
+
+        Manage survey questions, types, localized labels, validation settings, and sequencing.
+      subgroupDescription: ''
+      title: 'Duplicate Question'
+      description: 'Deep-copy a question including its settings and localized options directly below the original question.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question to duplicate.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      question_id: 1
+      organization: 1
+      question: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "question": {
+              "id": 2,
+              "page_id": 1,
+              "type": "single_choice",
+              "title": {
+                "uz": "Xizmatimizdan qanchalik tez-tez foydalanasiz? (Copy)",
+                "ru": "Как часто вы пользуетесь нашим сервисом? (Copy)",
+                "en": "How often do you use our service? (Copy)"
+              },
+              "position": 2
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/business/organizations/{organization_id}/pages/{page_id}/questions/reorder'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Questions)
+
+        Manage survey questions, types, localized labels, validation settings, and sequencing.
+      subgroupDescription: ''
+      title: 'Reorder Questions'
+      description: 'Update sequential positions of questions on a given page.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      page_id: 1
+      organization: 1
+      page: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      questions:
+        custom: []
+        name: questions
+        description: ''
+        required: true
+        example:
+          - 16
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      questions:
+        - 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Questions reordered successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/business/organizations/{organization_id}/questions/{question_id}/options'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Options)
+
+        Manage choice options for single_choice and multiple_choice questions.
+      subgroupDescription: ''
+      title: 'Add Option to Question'
+      description: 'Add a choice option with localized labels to a choice question.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      question_id: 1
+      organization: 1
+      question: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      label:
+        custom: []
+        name: label
+        description: 'Localized choice option label map keyed by language code.'
+        required: true
+        example:
+          uz: 'Har kuni'
+          ru: 'Каждый день'
+          en: Daily
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      label:
+        uz: 'Har kuni'
+        ru: 'Каждый день'
+        en: Daily
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "option": {
+              "id": 1,
+              "question_id": 1,
+              "position": 1,
+              "label": {
+                "uz": "Har kuni",
+                "ru": "Каждый день",
+                "en": "Daily"
+              },
+              "created_at": "2026-10-17T12:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/business/organizations/{organization_id}/options/{option_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Options)
+
+        Manage choice options for single_choice and multiple_choice questions.
+      subgroupDescription: ''
+      title: 'Update Option'
+      description: 'Update localized labels of an existing choice option.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      option_id:
+        custom: []
+        name: option_id
+        description: 'The ID of the option.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      option:
+        custom: []
+        name: option
+        description: 'The ID of the option.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      option_id: 1
+      organization: 1
+      option: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      label:
+        custom: []
+        name: label
+        description: 'Updated localized option label map.'
+        required: true
+        example:
+          uz: 'Haftada bir necha marta'
+          ru: 'Несколько раз в неделю'
+          en: 'Several times a week'
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      label:
+        uz: 'Haftada bir necha marta'
+        ru: 'Несколько раз в неделю'
+        en: 'Several times a week'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "option": {
+              "id": 1,
+              "question_id": 1,
+              "position": 1,
+              "label": {
+                "uz": "Har kuni (Yangilangan)"
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/business/organizations/{organization_id}/options/{option_id}'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Options)
+
+        Manage choice options for single_choice and multiple_choice questions.
+      subgroupDescription: ''
+      title: 'Delete Option'
+      description: 'Delete a choice option from a question.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      option_id:
+        custom: []
+        name: option_id
+        description: 'The ID of the option.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      option:
+        custom: []
+        name: option
+        description: 'The ID of the option.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      option_id: 1
+      organization: 1
+      option: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Option deleted successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/business/organizations/{organization_id}/questions/{question_id}/options/reorder'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: |-
+        Survey Builder (Options)
+
+        Manage choice options for single_choice and multiple_choice questions.
+      subgroupDescription: ''
+      title: 'Reorder Options'
+      description: 'Reorder choice options for a question.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      question_id:
+        custom: []
+        name: question_id
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      organization:
+        custom: []
+        name: organization
+        description: 'The ID of the organization.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      question:
+        custom: []
+        name: question
+        description: 'The ID of the question.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 1
+      question_id: 1
+      organization: 1
+      question: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      options:
+        custom: []
+        name: options
+        description: ''
+        required: true
+        example:
+          - 16
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      options:
+        - 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Options reordered successfully."
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

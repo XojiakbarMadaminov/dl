@@ -1,0 +1,449 @@
+name: Respondent
+description: |-
+
+  Core respondent participation flow: starting or resuming surveys, saving page answers, and completing surveys.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/respondent/surveys/{survey_id}/participate'
+    metadata:
+      custom: []
+      groupName: Respondent
+      groupDescription: |-
+
+        Core respondent participation flow: starting or resuming surveys, saving page answers, and completing surveys.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Start or Resume Participation'
+      description: 'Starts participation in an ACTIVE survey or resumes an in-progress session. Guarantees exactly one participation per user per survey (`UNIQUE(survey_id, user_id)`).'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the active survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      survey_id: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      locale:
+        custom: []
+        name: locale
+        description: 'Preferred survey language (must be one of survey locales: uz, ru, en). Optional; defaults to user profile locale or survey default_locale.'
+        required: false
+        example: uz
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      locale: uz
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "participation_id": 1,
+            "status": "in_progress",
+            "survey": {
+              "id": 1,
+              "title": "Mijozlar qoniqishi so‘rovi",
+              "welcome_message": "Assalomu alaykum! So‘rovnomaga xush kelibsiz."
+            },
+            "current_step": {
+              "page": {
+                "id": 1,
+                "title": "Xizmatlardan foydalanish",
+                "description": null,
+                "position": 1,
+                "questions": [
+                  {
+                    "id": 1,
+                    "type": "single_choice",
+                    "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
+                    "is_required": true,
+                    "position": 1,
+                    "options": [
+                      {"id": 1, "label": "Har kuni", "position": 1},
+                      {"id": 2, "label": "Haftada bir necha marta", "position": 2}
+                    ]
+                  }
+                ]
+              },
+              "is_first_page": true,
+              "is_last_page": false,
+              "next": {
+                "type": "page",
+                "page_id": 2
+              }
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "SURVEY_NOT_ACTIVE",
+              "message": "Survey is not open for responses.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/respondent/participations/{participation_id}'
+    metadata:
+      custom: []
+      groupName: Respondent
+      groupDescription: |-
+
+        Core respondent participation flow: starting or resuming surveys, saving page answers, and completing surveys.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get Current Participation Step'
+      description: 'Load the current survey page and answered state for an in-progress session.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      participation_id:
+        custom: []
+        name: participation_id
+        description: 'The ID of the participation.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation:
+        custom: []
+        name: participation
+        description: 'The ID of the participation session.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      participation_id: 1
+      participation: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "participation_id": 1,
+            "status": "in_progress",
+            "current_step": {
+              "page": {
+                "id": 1,
+                "title": "Xizmatlardan foydalanish",
+                "position": 1
+              },
+              "is_first_page": true,
+              "is_last_page": false,
+              "next": {
+                "type": "page",
+                "page_id": 2
+              }
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "participation_id": 1,
+            "status": "completed",
+            "completed": true
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/respondent/participations/{participation_id}/pages/{page_id}'
+    metadata:
+      custom: []
+      groupName: Respondent
+      groupDescription: |-
+
+        Core respondent participation flow: starting or resuming surveys, saving page answers, and completing surveys.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Submit Page Answers'
+      description: |-
+        Validates and saves answers for the given page. Advances participation to the next page determined by SurveyFlow.
+
+        Important: The frontend MUST NOT calculate the next page; the backend SurveyFlow response dictates navigation.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      participation_id:
+        custom: []
+        name: participation_id
+        description: 'The ID of the participation.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      page_id:
+        custom: []
+        name: page_id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation:
+        custom: []
+        name: participation
+        description: 'The ID of the participation session.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'The ID of the page being submitted.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      participation_id: 1
+      page_id: 1
+      participation: 1
+      page: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      answers:
+        custom: []
+        name: answers
+        description: 'Map of question IDs to answer objects. For single choice: `{"option_id": 1}`; multiple choice: `{"option_ids": [1, 2]}`; rating: `{"value": 5}`; text: `{"text": "Ajoyib xizmat"}`.'
+        required: true
+        example:
+          1:
+            option_id: 1
+        type: object
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      answers:
+        1:
+          option_id: 1
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "current_step": {
+              "page": {
+                "id": 2,
+                "title": "Baholash",
+                "position": 2,
+                "questions": [
+                  {
+                    "id": 2,
+                    "type": "rating",
+                    "title": "Xizmat ko‘rsatish sifatini baholang (1-5)",
+                    "is_required": true,
+                    "position": 1,
+                    "settings": {"min": 1, "max": 5}
+                  }
+                ]
+              },
+              "is_first_page": false,
+              "is_last_page": true,
+              "next": {
+                "type": "complete"
+              }
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "This question is required.",
+              "fields": {
+                "answers.1": ["This question is required."]
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/respondent/participations/{participation_id}/complete'
+    metadata:
+      custom: []
+      groupName: Respondent
+      groupDescription: |-
+
+        Core respondent participation flow: starting or resuming surveys, saving page answers, and completing surveys.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Complete Participation'
+      description: 'Finalizes participation session and marks it COMPLETED. Idempotent: repeated calls on an already completed session return success safely.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      participation_id:
+        custom: []
+        name: participation_id
+        description: 'The ID of the participation.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation:
+        custom: []
+        name: participation
+        description: 'The ID of the participation session.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      participation_id: 1
+      participation: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "completed": true,
+            "thank_you_message": "Fikringiz uchun tashakkur!"
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

@@ -1,0 +1,377 @@
+name: Admin
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/moderation/surveys
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: |-
+        Moderation
+
+        Platform moderation queue for reviewing submitted business surveys, approving or requesting changes before publication.
+      subgroupDescription: ''
+      title: 'Moderation Queue'
+      description: 'List surveys pending review or in other moderation states. Restricted to platform administrators.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      status:
+        custom: []
+        name: status
+        description: 'Filter by status (default is pending_review). Allowed: pending_review, approved, changes_requested.'
+        required: false
+        example: pending_review
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'Page number.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      status: pending_review
+      page: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "organization_id": 1,
+                "status": "pending_review",
+                "title": {"uz": "Mijozlar qoniqishi so‘rovi"},
+                "created_at": "2026-10-17T12:00:00.000000Z"
+              }
+            ]
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 403
+        content: |-
+          {
+            "error": {
+              "code": "FORBIDDEN",
+              "message": "Admin privileges required.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/moderation/surveys/{survey_id}'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: |-
+        Moderation
+
+        Platform moderation queue for reviewing submitted business surveys, approving or requesting changes before publication.
+      subgroupDescription: ''
+      title: 'Review Survey Details'
+      description: 'Fetch complete survey hierarchy (pages, questions, options, translations, and organization info) for moderation review.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      survey_id: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "pending_review",
+              "title": {
+                "uz": "Mijozlar qoniqishi so‘rovi",
+                "ru": "Опрос удовлетворенности клиентов",
+                "en": "Customer Satisfaction Survey"
+              },
+              "pages": [
+                {
+                  "id": 1,
+                  "title": {"uz": "Xizmatlardan foydalanish"},
+                  "questions": [
+                    {
+                      "id": 1,
+                      "type": "single_choice",
+                      "title": {"uz": "Xizmatimizdan qanchalik tez-tez foydalanasiz?"}
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/moderation/surveys/{survey_id}/approve'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: |-
+        Moderation
+
+        Platform moderation queue for reviewing submitted business surveys, approving or requesting changes before publication.
+      subgroupDescription: ''
+      title: 'Approve Survey'
+      description: 'Approve a survey in PENDING_REVIEW status. Transitions status to APPROVED, enabling the business to publish.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      survey_id: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "approved"
+            },
+            "message": "Survey approved successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "INVALID_STATUS_TRANSITION",
+              "message": "Survey cannot be approved in its current status: draft.",
+              "fields": {}
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/moderation/surveys/{survey_id}/request-changes'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: |-
+        Moderation
+
+        Platform moderation queue for reviewing submitted business surveys, approving or requesting changes before publication.
+      subgroupDescription: ''
+      title: 'Request Changes'
+      description: 'Reject or request adjustments for a survey in PENDING_REVIEW status. Requires explanatory feedback comment.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey:
+        custom: []
+        name: survey
+        description: 'The ID of the survey.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      survey_id: 1
+      survey: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      comment:
+        custom: []
+        name: comment
+        description: 'Explanatory comment outlining required fixes (min 3 characters).'
+        required: true
+        example: "Iltimos, ruscha tarjimalardagi orfografik xatolarni to'g'rilang."
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      comment: "Iltimos, ruscha tarjimalardagi orfografik xatolarni to'g'rilang."
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "survey": {
+              "id": 1,
+              "status": "changes_requested"
+            },
+            "message": "Changes requested successfully."
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "error": {
+              "code": "VALIDATION_ERROR",
+              "message": "The comment field is required.",
+              "fields": {
+                "comment": ["The comment field is required."]
+              }
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
