@@ -2,14 +2,16 @@
 
 namespace App\Modules\Results\Services;
 
-use App\Modules\Participation\Enums\ParticipationStatus;
-use App\Modules\Participation\Models\Participation;
+use App\Modules\Results\Queries\SurveyParticipationsQuery;
 use App\Modules\Survey\Enums\QuestionType;
 use App\Modules\Survey\Models\Survey;
 
 class SurveyExportService
 {
-    public function exportCsv(Survey $survey, ?string $locale = null): string
+    public function __construct(protected SurveyParticipationsQuery $participationsQuery) {}
+
+    /** @param array<string, mixed> $filters */
+    public function exportCsv(Survey $survey, ?string $locale = null, array $filters = []): string
     {
         $locale = $locale ?? $survey->default_locale;
 
@@ -41,14 +43,12 @@ class SurveyExportService
             return '';
         }
 
-        fputcsv($output, $headers);
+        fwrite($output, "\xEF\xBB\xBF");
+        fputcsv($output, array_map($this->escapeCell(...), $headers), escape: '');
 
-        // Fetch completed participations with answers
-        $participations = Participation::where('survey_id', $survey->id)
-            ->where('status', ParticipationStatus::COMPLETED)
-            ->with(['answers.options', 'user'])
-            ->orderBy('completed_at')
-            ->get();
+        $participations = $this->participationsQuery->build($survey, $filters)
+            ->with('answers.options')
+            ->lazyById(100);
 
         foreach ($participations as $participation) {
             $answersByQuestion = $participation->answers->keyBy('question_id');
@@ -82,7 +82,7 @@ class SurveyExportService
                 }
             }
 
-            fputcsv($output, $row);
+            fputcsv($output, array_map($this->escapeCell(...), $row), escape: '');
         }
 
         rewind($output);
@@ -90,5 +90,12 @@ class SurveyExportService
         fclose($output);
 
         return $csvContent ?: '';
+    }
+
+    private function escapeCell(mixed $value): string
+    {
+        $cell = (string) $value;
+
+        return preg_match('/^[\s\x{FEFF}]*[=+@-]/u', $cell) === 1 ? "'".$cell : $cell;
     }
 }

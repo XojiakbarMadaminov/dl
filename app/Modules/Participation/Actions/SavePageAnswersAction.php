@@ -24,20 +24,27 @@ class SavePageAnswersAction
      */
     public function execute(Participation $participation, SurveyPage $page, array $answers): array
     {
-        $participation->assertCanAcceptAnswers();
-
-        if ($page->survey_id !== $participation->survey_id) {
-            throw new ApiException(
-                message: 'Page does not belong to this survey.',
-                errorCode: 'INVALID_PAGE_FLOW',
-                statusCode: 422,
-            );
-        }
-
-        // Validate only applicable questions on this page
-        $this->answerValidator->validatePageAnswers($page, $answers);
-
         return DB::transaction(function () use ($participation, $page, $answers) {
+            $participation = Participation::query()->lockForUpdate()->findOrFail($participation->id);
+            $participation->assertCanAcceptAnswers();
+
+            if ($page->survey_id !== $participation->survey_id) {
+                throw new ApiException(
+                    message: 'Page does not belong to this survey.',
+                    errorCode: 'INVALID_PAGE_FLOW',
+                    statusCode: 422,
+                );
+            }
+
+            $persistedAnswers = $this->surveyFlow->answers($participation);
+            $path = $this->surveyFlow->path($participation->survey, $persistedAnswers);
+            $this->answerValidator->validatePageAnswers($page, $answers, applicableQuestionIds: $path['question_ids']);
+            $history = $participation->page_history ?: array_slice($path['page_ids'], 0, (int) array_search($participation->current_page_id, $path['page_ids'], true) + 1);
+            if (! in_array($page->id, $path['page_ids'], true) || ($page->id !== $participation->current_page_id && ! in_array($page->id, $history, true))) {
+                throw new ApiException('Page has not been reached in this participation.', 'INVALID_PAGE_FLOW', 422);
+            }
+            $history = array_slice($history, 0, (int) array_search($page->id, $history, true) + 1);
+
             $questionIds = $page->questions()->pluck('id')->all();
 
             // Delete old answers and pivot options for these questions
@@ -52,6 +59,9 @@ class SavePageAnswersAction
 
             // Persist page answers atomically
             foreach ($page->questions as $question) {
+                if (! in_array($question->id, $path['question_ids'], true)) {
+                    continue;
+                }
                 $qKey = (string) $question->id;
                 $hasAnswer = array_key_exists($qKey, $answers) || array_key_exists($question->id, $answers);
                 if (! $hasAnswer) {
@@ -80,24 +90,28 @@ class SavePageAnswersAction
             $participation->update(['last_activity_at' => now()]);
 
             // Calculate next destination via SurveyFlow
-            $step = $this->surveyFlow->getStep($participation->survey, $page, $participation->locale);
+            $updatedPath = $this->surveyFlow->path($participation->survey, $this->surveyFlow->answers($participation));
+            $participation->answers()->whereNotIn('question_id', $updatedPath['question_ids'])->delete();
+            $participation->update(['current_page_id' => $page->id, 'page_history' => $history]);
+            $step = $this->surveyFlow->getStep($participation->survey, $page, $participation->locale, $updatedPath['answers']);
 
-            if ($step['next'] === 'complete') {
+            if ($step['next']['type'] === 'completed') {
                 return [
-                    'next' => 'complete',
+                    'next' => $step['next'],
                     'can_complete' => true,
                     'current_step' => $step,
                 ];
             }
 
-            $nextPageId = (int) $step['next'];
-            $participation->update(['current_page_id' => $nextPageId]);
+            $nextPageId = $step['next']['id'];
+            $history[] = $nextPageId;
+            $participation->update(['current_page_id' => $nextPageId, 'page_history' => $history]);
 
             $nextPage = SurveyPage::findOrFail($nextPageId);
-            $nextStep = $this->surveyFlow->getStep($participation->survey, $nextPage, $participation->locale);
+            $nextStep = $this->surveyFlow->getStep($participation->survey, $nextPage, $participation->locale, $updatedPath['answers']);
 
             return [
-                'next' => $nextPageId,
+                'next' => $step['next'],
                 'can_complete' => false,
                 'next_step' => $nextStep,
             ];

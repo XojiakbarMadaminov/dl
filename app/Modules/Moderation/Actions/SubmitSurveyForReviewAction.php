@@ -21,17 +21,22 @@ class SubmitSurveyForReviewAction
 
     public function execute(Survey $survey, User $user, ?string $ipAddress = null): Survey
     {
-        if (! in_array($survey->status, [SurveyStatus::DRAFT, SurveyStatus::CHANGES_REQUESTED], true)) {
-            throw new ApiException(
-                message: "Cannot submit survey for review from status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
-
-        $this->publishValidator->validate($survey);
-
         return DB::transaction(function () use ($survey, $user, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::PENDING_REVIEW) {
+                return $survey;
+            }
+
+            if (! in_array($survey->status, [SurveyStatus::DRAFT, SurveyStatus::CHANGES_REQUESTED], true)) {
+                throw new ApiException(
+                    message: "Cannot submit survey for review from status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
+            $this->publishValidator->validate($survey);
+
             $survey->update([
                 'status' => SurveyStatus::PENDING_REVIEW,
             ]);

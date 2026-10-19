@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\ApiException;
 use App\Models\User;
 use App\Modules\Organization\Actions\CreateOrganizationAction;
 use App\Modules\Organization\Models\Organization;
@@ -9,6 +10,7 @@ use App\Modules\Survey\Enums\QuestionType;
 use App\Modules\Survey\Enums\SurveyStatus;
 use App\Modules\Survey\Models\Survey;
 use App\Modules\Survey\Models\SurveyPage;
+use App\Modules\Survey\Validators\QuestionSettingsValidator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,6 +21,33 @@ class SurveyBuilderTest extends TestCase
     private User $user;
 
     private Organization $organization;
+
+    public function test_translation_values_must_be_strings_not_nested_objects(): void
+    {
+        $this->actingAs($this->user)->postJson(
+            "/api/v1/business/organizations/{$this->organization->id}/surveys", [
+                'default_locale' => 'uz',
+                'locales' => ['uz'],
+                'title' => ['uz' => ['nested' => 'invalid']],
+            ]
+        )->assertUnprocessable()->assertJsonValidationErrors('title.uz', 'error.fields');
+    }
+
+    public function test_rating_defaults_and_selection_limits_are_validated_consistently(): void
+    {
+        $validator = app(QuestionSettingsValidator::class);
+        $this->assertSame(['max_selections' => 2], $validator->validate(QuestionType::MULTIPLE_CHOICE, ['max_selections' => 2]));
+        $this->assertSame(['max' => 10], $validator->validate(QuestionType::RATING, ['max' => 10]));
+
+        foreach ([['min' => 5], ['max' => 1], ['min' => 5, 'max' => 4], ['min' => 1, 'max' => ['invalid']]] as $settings) {
+            try {
+                $validator->validate(QuestionType::RATING, $settings);
+                $this->fail('Invalid effective rating bounds were accepted.');
+            } catch (ApiException $exception) {
+                $this->assertSame('INVALID_QUESTION_SETTINGS', $exception->getErrorCode());
+            }
+        }
+    }
 
     protected function setUp(): void
     {

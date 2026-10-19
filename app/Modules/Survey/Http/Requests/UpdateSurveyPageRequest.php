@@ -18,7 +18,9 @@ class UpdateSurveyPageRequest extends FormRequest
     {
         return [
             'title' => ['nullable', 'array'],
+            'title.*' => ['nullable', 'string'],
             'description' => ['nullable', 'array'],
+            'description.*' => ['nullable', 'string'],
         ];
     }
 

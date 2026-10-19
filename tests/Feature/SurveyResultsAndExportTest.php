@@ -183,4 +183,37 @@ class SurveyResultsAndExportTest extends TestCase
         $this->assertStringContainsString('User ID', $content);
         $this->assertStringContainsString('Osh', $content);
     }
+
+    public function test_list_summary_aggregate_and_export_share_filters(): void
+    {
+        $base = "/api/v1/business/organizations/{$this->organization->id}/surveys/{$this->survey->id}";
+        $inProgress = Participation::query()->where('status', 'in_progress')->firstOrFail();
+        $inProgress->update(['locale' => 'ru']);
+        $filter = '?status=in_progress&participation_locale=ru';
+        $this->actingAs($this->businessUser)->getJson("{$base}/participations{$filter}")
+            ->assertOk()->assertJsonPath('total', 1)->assertJsonPath('data.0.id', $inProgress->id)
+            ->assertJsonMissingPath('data.0.user.platform_role')->assertJsonMissingPath('data.0.user.status');
+        $this->getJson("{$base}/results/summary{$filter}")->assertOk()
+            ->assertJsonPath('started_count', 1)->assertJsonPath('completed_count', 0);
+        $this->getJson("{$base}/results/questions/{$this->ratingQ->id}{$filter}")->assertOk()
+            ->assertJsonPath('total_responses', 1)->assertJsonPath('average', 4);
+        $response = $this->get("{$base}/results/export{$filter}")->assertOk();
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $response->getContent());
+        $this->assertStringContainsString('Somsa', $response->getContent());
+        $this->assertStringNotContainsString('Osh', $response->getContent());
+
+        $this->get("{$base}/results/export?status=completed")->assertOk()->assertSee('Osh')->assertDontSee('Somsa');
+        $this->getJson("{$base}/results/summary?status=unknown")->assertUnprocessable();
+        $this->getJson("{$base}/results/export?participation_locale[]=ru")->assertUnprocessable();
+    }
+
+    public function test_export_neutralizes_spreadsheet_formulas_in_authored_and_answer_content(): void
+    {
+        $this->choiceQ->update(['title' => ['uz' => '=HYPERLINK("https://example.test")']]);
+        $this->optA->update(['label' => ['uz' => '=1+1']]);
+        $response = $this->actingAs($this->businessUser)->get(
+            "/api/v1/business/organizations/{$this->organization->id}/surveys/{$this->survey->id}/results/export?status=completed"
+        )->assertOk();
+        $this->assertStringContainsString("'=1+1", $response->getContent());
+    }
 }

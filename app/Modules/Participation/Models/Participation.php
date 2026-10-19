@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string $locale
  * @property ParticipationStatus $status
  * @property int|null $current_page_id
+ * @property array<int, int> $page_history
  * @property Carbon $started_at
  * @property Carbon|null $completed_at
  * @property Carbon $last_activity_at
@@ -36,6 +37,7 @@ class Participation extends Model
         'locale',
         'status',
         'current_page_id',
+        'page_history',
         'started_at',
         'completed_at',
         'last_activity_at',
@@ -48,6 +50,7 @@ class Participation extends Model
     {
         return [
             'status' => ParticipationStatus::class,
+            'page_history' => 'array',
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
             'last_activity_at' => 'datetime',

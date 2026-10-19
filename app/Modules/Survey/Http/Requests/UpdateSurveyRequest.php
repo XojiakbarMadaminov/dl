@@ -23,9 +23,13 @@ class UpdateSurveyRequest extends FormRequest
             'locales' => ['sometimes', 'array', 'min:1'],
             'locales.*' => ['string', Rule::in(PlatformLocale::values())],
             'title' => ['sometimes', 'array'],
+            'title.*' => ['nullable', 'string'],
             'description' => ['nullable', 'array'],
+            'description.*' => ['nullable', 'string'],
             'welcome_message' => ['nullable', 'array'],
+            'welcome_message.*' => ['nullable', 'string'],
             'thank_you_message' => ['nullable', 'array'],
+            'thank_you_message.*' => ['nullable', 'string'],
             'internal_note' => ['nullable', 'string', 'max:5000'],
         ];
     }

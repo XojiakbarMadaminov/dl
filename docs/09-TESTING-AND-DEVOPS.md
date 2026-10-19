@@ -30,7 +30,10 @@ Must cover:
 - respondent cannot access another user's participation;
 - moderation approve/request-changes permissions;
 - preview does not affect real analytics;
-- SurveyFlow linear navigation.
+- SurveyFlow linear fallback and conditional navigation;
+- rule ownership, immutability, operators, cross-survey/broken references and loop prevention;
+- hidden-required validation, AND/OR, priority, early completion and actual-history Back;
+- branch-change cleanup in results/export and stateless preview parity.
 
 ## Transactions
 

@@ -1,163 +1,88 @@
-# Dialog Respondent Participation Flow
+# Dialog respondent participation API
 
-This guide explains the respondent participation lifecycle, payload structures, answer submission rules, and the contract for page navigation.
+All endpoints require Sanctum Bearer authentication. Navigation is owned by the backend, not calculated by the client.
 
----
+## Start or resume
 
-## 1. Core Architectural Principle: Backend Owns Navigation
+`POST /api/v1/respondent/surveys/{survey}/participate`
 
-> [!IMPORTANT]
-> **The frontend client MUST NOT calculate or assume the next page.**
->
-> The backend `SurveyFlow` engine controls page sequencing. Every answer submission returns the exact `current_step` containing the next page or completion trigger. The frontend simply renders whatever page object the backend provides.
+Optional body: `{"locale":"ru"}`. Omitting the locale uses the survey default for a new participation. A resumed participation retains its original locale.
 
----
+A new or in-progress participation returns HTTP 201:
 
-## 2. Participation Lifecycle
-
-```mermaid
-stateDiagram-v2
-    [*] --> InProgress: POST /respondent/surveys/{survey}/participate
-    InProgress --> InProgress: PUT /respondent/participations/{p}/pages/{page} (Next Page)
-    InProgress --> Completed: POST /respondent/participations/{p}/complete
-    Completed --> Completed: POST /respondent/participations/{p}/complete (Idempotent Safe)
-    Completed --> [*]
-```
-
-### Participation Invariants:
-1. **Single Participation Per User**: Database constraint `UNIQUE(survey_id, user_id)` guarantees one participation session per user per survey. Calling `participate` on an existing session safely resumes it.
-2. **Survey Must Be Active**: Only surveys in `active` status accept participation. Inactive surveys reject with HTTP 422 `SURVEY_NOT_ACTIVE`.
-3. **Draft Answers**: Answers on a page are upserted when submitted. A respondent can safely navigate away and resume later.
-4. **Idempotent Completion**: Calling `POST .../complete` multiple times returns 200 OK without errors or double counting.
-
----
-
-## 3. API Sequence
-
-### Step 1: Start or Resume Participation
-Endpoint: `POST /api/v1/respondent/surveys/{survey}/participate`
-Request:
-```json
-{
-  "locale": "uz"
-}
-```
-Response:
 ```json
 {
   "participation_id": 14,
   "status": "in_progress",
-  "survey": {
-    "id": 1,
-    "title": "Mijozlar qoniqishi so‘rovi",
-    "welcome_message": "Assalomu alaykum! So‘rovnomaga xush kelibsiz."
-  },
+  "locale": "ru",
+  "survey": {"id": 1, "title": "Опрос", "welcome_message": null},
   "current_step": {
-    "page": {
-      "id": 10,
-      "title": "Xizmatlardan foydalanish",
-      "position": 1,
-      "questions": [
-        {
-          "id": 101,
-          "type": "single_choice",
-          "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
-          "is_required": true,
-          "position": 1,
-          "options": [
-            { "id": 501, "label": "Har kuni", "position": 1 },
-            { "id": 502, "label": "Haftada bir necha marta", "position": 2 }
-          ]
-        },
-        {
-          "id": 102,
-          "type": "short_text",
-          "title": "Qo‘shimcha takliflaringiz",
-          "is_required": false,
-          "position": 2,
-          "options": []
-        }
-      ]
-    },
-    "is_first_page": true,
-    "is_last_page": false,
-    "next": {
-      "type": "page",
-      "page_id": 11
-    }
+    "page": {"id": 10, "position": 1, "title": null, "description": null, "questions": []},
+    "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
+    "next": {"type": "page", "id": 11}
   }
 }
 ```
 
----
+A published physical page must contain a question, but conditional visibility can result in an empty visible questions array. Save that page with `{"answers":{}}` to continue. All respondent-facing content, including rating endpoint labels, is resolved to strings rather than translation maps.
 
-### Step 2: Answer Submission Formats
-Endpoint: `PUT /api/v1/respondent/participations/{participation}/pages/{page}`
+Starting again after completion returns HTTP 200 with the existing `participation_id`, `status: "completed"`, `locale`, `completed: true` and `thank_you_message`. It does not create another record. Surveys must be active to start/resume through this endpoint.
 
-The `answers` payload is an object keyed by question ID string. The value depends on question type:
+## Save page answers
 
-| Question Type | Answer Payload Format | Example |
-|:---|:---|:---|
-| **`single_choice`** | `{"option_id": number}` | `{"101": {"option_id": 501}}` |
-| **`multiple_choice`** | `{"option_ids": number[]}` | `{"103": {"option_ids": [503, 504]}}` |
-| **`rating`** | `{"value": number}` | `{"104": {"value": 5}}` |
-| **`short_text`** | `{"text": string}` | `{"102": {"text": "Ajoyib xizmat"}}` |
-| **`long_text`** | `{"text": string}` | `{"105": {"text": "Batafsil sharh..."}}` |
+`PUT /api/v1/respondent/participations/{participation}/pages/{page}`
 
-#### Example Request:
+`answers` is an object keyed by question ID. Values are direct scalars/arrays, **not** objects such as `{"option_id":501}`.
+
+| Type | Value | Example |
+| --- | --- | --- |
+| single_choice | One integer option ID | `{"101":501}` |
+| multiple_choice | Distinct integer option IDs | `{"103":[503,504]}` |
+| rating | Integer inside configured bounds | `{"104":5}` |
+| short_text / long_text | String | `{"105":"Ajoyib xizmat"}` |
+
+```json
+{"answers":{"101":501,"102":"Ajoyib xizmat"}}
+```
+
+Each save replaces this page's answer set atomically. Omitted/empty optional answers clear previously saved values. Required answers, option membership, distinct selections, min/max selections and text limits are validated. Invalid answers return HTTP 422 `INVALID_ANSWER` with `answers.{questionId}` fields; malformed envelopes return `VALIDATION_ERROR`.
+
+Non-final page response:
+
 ```json
 {
-  "answers": {
-    "101": {
-      "option_id": 501
-    },
-    "102": {
-      "text": "Ajoyib xizmat"
-    }
+  "next": {"type":"page","id":11},
+  "can_complete": false,
+  "next_step": {
+    "page": {"id":11,"position":2,"title":null,"description":null,"questions":[]},
+    "progress": {"current_step":2,"total_steps":2,"percent":100,"is_first_page":false,"is_last_page":true},
+    "next": {"type":"completed"}
   }
 }
 ```
 
-#### Response (Directs to Next Page):
+Final page response contains `next: {"type":"completed"}`, `can_complete: true`, and `current_step` for that page. This destination indicates that the client can request completion; it does not finalize participation by itself.
+
+**Contract change:** old integer/string `next` values are replaced by the typed destination above, consistently for preview and respondent flows.
+
+## Resume saved work
+
+`GET /api/v1/respondent/participations/{participation}`
+
+An in-progress response includes `participation_id`, `status`, `locale`, `current_step`, and `answers` keyed by question ID. Each saved answer contains `text_value`, `number_value`, and `option_ids`. A completed participation returns `completed: true` without a current page.
+
+## Complete
+
+`POST /api/v1/respondent/participations/{participation}/complete`
+
 ```json
-{
-  "success": true,
-  "current_step": {
-    "page": {
-      "id": 11,
-      "title": "Baholash",
-      "position": 2,
-      "questions": [
-        {
-          "id": 104,
-          "type": "rating",
-          "title": "Xizmat sifatini baholang (1-5)",
-          "is_required": true,
-          "settings": { "min": 1, "max": 5 }
-        }
-      ]
-    },
-    "is_first_page": false,
-    "is_last_page": true,
-    "next": {
-      "type": "complete"
-    }
-  }
-}
+{"completed":true,"status":"completed","thank_you_message":"Rahmat!"}
 ```
 
----
+The survey must still be active and persisted answers must pass the same validation as a page save, including all required questions on the applicable path. The participation must reach that path's final page. Repeating completion returns HTTP 200 without changing the completion timestamp. Completed answers cannot be edited. Ownership is checked on every participation endpoint; access to someone else's participation returns HTTP 403.
 
-### Step 3: Complete Participation
-When `current_step.next.type === "complete"`, show the submission button. Upon clicking submit, call:
+## Conditional flow and Back
 
-Endpoint: `POST /api/v1/respondent/participations/{participation}/complete`
-Response:
-```json
-{
-  "completed": true,
-  "thank_you_message": "Fikringiz uchun tashakkur!"
-}
-```
+MVP supports visibility based on earlier pages, forward jumps, AND/OR and early completion without changing typed `next` destinations. Navigation returned by a read is provisional until the current answers are saved. Progress uses physical page counts, not predicted branch length. Re-saving an earlier visited page recalculates the path and removes newly inapplicable answers from results.
 
-Display `thank_you_message` to the respondent and navigate to the completion confirmation screen.
+`POST /api/v1/respondent/participations/{participation}/back` returns the GET participation envelope for the actually visited previous page, with saved answers. First-page Back is a no-op; completed/inactive sessions cannot navigate Back. Skipped/unvisited pages cannot be submitted directly. See `API-SURVEY-LOGIC.md` for the full contract.

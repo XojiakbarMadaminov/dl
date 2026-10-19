@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dialog API Collection",
-        "_postman_id": "d1b5c342-9226-4c4f-afa4-0390887def6f",
+        "_postman_id": "94246bea-eedc-4433-adc9-202d884a4954",
         "description": "Dialog Survey Platform API collection for frontend engineers",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json",
         "version": "1.0.0"
@@ -279,7 +279,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -331,7 +331,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -399,7 +399,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -445,7 +445,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -469,7 +469,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"default_locale\":\"uz\",\"locales\":[\"en\"],\"title\":{\"uz\":\"Mijozlar qoniqishi so\u2018rovi\",\"ru\":\"\u041e\u043f\u0440\u043e\u0441 \u0443\u0434\u043e\u0432\u043b\u0435\u0442\u0432\u043e\u0440\u0435\u043d\u043d\u043e\u0441\u0442\u0438 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432\",\"en\":\"Customer Satisfaction Survey\"},\"description\":{\"uz\":\"Xizmatlar sifatini yaxshilash bo\u2018yicha fikringiz\",\"ru\":\"\u0412\u0430\u0448\u0435 \u043c\u043d\u0435\u043d\u0438\u0435 \u0434\u043b\u044f \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u0441\u0435\u0440\u0432\u0438\u0441\u0430\",\"en\":\"Your feedback to improve service quality\"},\"welcome_message\":{\"uz\":\"Assalomu alaykum! So\u2018rovnomamizga xush kelibsiz.\",\"ru\":\"\u0414\u043e\u0431\u0440\u043e \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c \u0432 \u043d\u0430\u0448 \u043e\u043f\u0440\u043e\u0441!\",\"en\":\"Welcome to our satisfaction survey!\"},\"thank_you_message\":{\"uz\":\"Ishtirokingiz uchun katta rahmat!\",\"ru\":\"\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0443\u0447\u0430\u0441\u0442\u0438\u0435!\",\"en\":\"Thank you for your valuable participation!\"},\"internal_note\":\"Q4 2026 Customer Satisfaction Track\"}"
+                                    "raw": "{\"default_locale\":\"uz\",\"locales\":[\"ru\"],\"title\":[\"architecto\"],\"description\":[\"architecto\"],\"welcome_message\":[\"architecto\"],\"thank_you_message\":[\"architecto\"],\"internal_note\":\"Q4 2026 Customer Satisfaction Track\"}"
                                 },
                                 "description": "Create a new draft survey within an organization. Selected locales must be a subset of [uz, ru, en], and default_locale must belong to selected locales."
                             },
@@ -500,13 +500,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -558,13 +558,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -594,7 +594,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"default_locale\":\"uz\",\"locales\":[\"ru\"],\"title\":{\"uz\":\"Mijozlar qoniqishi so\u2018rovi (Yangilangan)\",\"ru\":\"\u041e\u043f\u0440\u043e\u0441 \u0443\u0434\u043e\u0432\u043b\u0435\u0442\u0432\u043e\u0440\u0435\u043d\u043d\u043e\u0441\u0442\u0438 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432 (\u041e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u043d\u044b\u0439)\",\"en\":\"Customer Satisfaction Survey (Updated)\"},\"description\":{\"uz\":\"Xizmatlar sifatini oshirish bo\u2018yicha fikrlar\",\"ru\":\"\u041c\u043d\u0435\u043d\u0438\u044f \u0434\u043b\u044f \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u0441\u0435\u0440\u0432\u0438\u0441\u0430\",\"en\":\"Feedback to improve service quality\"},\"welcome_message\":{\"uz\":\"Xush kelibsiz!\",\"ru\":\"\u0414\u043e\u0431\u0440\u043e \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c!\",\"en\":\"Welcome!\"},\"thank_you_message\":{\"uz\":\"Rahmat!\",\"ru\":\"\u0421\u043f\u0430\u0441\u0438\u0431\u043e!\",\"en\":\"Thank you!\"},\"internal_note\":\"Reviewed with stakeholders.\"}"
+                                    "raw": "{\"default_locale\":\"uz\",\"locales\":[\"en\"],\"title\":[\"architecto\"],\"description\":[\"architecto\"],\"welcome_message\":[\"architecto\"],\"thank_you_message\":[\"architecto\"],\"internal_note\":\"Reviewed with stakeholders.\"}"
                                 },
                                 "description": "Update metadata, title, or locales of a draft survey. Surveys in active, closed, or archived status cannot be edited."
                             },
@@ -625,13 +625,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -660,7 +660,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "Permanently delete a survey. Only draft surveys or surveys requesting changes can be deleted. Active surveys cannot be deleted."
+                                "description": "Permanently delete a draft survey without moderation or participation history. Surveys with history must be preserved."
                             },
                             "response": [
                                 {
@@ -680,6 +680,113 @@
                     ]
                 },
                 {
+                    "name": "Survey Logic",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Read Survey Logic",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/logic",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/logic",
+                                    "variable": [
+                                        {
+                                            "id": "organization_id",
+                                            "key": "organization_id",
+                                            "value": 16,
+                                            "description": "The ID of the organization."
+                                        },
+                                        {
+                                            "id": "survey_id",
+                                            "key": "survey_id",
+                                            "value": 16,
+                                            "description": "The ID of the survey."
+                                        }
+                                    ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": ""
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"rules\":[]}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Replace Survey Logic",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/logic",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/logic",
+                                    "variable": [
+                                        {
+                                            "id": "organization_id",
+                                            "key": "organization_id",
+                                            "value": 16,
+                                            "description": "The ID of the organization."
+                                        },
+                                        {
+                                            "id": "survey_id",
+                                            "key": "survey_id",
+                                            "value": 16,
+                                            "description": "The ID of the survey."
+                                        }
+                                    ]
+                                },
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"rules\":[{\"action\":\"show_question\",\"target_question_id\":202,\"priority\":0,\"match\":\"all\",\"conditions\":[{\"question_id\":101,\"operator\":\"equals\",\"value\":501}]}]}"
+                                },
+                                "description": "Atomically replaces all rules. Send rules: [] to remove all logic. See API-SURVEY-LOGIC.md for the contract."
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"rules\":[{\"id\":1,\"action\":\"show_question\",\"source_page_id\":null,\"target_page_id\":null,\"target_question_id\":202,\"priority\":0,\"match\":\"all\",\"conditions\":[{\"question_id\":101,\"operator\":\"equals\",\"value\":501}]}]}",
+                                    "name": ""
+                                },
+                                {
+                                    "header": [],
+                                    "code": 422,
+                                    "body": "{\"error\":{\"code\":\"INVALID_SURVEY_LOGIC\",\"message\":\"Invalid survey logic.\",\"fields\":{\"rules.0\":[\"Navigation may only target a later page in this survey.\"]}}}",
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "Results & Analytics\n\nReal-time analytics, response aggregates, respondent participation breakdown, and CSV data export.",
                     "description": "",
                     "item": [
@@ -689,19 +796,38 @@
                                 "url": {
                                     "host": "{{baseUrl}}",
                                     "path": "api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/summary",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/summary",
+                                    "query": [
+                                        {
+                                            "key": "status",
+                                            "value": "completed",
+                                            "description": "Filter by participation status; omit to include both statuses.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "participation_locale",
+                                            "value": "ru",
+                                            "description": "Filter by stored participation locale.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "locale",
+                                            "value": "uz",
+                                            "description": "Display language for question and option labels, not a participation filter.",
+                                            "disabled": false
+                                        }
+                                    ],
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/summary?status=completed&participation_locale=ru&locale=uz",
                                     "variable": [
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -749,30 +875,42 @@
                                     "path": "api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/questions\/:question_id",
                                     "query": [
                                         {
+                                            "key": "status",
+                                            "value": "",
+                                            "description": "Filter by participation status: in_progress or completed.",
+                                            "disabled": true
+                                        },
+                                        {
+                                            "key": "participation_locale",
+                                            "value": "",
+                                            "description": "Filter by stored participation locale: uz, ru or en.",
+                                            "disabled": true
+                                        },
+                                        {
                                             "key": "locale",
                                             "value": "uz",
                                             "description": "Optional locale to label choice options. Defaults to survey default_locale.",
                                             "disabled": false
                                         }
                                     ],
-                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/questions\/:question_id?locale=uz",
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/questions\/:question_id?status=&participation_locale=&locale=uz",
                                     "variable": [
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -813,7 +951,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"question_id\": 1,\n  \"type\": \"single_choice\",\n  \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n  \"total_answers\": 8,\n  \"options\": [\n    {\n      \"id\": 1,\n      \"label\": \"Har kuni\",\n      \"count\": 6,\n      \"percentage\": 75.0\n    },\n    {\n      \"id\": 2,\n      \"label\": \"Haftada bir necha marta\",\n      \"count\": 2,\n      \"percentage\": 25.0\n    }\n  ]\n}",
+                                    "body": "{\n  \"question_id\": 1,\n  \"type\": \"single_choice\",\n  \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n  \"total_responses\": 8,\n  \"distribution\": [\n    {\n      \"option_id\": 1,\n      \"label\": \"Har kuni\",\n      \"count\": 6,\n      \"percentage\": 75.0\n    },\n    {\n      \"id\": 2,\n      \"label\": \"Haftada bir necha marta\",\n      \"count\": 2,\n      \"percentage\": 25.0\n    }\n  ]\n}",
                                     "name": ""
                                 }
                             ]
@@ -828,7 +966,19 @@
                                         {
                                             "key": "status",
                                             "value": "completed",
-                                            "description": "Filter by status (in_progress, completed, abandoned).",
+                                            "description": "Filter by status (in_progress, completed).",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "participation_locale",
+                                            "value": "",
+                                            "description": "Filter by stored participation locale: uz, ru or en.",
+                                            "disabled": true
+                                        },
+                                        {
+                                            "key": "locale",
+                                            "value": "uz",
+                                            "description": "Display language for question and option labels, not a participation filter.",
                                             "disabled": false
                                         },
                                         {
@@ -838,18 +988,18 @@
                                             "disabled": false
                                         }
                                     ],
-                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/participations?status=completed&page=1",
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/participations?status=completed&participation_locale=&locale=uz&page=1",
                                     "variable": [
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -901,19 +1051,19 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "participation_id",
                                             "key": "participation_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the participation."
                                         },
                                         {
@@ -954,7 +1104,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"participation\": {\n    \"id\": 1,\n    \"status\": \"completed\",\n    \"locale\": \"uz\",\n    \"started_at\": \"2026-10-17T10:00:00.000000Z\",\n    \"completed_at\": \"2026-10-17T10:05:00.000000Z\",\n    \"user\": {\n      \"id\": 3,\n      \"name\": \"Anvar Alimov\",\n      \"email\": \"respondent@dialog.uz\"\n    },\n    \"answers\": [\n      {\n        \"question_id\": 1,\n        \"question_title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n        \"type\": \"single_choice\",\n        \"text_value\": \"Har kuni\",\n        \"number_value\": null,\n        \"selected_options\": [\n          {\"id\": 1, \"label\": \"Har kuni\"}\n        ]\n      }\n    ]\n  }\n}",
+                                    "body": "{\n  \"participation\": {\n    \"id\": 1,\n    \"status\": \"completed\",\n    \"locale\": \"uz\",\n    \"started_at\": \"2026-10-17T10:00:00.000000Z\",\n    \"completed_at\": \"2026-10-17T10:05:00.000000Z\",\n    \"user\": {\n      \"id\": 3,\n      \"name\": \"Anvar Alimov\",\n      \"email\": \"respondent@dialog.uz\"\n    },\n    \"answers\": [\n      {\n        \"question_id\": 1,\n        \"question_title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n        \"type\": \"single_choice\",\n        \"text_value\": null,\n        \"number_value\": null,\n        \"selected_options\": [\n          {\"id\": 1, \"label\": \"Har kuni\"}\n        ]\n      }\n    ]\n  }\n}",
                                     "name": ""
                                 }
                             ]
@@ -967,24 +1117,36 @@
                                     "path": "api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/export",
                                     "query": [
                                         {
+                                            "key": "status",
+                                            "value": "",
+                                            "description": "Filter by participation status: in_progress or completed.",
+                                            "disabled": true
+                                        },
+                                        {
+                                            "key": "participation_locale",
+                                            "value": "",
+                                            "description": "Filter by stored participation locale: uz, ru or en.",
+                                            "disabled": true
+                                        },
+                                        {
                                             "key": "locale",
                                             "value": "uz",
                                             "description": "Optional locale for question and option headers. Defaults to survey default_locale.",
                                             "disabled": false
                                         }
                                     ],
-                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/export?locale=uz",
+                                    "raw": "{{baseUrl}}\/api\/v1\/business\/organizations\/:organization_id\/surveys\/:survey_id\/results\/export?status=&participation_locale=&locale=uz",
                                     "variable": [
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1013,7 +1175,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "Download completed survey responses as a CSV spreadsheet."
+                                "description": "Download filtered survey responses as a CSV spreadsheet. Defaults to both completed and in-progress records; pass status=completed for completed-only export."
                             },
                             "response": [
                                 {
@@ -1042,13 +1204,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1106,13 +1268,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1170,13 +1332,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1228,13 +1390,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1286,13 +1448,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1344,13 +1506,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1415,13 +1577,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1456,7 +1618,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"survey\": {\n    \"id\": 1,\n    \"status\": \"draft\",\n    \"locale\": \"uz\",\n    \"title\": \"Mijozlar qoniqishi so\u2018rovi\",\n    \"description\": \"Xizmatlarimiz sifatini oshirish bo\u2018yicha fikringiz muhim\",\n    \"welcome_message\": \"Assalomu alaykum!\",\n    \"thank_you_message\": \"Tashakkur!\"\n  },\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"description\": null,\n      \"position\": 1,\n      \"questions\": [\n        {\n          \"id\": 1,\n          \"type\": \"single_choice\",\n          \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n          \"description\": null,\n          \"is_required\": true,\n          \"position\": 1,\n          \"options\": [\n            {\"id\": 1, \"label\": \"Har kuni\", \"position\": 1}\n          ]\n        }\n      ]\n    },\n    \"is_first_page\": true,\n    \"is_last_page\": false,\n    \"next\": {\n      \"type\": \"page\",\n      \"page_id\": 2\n    }\n  }\n}",
+                                    "body": "{\n  \"survey\": {\n    \"id\": 1,\n    \"status\": \"draft\",\n    \"locale\": \"uz\",\n    \"title\": \"Mijozlar qoniqishi so\u2018rovi\",\n    \"description\": \"Xizmatlarimiz sifatini oshirish bo\u2018yicha fikringiz muhim\",\n    \"welcome_message\": \"Assalomu alaykum!\",\n    \"thank_you_message\": \"Tashakkur!\"\n  },\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"description\": null,\n      \"position\": 1,\n      \"questions\": [\n        {\n          \"id\": 1,\n          \"type\": \"single_choice\",\n          \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n          \"description\": null,\n          \"is_required\": true,\n          \"position\": 1,\n          \"options\": [\n            {\"id\": 1, \"label\": \"Har kuni\", \"position\": 1}\n          ]\n        }\n      ]\n    },\n    \"progress\": {\"current_step\": 1, \"total_steps\": 2, \"percent\": 50, \"is_first_page\": true, \"is_last_page\": false},\n    \"next\": {\n      \"type\": \"page\",\n      \"id\": 2\n    }\n  }\n}",
                                     "name": ""
                                 }
                             ]
@@ -1473,19 +1635,19 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1521,7 +1683,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"locale\":\"uz\",\"answers\":{\"1\":{\"option_id\":1}}}"
+                                    "raw": "{\"locale\":\"uz\",\"answers\":{\"1\":1},\"previous_answers\":[]}"
                                 },
                                 "description": "Test-validates answers for a specific page in preview mode without recording responses in the database."
                             },
@@ -1529,13 +1691,13 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"valid\": true,\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"position\": 1\n    },\n    \"is_first_page\": true,\n    \"is_last_page\": false,\n    \"next\": {\n      \"type\": \"page\",\n      \"page_id\": 2\n    }\n  }\n}",
+                                    "body": "{\n  \"valid\": true,\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"position\": 1\n    },\n    \"progress\": {\"current_step\": 1, \"total_steps\": 2, \"percent\": 50, \"is_first_page\": true, \"is_last_page\": false},\n    \"next\": {\n      \"type\": \"page\",\n      \"id\": 2\n    }\n  }\n}",
                                     "name": ""
                                 },
                                 {
                                     "header": [],
                                     "code": 422,
-                                    "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"This question is required.\",\n    \"fields\": {\n      \"answers.1\": [\"This question is required.\"]\n    }\n  }\n}",
+                                    "body": "{\n  \"error\": {\n    \"code\": \"INVALID_ANSWER\",\n    \"message\": \"One or more answers are invalid.\",\n    \"fields\": {\n      \"answers.1\": [\"This question is required.\"]\n    }\n  }\n}",
                                     "name": ""
                                 }
                             ]
@@ -1558,13 +1720,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1594,7 +1756,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"title\":{\"uz\":\"Xizmatlardan foydalanish\",\"ru\":\"\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432\",\"en\":\"Service Usage\"},\"description\":{\"uz\":\"Iltimos, barcha savollarga xolis javob bering.\",\"ru\":\"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043e\u0442\u0432\u0435\u0442\u044c\u0442\u0435 \u043d\u0430 \u0432\u0441\u0435 \u0432\u043e\u043f\u0440\u043e\u0441\u044b.\",\"en\":\"Please answer all questions objectively.\"}}"
+                                    "raw": "{\"title\":[\"architecto\"],\"description\":[\"architecto\"]}"
                                 },
                                 "description": "Appends a new page to the draft survey. Automatically assigns the next sequential position."
                             },
@@ -1619,13 +1781,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1655,7 +1817,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"title\":{\"uz\":\"Baholash va takliflar\",\"ru\":\"\u041e\u0446\u0435\u043d\u043a\u0430 \u0438 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f\",\"en\":\"Rating & Feedback\"},\"description\":{\"uz\":\"Yakuniy bahoni bering.\",\"ru\":\"\u041f\u043e\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u0438\u0442\u043e\u0433\u043e\u0432\u0443\u044e \u043e\u0446\u0435\u043d\u043a\u0443.\",\"en\":\"Provide your final rating.\"}}"
+                                    "raw": "{\"title\":[\"architecto\"],\"description\":[\"architecto\"]}"
                                 },
                                 "description": "Update page title or description. Survey must be editable (draft or changes requested)."
                             },
@@ -1680,13 +1842,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1744,13 +1906,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1811,13 +1973,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1847,7 +2009,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"type\":\"single_choice\",\"title\":{\"uz\":\"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\"ru\":\"\u041a\u0430\u043a \u0447\u0430\u0441\u0442\u043e \u0432\u044b \u043f\u043e\u043b\u044c\u0437\u0443\u0435\u0442\u0435\u0441\u044c \u043d\u0430\u0448\u0438\u043c \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u043c?\",\"en\":\"How often do you use our service?\"},\"description\":{\"uz\":\"Faqat bitta variantni tanlang\",\"ru\":\"\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0434\u0438\u043d \u0432\u0430\u0440\u0438\u0430\u043d\u0442\",\"en\":\"Select one option only\"},\"is_required\":true,\"settings\":{\"min\":1,\"max\":5}}"
+                                    "raw": "{\"type\":\"single_choice\",\"title\":[\"architecto\"],\"description\":[\"architecto\"],\"is_required\":true,\"settings\":{\"min\":1,\"max\":5}}"
                                 },
                                 "description": "Create a new question within a survey page. Supported types: single_choice, multiple_choice, rating, short_text, long_text."
                             },
@@ -1872,13 +2034,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -1908,7 +2070,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"type\":\"single_choice\",\"title\":{\"uz\":\"Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)\",\"ru\":\"\u041a\u0430\u043a \u0447\u0430\u0441\u0442\u043e \u0432\u044b \u043f\u043e\u043b\u044c\u0437\u0443\u0435\u0442\u0435\u0441\u044c \u043d\u0430\u0448\u0438\u043c \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u043c? (\u041e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u043e)\",\"en\":\"How often do you use our service? (Updated)\"},\"description\":{\"uz\":\"Iltimos, aniq javob bering.\"},\"is_required\":true,\"settings\":{\"min\":1,\"max\":5}}"
+                                    "raw": "{\"type\":\"single_choice\",\"title\":[\"architecto\"],\"description\":[\"architecto\"],\"is_required\":true,\"settings\":{\"min\":1,\"max\":5}}"
                                 },
                                 "description": "Update question properties, localized titles, and type-specific settings. Survey must be editable."
                             },
@@ -1933,13 +2095,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -1991,13 +2153,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2049,13 +2211,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -2116,13 +2278,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2152,7 +2314,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"label\":{\"uz\":\"Har kuni\",\"ru\":\"\u041a\u0430\u0436\u0434\u044b\u0439 \u0434\u0435\u043d\u044c\",\"en\":\"Daily\"}}"
+                                    "raw": "{\"label\":[\"architecto\"]}"
                                 },
                                 "description": "Add a choice option with localized labels to a choice question."
                             },
@@ -2177,13 +2339,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "option_id",
                                             "key": "option_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the option."
                                         },
                                         {
@@ -2213,7 +2375,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"label\":{\"uz\":\"Haftada bir necha marta\",\"ru\":\"\u041d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0440\u0430\u0437 \u0432 \u043d\u0435\u0434\u0435\u043b\u044e\",\"en\":\"Several times a week\"}}"
+                                    "raw": "{\"label\":[\"architecto\"]}"
                                 },
                                 "description": "Update localized labels of an existing choice option."
                             },
@@ -2238,13 +2400,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "option_id",
                                             "key": "option_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the option."
                                         },
                                         {
@@ -2296,13 +2458,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2365,7 +2527,7 @@
                                 {
                                     "id": "survey_id",
                                     "key": "survey_id",
-                                    "value": 1,
+                                    "value": 16,
                                     "description": "The ID of the survey."
                                 },
                                 {
@@ -2397,7 +2559,7 @@
                         {
                             "header": [],
                             "code": 201,
-                            "body": "{\n  \"participation_id\": 1,\n  \"status\": \"in_progress\",\n  \"survey\": {\n    \"id\": 1,\n    \"title\": \"Mijozlar qoniqishi so\u2018rovi\",\n    \"welcome_message\": \"Assalomu alaykum! So\u2018rovnomaga xush kelibsiz.\"\n  },\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"description\": null,\n      \"position\": 1,\n      \"questions\": [\n        {\n          \"id\": 1,\n          \"type\": \"single_choice\",\n          \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n          \"is_required\": true,\n          \"position\": 1,\n          \"options\": [\n            {\"id\": 1, \"label\": \"Har kuni\", \"position\": 1},\n            {\"id\": 2, \"label\": \"Haftada bir necha marta\", \"position\": 2}\n          ]\n        }\n      ]\n    },\n    \"is_first_page\": true,\n    \"is_last_page\": false,\n    \"next\": {\n      \"type\": \"page\",\n      \"page_id\": 2\n    }\n  }\n}",
+                            "body": "{\n  \"participation_id\": 1,\n  \"status\": \"in_progress\",\n  \"survey\": {\n    \"id\": 1,\n    \"title\": \"Mijozlar qoniqishi so\u2018rovi\",\n    \"welcome_message\": \"Assalomu alaykum! So\u2018rovnomaga xush kelibsiz.\"\n  },\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"description\": null,\n      \"position\": 1,\n      \"questions\": [\n        {\n          \"id\": 1,\n          \"type\": \"single_choice\",\n          \"title\": \"Xizmatimizdan qanchalik tez-tez foydalanasiz?\",\n          \"is_required\": true,\n          \"position\": 1,\n          \"options\": [\n            {\"id\": 1, \"label\": \"Har kuni\", \"position\": 1},\n            {\"id\": 2, \"label\": \"Haftada bir necha marta\", \"position\": 2}\n          ]\n        }\n      ]\n    },\n    \"progress\": {\"current_step\": 1, \"total_steps\": 2, \"percent\": 50, \"is_first_page\": true, \"is_last_page\": false},\n    \"next\": {\n      \"type\": \"page\",\n      \"id\": 2\n    }\n  }\n}",
                             "name": ""
                         },
                         {
@@ -2420,7 +2582,7 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 1,
+                                    "value": 16,
                                     "description": "The ID of the participation."
                                 },
                                 {
@@ -2449,7 +2611,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n  \"participation_id\": 1,\n  \"status\": \"in_progress\",\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"position\": 1\n    },\n    \"is_first_page\": true,\n    \"is_last_page\": false,\n    \"next\": {\n      \"type\": \"page\",\n      \"page_id\": 2\n    }\n  }\n}",
+                            "body": "{\n  \"participation_id\": 1,\n  \"status\": \"in_progress\",\n  \"current_step\": {\n    \"page\": {\n      \"id\": 1,\n      \"title\": \"Xizmatlardan foydalanish\",\n      \"position\": 1\n    },\n    \"progress\": {\"current_step\": 1, \"total_steps\": 2, \"percent\": 50, \"is_first_page\": true, \"is_last_page\": false},\n    \"next\": {\n      \"type\": \"page\",\n      \"id\": 2\n    }\n  }\n}",
                             "name": ""
                         },
                         {
@@ -2472,13 +2634,13 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 1,
+                                    "value": 16,
                                     "description": "The ID of the participation."
                                 },
                                 {
                                     "id": "page_id",
                                     "key": "page_id",
-                                    "value": 1,
+                                    "value": 16,
                                     "description": "The ID of the page."
                                 },
                                 {
@@ -2508,7 +2670,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"answers\":{\"1\":{\"option_id\":1}}}"
+                            "raw": "{\"answers\":{\"1\":1}}"
                         },
                         "description": "Validates and saves answers for the given page. Advances participation to the next page determined by SurveyFlow.\n\nImportant: The frontend MUST NOT calculate the next page; the backend SurveyFlow response dictates navigation."
                     },
@@ -2516,13 +2678,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n  \"success\": true,\n  \"current_step\": {\n    \"page\": {\n      \"id\": 2,\n      \"title\": \"Baholash\",\n      \"position\": 2,\n      \"questions\": [\n        {\n          \"id\": 2,\n          \"type\": \"rating\",\n          \"title\": \"Xizmat ko\u2018rsatish sifatini baholang (1-5)\",\n          \"is_required\": true,\n          \"position\": 1,\n          \"settings\": {\"min\": 1, \"max\": 5}\n        }\n      ]\n    },\n    \"is_first_page\": false,\n    \"is_last_page\": true,\n    \"next\": {\n      \"type\": \"complete\"\n    }\n  }\n}",
+                            "body": "{\n  \"next\": {\"type\": \"completed\"},\n  \"can_complete\": true,\n  \"current_step\": {\n    \"page\": {\"id\": 2, \"position\": 2, \"title\": \"Baholash\", \"description\": null, \"questions\": []},\n    \"progress\": {\"current_step\": 2, \"total_steps\": 2, \"percent\": 100, \"is_first_page\": false, \"is_last_page\": true},\n    \"next\": {\"type\": \"completed\"}\n  }\n}",
                             "name": ""
                         },
                         {
                             "header": [],
                             "code": 422,
-                            "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"This question is required.\",\n    \"fields\": {\n      \"answers.1\": [\"This question is required.\"]\n    }\n  }\n}",
+                            "body": "{\n  \"error\": {\n    \"code\": \"INVALID_ANSWER\",\n    \"message\": \"One or more answers are invalid.\",\n    \"fields\": {\n      \"answers.1\": [\"This question is required.\"]\n    }\n  }\n}",
                             "name": ""
                         }
                     ]
@@ -2539,7 +2701,7 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 1,
+                                    "value": 16,
                                     "description": "The ID of the participation."
                                 },
                                 {
@@ -2572,6 +2734,39 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Previous Visited Page",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/respondent\/participations\/:participation_id\/back",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/respondent\/participations\/:participation_id\/back",
+                            "variable": [
+                                {
+                                    "id": "participation_id",
+                                    "key": "participation_id",
+                                    "value": 16,
+                                    "description": "The ID of the participation."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Returns to the actually visited previous page, not the previous page by position. On the first page this is a no-op."
+                    },
+                    "response": []
                 }
             ]
         },
@@ -2646,7 +2841,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -2692,7 +2887,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -2744,7 +2939,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 1,
+                                            "value": 16,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -2838,7 +3033,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":\"ok\",\"version\":\"v1\",\"timestamp\":\"2026-10-17T12:28:35+00:00\"}",
+                            "body": "{\"status\":\"ok\",\"version\":\"v1\",\"timestamp\":\"2026-10-19T05:13:33+00:00\"}",
                             "name": ""
                         }
                     ]

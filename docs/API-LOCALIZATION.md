@@ -8,7 +8,7 @@ This guide explains how localization works across Dialog, separating **Platform 
 
 1. **Platform Interface Localization**
    - Applies to UI strings, system notification messages, error messages, and the user's preferred language (`users.locale`).
-   - Controlled via the `Accept-Language` HTTP header (`uz`, `ru`, `en`) or user profile locale.
+   - Stored as the user profile locale (`uz`, `ru`, `en`) for client UI preferences. The backend does not currently negotiate `Accept-Language`; error messages are English and clients should translate stable error codes.
 
 2. **Survey Content Localization**
    - Applies to survey titles, descriptions, page titles, question titles, and choice option labels.
@@ -137,4 +137,4 @@ In the respondent flow:
   }
 }
 ```
-If a specific translation is missing, the backend automatically falls back to `survey.default_locale`.
+Question titles and option labels fall back to `survey.default_locale`. Optional descriptions, page labels and rating endpoint labels resolve to null when absent. Published required content must pass translation validation.

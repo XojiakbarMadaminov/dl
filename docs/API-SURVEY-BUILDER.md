@@ -122,7 +122,7 @@ Endpoint: `PUT /api/v1/business/organizations/{organization}/pages/{page}/questi
 
 #### Duplicate question:
 Endpoint: `POST /api/v1/business/organizations/{organization}/questions/{question}/duplicate`
-*Duplicates question, settings, and options immediately below the target question.*
+*Duplicates question, settings, and options at the end of the same page.*
 
 ---
 
@@ -148,16 +148,19 @@ Endpoint: `PUT /api/v1/business/organizations/{organization}/questions/{question
 ---
 
 ### Step 5: Test & Preview (Stateless)
+Optional MVP logic configuration: read or replace `GET/PUT /api/v1/business/organizations/{organization}/surveys/{survey}/logic` after creating pages/questions/options. See `API-SURVEY-LOGIC.md` for visibility, branching, early completion and AND/OR payloads. Rules share survey editability and become locked on review submission.
+
 Before submitting, preview the survey flow in any supported language without polluting production response databases:
 Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/preview?locale=uz`
 
 To test validate respondent inputs on a specific page:
+Supply `previous_answers` for earlier applicable pages when testing later conditional pages; preview creates no participation/answer records.
 Endpoint: `POST /api/v1/business/organizations/{organization}/surveys/{survey}/preview/pages/{page}/validate`
 ```json
 {
   "locale": "uz",
   "answers": {
-    "1": { "option_id": 1 }
+    "1": 1
   }
 }
 ```

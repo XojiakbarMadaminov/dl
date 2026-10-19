@@ -20,7 +20,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -112,7 +112,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -121,7 +121,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -139,7 +139,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 1
+      survey_id: 16
       survey: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -204,7 +204,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -213,7 +213,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -231,7 +231,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 1
+      survey_id: 16
       survey: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -292,7 +292,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -301,7 +301,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -319,7 +319,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 1
+      survey_id: 16
       survey: 1
     queryParameters: []
     cleanQueryParameters: []

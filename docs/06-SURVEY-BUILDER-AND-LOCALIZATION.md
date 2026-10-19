@@ -116,6 +116,8 @@ Before moderation submission, all selected locales must have the required respon
 
 A locale with incomplete published content must not be offered to respondents.
 
+Page titles and rating endpoint labels (`settings.min_label`, `settings.max_label`) are optional, but when a non-empty translation map is configured it must cover every selected locale. Their respondent/preview payloads are resolved strings, not maps. Translation map values must be strings or null, never nested objects.
+
 ## Translation validator
 
 Implement a dedicated domain validator such as:
@@ -165,6 +167,7 @@ Support:
 - create/update/delete/reorder options;
 - autosave-friendly small requests;
 - preview.
+- read/replace conditional rules using `GET/PUT /surveys/{survey}/logic`; see `API-SURVEY-LOGIC.md`.
 
 ## Publish/editability rule
 

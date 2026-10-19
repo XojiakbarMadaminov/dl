@@ -19,7 +19,7 @@ Agents should mark `[x]` only after the implementation and relevant tests are co
 
 - [x] Implement user registration with email/password.
 - [x] Implement login/logout/me.
-- [x] Implement password reset if included by current product task.
+- [ ] Implement password reset if included by current product task. No reset endpoints/actions exist yet.
 - [x] Add platform locale (`uz`, `ru`, `en`).
 - [x] Add platform role (`user`, `admin`).
 - [x] Create organizations.
@@ -100,25 +100,57 @@ Agents should mark `[x]` only after the implementation and relevant tests are co
 - [x] Implement text answer list.
 - [x] Add locale/filter support required by UI.
 - [x] Implement CSV export respecting filters.
-- [x] Queue export if it becomes heavy.
+- [ ] Queue export if it becomes heavy. Current CSV export is synchronous and loads participations in batches.
 
 ## Phase 7 — Hardening
 
+- [x] Configure localhost/loopback frontend CORS, explicit production origins, credentialed preflight and API error-response regression tests.
 - [x] Review indexes using real query patterns.
 - [x] Add rate limiting where appropriate.
 - [x] Review N+1 queries.
 - [x] Add/verify audit coverage for critical operations.
 - [x] Verify sensitive-data logging rules.
-- [x] Verify production queue worker configuration.
-- [x] Verify scheduler configuration.
+- [ ] Verify production queue worker configuration on the actual server (runbook exists).
+- [ ] Verify scheduler configuration on the actual server (runbook exists).
 - [x] Add backup/restore runbook.
 - [x] Run full end-to-end acceptance flow.
 
+## Documentation/code audit — 2026-10-19
+
+Details and explicit architecture conflicts: `docs/AUDIT-DOCS-CODE.md`.
+
+- [x] Enforce persisted-answer validation and transactional/idempotent completion.
+- [x] Serialize duplicate starts and participation writes; prevent stale-model completed-answer updates.
+- [x] Use typed `SurveyFlow` destinations in respondent and preview responses.
+- [x] Validate answer payload types, distinct choice IDs and integer rating bounds.
+- [x] Validate effective question settings and block empty/impossible pages before review.
+- [x] Resolve rating labels and validate configured page/rating label translations.
+- [x] Make submit/decision/publication retries safe and preserve surveys with history.
+- [x] Share result filters with CSV and restrict business result user profile fields.
+- [x] Add CSV BOM and formula neutralization.
+- [x] Correct integration guides for actual auth, enums, payloads and response keys.
+- [ ] Reconcile moderation-round storage with the event schema without losing existing history.
+- [ ] Reconcile audit column/action naming and user-agent coverage with the architecture document.
+- [ ] Complete remaining controller-to-Action/FormRequest and Query/Resource extraction.
+
+## MVP conditional logic — approved 2026-10-19
+
+- [x] Define the MVP rule/operator contract and update the previous deferred-scope decisions.
+- [x] Add survey rule storage and participation visited-page history with a forward migration.
+- [x] Add authorized read/atomic-replace builder endpoints with editable-state guards and audit coverage.
+- [x] Validate survey-local references, type-specific operators, earlier-page visibility and forward-only navigation.
+- [x] Implement AND/OR conditions, deterministic priorities and linear fallback in SurveyFlow.
+- [x] Implement conditional visibility, page branching and early completion.
+- [x] Validate only applicable questions and prevent submission of unvisited/skipped pages.
+- [x] Remove newly hidden/skipped persisted answers after route-changing edits and preserve result/export consistency.
+- [x] Implement actual-history Back with ownership, active-state and completion guards.
+- [x] Use the same logic in stateless preview and revalidate rules before review/publication.
+- [x] Add feature/operator regression tests.
+
 ## Future phases — do not implement until explicitly approved
 
-- [ ] Conditional survey logic engine.
-- [ ] AND/OR and advanced operators.
-- [ ] Screening/disqualification.
+- [ ] Same-page reactive visibility, nested groups and additional advanced operators.
+- [ ] Distinct screening/disqualification status and analytics (MVP early completion is implemented).
 - [ ] Piping/carry-forward/randomization/scoring.
 - [ ] Survey versioning.
 - [ ] Public collectors/links/invitations/embed.

@@ -1,161 +1,68 @@
-# Dialog Survey Results & Analytics Guide
+# Dialog results and CSV API
 
-This guide describes how to consume survey analytics, aggregate statistics, individual response data, and export CSV spreadsheets for business users.
+All routes are under `/api/v1/business/organizations/{organization}/surveys/{survey}` and require authenticated organization read permission. Organization/survey/participation/question ownership is checked by the backend.
 
----
+## Shared filters
 
-## 1. High-Level Summary Metrics
+List, summary, question aggregate and CSV export use the same participation query:
 
-Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/results/summary`
+- `status=in_progress|completed`: omit to include both statuses.
+- `participation_locale=uz|ru|en`: filter on the participation's stored locale.
+- `locale=uz|ru|en`: select the display language for question/option labels; this is **not** a participation filter. Defaults to the survey default, with default-language fallback for missing labels.
 
-Returns overview metrics for dashboards:
+Invalid filter values return HTTP 422 `VALIDATION_ERROR`. CSV now includes the same records as the list by default; pass `status=completed` for completed-only exports.
+
+## Summary
+
+`GET .../results/summary`
+
 ```json
-{
-  "survey_id": 1,
-  "started_count": 120,
-  "completed_count": 96,
-  "in_progress_count": 24,
-  "completion_rate": 80.0
-}
+{"survey_id":1,"started_count":120,"completed_count":96,"in_progress_count":24,"completion_rate":80}
 ```
 
-- `completion_rate`: Calculated as `round((completed_count / started_count) * 100, 2)` (or `0.0` if no starts).
+Counts apply to the filtered set. Completion rate is `round(completed_count / started_count * 100, 1)`, or zero when there are no starts.
 
----
+## Question aggregates
 
-## 2. Question-Level Aggregate Statistics
+`GET .../results/questions/{question}`
 
-Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/results/questions/{question}?locale=uz`
+Choice response:
 
-Returns distribution metrics tailored by question type:
-
-### A. Choice Questions (`single_choice`, `multiple_choice`):
 ```json
 {
-  "question_id": 101,
-  "type": "single_choice",
-  "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
-  "total_answers": 96,
-  "options": [
-    {
-      "id": 501,
-      "label": "Har kuni",
-      "count": 72,
-      "percentage": 75.0
-    },
-    {
-      "id": 502,
-      "label": "Haftada bir necha marta",
-      "count": 24,
-      "percentage": 25.0
-    }
+  "question_id":101,
+  "type":"single_choice",
+  "title":"Savol",
+  "total_responses":4,
+  "distribution":[
+    {"option_id":501,"label":"Ha","count":3,"percentage":75},
+    {"option_id":502,"label":"Yo‘q","count":1,"percentage":25}
   ]
 }
 ```
 
-### B. Rating Questions (`rating`):
-```json
-{
-  "question_id": 104,
-  "type": "rating",
-  "title": "Xizmat sifatini baholang (1-5)",
-  "total_answers": 96,
-  "average": 4.65,
-  "min": 1,
-  "max": 5
-}
-```
+- Single/multiple choice: `distribution` contains each option's count and percentage of answers to that question. Multiple-choice percentages may sum to more than 100%.
+- Rating: `average` (rounded to two decimals), and `distribution` entries `{"rating":5,"count":3,"percentage":75}` for each configured rating value.
+- Text: `sample_answers` contains up to 50 most recent non-null text answers.
+- Every type returns `question_id`, `type`, `title`, `total_responses`. In-progress answers count unless excluded by the status filter.
 
-### C. Text Questions (`short_text`, `long_text`):
-```json
-{
-  "question_id": 105,
-  "type": "short_text",
-  "title": "Qo‘shimcha fikrlaringiz",
-  "total_answers": 48
-}
-```
+## Participation list and detail
 
----
+`GET .../participations?status=completed&page=1`
 
-## 3. Respondent Participations & Detail
+Returns Laravel pagination fields including `data`, `current_page`, `per_page` (20), and `total`. Records include participation identifiers, locale, status and timestamps. The nested `user` is restricted to `id`, `name`, `email`; no password, token, platform role or account status is exposed.
 
-### List Participations (Paginated):
-Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/participations?status=completed&page=1`
+`GET .../participations/{participation}`
 
-Response includes paginated records with respondent basic profile and timestamps:
-```json
-{
-  "current_page": 1,
-  "data": [
-    {
-      "id": 14,
-      "survey_id": 1,
-      "user_id": 3,
-      "locale": "uz",
-      "status": "completed",
-      "started_at": "2026-10-17T10:00:00.000000Z",
-      "completed_at": "2026-10-17T10:05:00.000000Z",
-      "user": {
-        "id": 3,
-        "name": "Anvar Alimov",
-        "email": "respondent@dialog.uz"
-      }
-    }
-  ],
-  "total": 96,
-  "per_page": 20
-}
-```
+Returns a `participation` object with identifiers/status/locale/timestamps, basic `user`, and `answers`. An answer has `question_id`, localized `question_title`, `type`, `text_value`, `number_value`, `selected_options` (`id`, localized `label`). Choice answers use selected options; `text_value` is null.
 
-### Individual Participation Answer Breakdown:
-Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/participations/{participation}`
+## CSV
 
-Response:
-```json
-{
-  "participation": {
-    "id": 14,
-    "status": "completed",
-    "locale": "uz",
-    "started_at": "2026-10-17T10:00:00.000000Z",
-    "completed_at": "2026-10-17T10:05:00.000000Z",
-    "user": {
-      "id": 3,
-      "name": "Anvar Alimov",
-      "email": "respondent@dialog.uz"
-    },
-    "answers": [
-      {
-        "question_id": 101,
-        "question_title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
-        "type": "single_choice",
-        "text_value": "Har kuni",
-        "number_value": null,
-        "selected_options": [
-          { "id": 501, "label": "Har kuni" }
-        ]
-      },
-      {
-        "question_id": 104,
-        "question_title": "Xizmat sifatini baholang (1-5)",
-        "type": "rating",
-        "text_value": null,
-        "number_value": 5,
-        "selected_options": []
-      }
-    ]
-  }
-}
-```
+`GET .../results/export?status=completed&participation_locale=ru&locale=uz`
 
----
-
-## 4. Exporting Results to CSV
-
-Endpoint: `GET /api/v1/business/organizations/{organization}/surveys/{survey}/results/export?locale=uz`
-
-- **Content-Type**: `text/csv; charset=UTF-8`
-- **Content-Disposition**: `attachment; filename="survey_1_results_20261017_120000.csv"`
-- Standard UTF-8 BOM encoding for flawless rendering in Excel and Google Sheets.
-- Columns include: `participation_id`, `respondent_id`, `respondent_name`, `locale`, `started_at`, `completed_at`, followed by each question title column with the respondent's answered text, number, or comma-separated option labels.
+- Content-Type: `text/csv; charset=UTF-8`.
+- Attachment filename: `survey_{id}_results_{Ymd_His}.csv`.
+- UTF-8 BOM, followed by columns `Participation ID`, `User ID`, `Locale`, `Started At`, `Completed At`, then `Q{id}: {localized question title}` columns.
+- Choice cells contain comma-separated localized option labels; text and rating cells contain their values.
+- Spreadsheet-formula prefixes in cells are neutralized with an apostrophe.
+- Participations are loaded in batches of 100; CSV generation is still synchronous. There is no queued export job/download API yet.

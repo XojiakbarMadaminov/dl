@@ -28,6 +28,10 @@ The same backend serves:
 
 Do not create separate mobile business logic or separate mobile services.
 
+## Browser CORS
+
+Laravel's existing global `HandleCors` middleware uses `config/cors.php` for `api/*` and `sanctum/csrf-cookie`; do not add duplicate middleware or per-controller CORS headers. Local/testing loopback origins are allowed on any port. Other origins use `CORS_ALLOWED_ORIGINS`; `CORS_ALLOW_LOCALHOST` explicitly controls loopback access outside development. Responses grant browser access only to allowed origins, including credentialed requests and API error responses. CORS never replaces backend auth. See `API-FRONTEND-GUIDE.md` for environment examples.
+
 ## Business examples
 
 ```text

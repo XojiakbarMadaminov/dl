@@ -20,7 +20,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -76,7 +76,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -157,7 +157,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -166,7 +166,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -184,7 +184,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
+      organization_id: 16
       organization: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -248,7 +248,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -257,7 +257,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -275,7 +275,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
+      organization_id: 16
       organization: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -351,7 +351,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -360,7 +360,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -378,7 +378,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
+      organization_id: 16
       organization: 1
     queryParameters:
       page:
@@ -469,7 +469,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -478,7 +478,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -496,7 +496,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
+      organization_id: 16
       organization: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -521,7 +521,7 @@ endpoints:
         description: ''
         required: true
         example:
-          - en
+          - ru
         type: 'string[]'
         enumValues:
           - uz
@@ -533,27 +533,23 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Localized survey title map. Must contain non-empty strings for all selected survey locales.'
-        required: true
+        description: ''
+        required: false
         example:
-          uz: 'Mijozlar qoniqishi so‘rovi'
-          ru: 'Опрос удовлетворенности клиентов'
-          en: 'Customer Satisfaction Survey'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       description:
         custom: []
         name: description
-        description: 'Optional localized survey subtitle/description map.'
+        description: ''
         required: false
         example:
-          uz: 'Xizmatlar sifatini yaxshilash bo‘yicha fikringiz'
-          ru: 'Ваше мнение для улучшения качества сервиса'
-          en: 'Your feedback to improve service quality'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -561,13 +557,11 @@ endpoints:
       welcome_message:
         custom: []
         name: welcome_message
-        description: 'Optional greeting displayed to respondents prior to answering.'
+        description: ''
         required: false
         example:
-          uz: 'Assalomu alaykum! So‘rovnomamizga xush kelibsiz.'
-          ru: 'Добро пожаловать в наш опрос!'
-          en: 'Welcome to our satisfaction survey!'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -575,13 +569,11 @@ endpoints:
       thank_you_message:
         custom: []
         name: thank_you_message
-        description: 'Optional completion message displayed after submission.'
+        description: ''
         required: false
         example:
-          uz: 'Ishtirokingiz uchun katta rahmat!'
-          ru: 'Спасибо за участие!'
-          en: 'Thank you for your valuable participation!'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -600,23 +592,15 @@ endpoints:
     cleanBodyParameters:
       default_locale: uz
       locales:
-        - en
+        - ru
       title:
-        uz: 'Mijozlar qoniqishi so‘rovi'
-        ru: 'Опрос удовлетворенности клиентов'
-        en: 'Customer Satisfaction Survey'
+        - architecto
       description:
-        uz: 'Xizmatlar sifatini yaxshilash bo‘yicha fikringiz'
-        ru: 'Ваше мнение для улучшения качества сервиса'
-        en: 'Your feedback to improve service quality'
+        - architecto
       welcome_message:
-        uz: 'Assalomu alaykum! So‘rovnomamizga xush kelibsiz.'
-        ru: 'Добро пожаловать в наш опрос!'
-        en: 'Welcome to our satisfaction survey!'
+        - architecto
       thank_you_message:
-        uz: 'Ishtirokingiz uchun katta rahmat!'
-        ru: 'Спасибо за участие!'
-        en: 'Thank you for your valuable participation!'
+        - architecto
       internal_note: 'Q4 2026 Customer Satisfaction Track'
     fileParameters: []
     responses:
@@ -690,7 +674,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -699,7 +683,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -710,7 +694,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -739,8 +723,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -815,7 +799,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -824,7 +808,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -835,7 +819,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -864,8 +848,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -891,7 +875,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - ru
+          - en
         type: 'string[]'
         enumValues:
           - uz
@@ -903,27 +887,23 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Localized survey title map keyed by language code.'
+        description: ''
         required: false
         example:
-          uz: 'Mijozlar qoniqishi so‘rovi (Yangilangan)'
-          ru: 'Опрос удовлетворенности клиентов (Обновленный)'
-          en: 'Customer Satisfaction Survey (Updated)'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       description:
         custom: []
         name: description
-        description: 'Optional localized survey subtitle/description map.'
+        description: ''
         required: false
         example:
-          uz: 'Xizmatlar sifatini oshirish bo‘yicha fikrlar'
-          ru: 'Мнения для улучшения качества сервиса'
-          en: 'Feedback to improve service quality'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -931,13 +911,11 @@ endpoints:
       welcome_message:
         custom: []
         name: welcome_message
-        description: 'Optional greeting displayed to respondents.'
+        description: ''
         required: false
         example:
-          uz: 'Xush kelibsiz!'
-          ru: 'Добро пожаловать!'
-          en: Welcome!
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -945,13 +923,11 @@ endpoints:
       thank_you_message:
         custom: []
         name: thank_you_message
-        description: 'Optional message displayed after completion.'
+        description: ''
         required: false
         example:
-          uz: Rahmat!
-          ru: Спасибо!
-          en: 'Thank you!'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -970,23 +946,15 @@ endpoints:
     cleanBodyParameters:
       default_locale: uz
       locales:
-        - ru
+        - en
       title:
-        uz: 'Mijozlar qoniqishi so‘rovi (Yangilangan)'
-        ru: 'Опрос удовлетворенности клиентов (Обновленный)'
-        en: 'Customer Satisfaction Survey (Updated)'
+        - architecto
       description:
-        uz: 'Xizmatlar sifatini oshirish bo‘yicha fikrlar'
-        ru: 'Мнения для улучшения качества сервиса'
-        en: 'Feedback to improve service quality'
+        - architecto
       welcome_message:
-        uz: 'Xush kelibsiz!'
-        ru: 'Добро пожаловать!'
-        en: Welcome!
+        - architecto
       thank_you_message:
-        uz: Rahmat!
-        ru: Спасибо!
-        en: 'Thank you!'
+        - architecto
       internal_note: 'Reviewed with stakeholders.'
     fileParameters: []
     responses:
@@ -1042,11 +1010,11 @@ endpoints:
         Manage organization surveys, metadata, localized titles, and lifecycles.
       subgroupDescription: ''
       title: 'Delete Survey'
-      description: 'Permanently delete a survey. Only draft surveys or surveys requesting changes can be deleted. Active surveys cannot be deleted.'
+      description: 'Permanently delete a draft survey without moderation or participation history. Surveys with history must be preserved.'
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1055,7 +1023,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1066,7 +1034,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1095,8 +1063,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -1139,6 +1107,301 @@ endpoints:
     custom: []
     httpMethods:
       - GET
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/logic'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: 'Survey Logic'
+      subgroupDescription: ''
+      title: 'Read Survey Logic'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 16
+      survey_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"rules":[]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/logic'
+    metadata:
+      custom: []
+      groupName: Business
+      groupDescription: ''
+      subgroup: 'Survey Logic'
+      subgroupDescription: ''
+      title: 'Replace Survey Logic'
+      description: 'Atomically replaces all rules. Send rules: [] to remove all logic. See API-SURVEY-LOGIC.md for the contract.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      organization_id:
+        custom: []
+        name: organization_id
+        description: 'The ID of the organization.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      survey_id:
+        custom: []
+        name: survey_id
+        description: 'The ID of the survey.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      organization_id: 16
+      survey_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      rules:
+        custom: []
+        name: rules
+        description: 'One conditional rule. Maximum 100 rules per survey.'
+        required: true
+        example:
+          -
+            action: show_question
+            target_question_id: 202
+            priority: 0
+            match: all
+            conditions:
+              -
+                question_id: 101
+                operator: equals
+                value: 501
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].action':
+        custom: []
+        name: 'rules[].action'
+        description: 'show_question, skip_to_page, or complete.'
+        required: true
+        example: show_question
+        type: string
+        enumValues:
+          - show_question
+          - skip_to_page
+          - complete
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].source_page_id':
+        custom: []
+        name: 'rules[].source_page_id'
+        description: 'Required only for navigation rules. Must be at least 1.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].target_page_id':
+        custom: []
+        name: 'rules[].target_page_id'
+        description: 'Required only for skip_to_page; must be a later page. Must be at least 1.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].target_question_id':
+        custom: []
+        name: 'rules[].target_question_id'
+        description: 'Required only for show_question. Must be at least 1.'
+        required: false
+        example: 202
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].priority':
+        custom: []
+        name: 'rules[].priority'
+        description: 'Smaller values win; ties use input order. Must be at least 0. Must not be greater than 1000000.'
+        required: true
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].match':
+        custom: []
+        name: 'rules[].match'
+        description: 'all for AND, any for OR.'
+        required: true
+        example: all
+        type: string
+        enumValues:
+          - all
+          - any
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions':
+        custom: []
+        name: 'rules[].conditions'
+        description: 'One condition. Maximum 20 per group.'
+        required: true
+        example:
+          -
+            question_id: 101
+            operator: equals
+            value: 501
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions[].question_id':
+        custom: []
+        name: 'rules[].conditions[].question_id'
+        description: 'Earlier-page question for visibility, earlier/current-page question for navigation. Must be at least 1.'
+        required: true
+        example: 101
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions[].operator':
+        custom: []
+        name: 'rules[].conditions[].operator'
+        description: 'Question-type-specific operator; see API-SURVEY-LOGIC.md.'
+        required: true
+        example: equals
+        type: string
+        enumValues:
+          - equals
+          - not_equals
+          - contains
+          - not_contains
+          - greater_than
+          - less_than
+          - answered
+          - not_answered
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions[].value':
+        custom: []
+        name: 'rules[].conditions[].value'
+        description: 'Integer option ID, integer rating, or text. Omit for answered/not_answered.'
+        required: false
+        example: 501
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      rules:
+        -
+          action: show_question
+          target_question_id: 202
+          priority: 0
+          match: all
+          conditions:
+            -
+              question_id: 101
+              operator: equals
+              value: 501
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"rules":[{"id":1,"action":"show_question","source_page_id":null,"target_page_id":null,"target_question_id":202,"priority":0,"match":"all","conditions":[{"question_id":101,"operator":"equals","value":501}]}]}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"error":{"code":"INVALID_SURVEY_LOGIC","message":"Invalid survey logic.","fields":{"rules.0":["Navigation may only target a later page in this survey."]}}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
     uri: 'api/v1/business/organizations/{organization_id}/surveys/{survey_id}/results/summary'
     metadata:
       custom: []
@@ -1154,7 +1417,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1163,7 +1426,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1174,7 +1437,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1203,12 +1466,56 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      status:
+        custom: []
+        name: status
+        description: 'Filter by participation status; omit to include both statuses.'
+        required: false
+        example: completed
+        type: string
+        enumValues:
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation_locale:
+        custom: []
+        name: participation_locale
+        description: 'Filter by stored participation locale.'
+        required: false
+        example: ru
+        type: string
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      locale:
+        custom: []
+        name: locale
+        description: 'Display language for question and option labels, not a participation filter.'
+        required: false
+        example: uz
+        type: string
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      status: completed
+      participation_locale: ru
+      locale: uz
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1253,7 +1560,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1262,7 +1569,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1273,7 +1580,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1284,7 +1591,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1324,13 +1631,35 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
-      question_id: 1
+      organization_id: 16
+      survey_id: 16
+      question_id: 16
       organization: 1
       survey: 1
       question: 1
     queryParameters:
+      status:
+        custom: []
+        name: status
+        description: 'Filter by participation status: in_progress or completed.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation_locale:
+        custom: []
+        name: participation_locale
+        description: 'Filter by stored participation locale: uz, ru or en.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
       locale:
         custom: []
         name: locale
@@ -1356,10 +1685,10 @@ endpoints:
             "question_id": 1,
             "type": "single_choice",
             "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
-            "total_answers": 8,
-            "options": [
+            "total_responses": 8,
+            "distribution": [
               {
-                "id": 1,
+                "option_id": 1,
                 "label": "Har kuni",
                 "count": 6,
                 "percentage": 75.0
@@ -1401,7 +1730,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1410,7 +1739,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1421,7 +1750,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1450,20 +1779,45 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters:
       status:
         custom: []
         name: status
-        description: 'Filter by status (in_progress, completed, abandoned).'
+        description: 'Filter by status (in_progress, completed).'
         required: false
         example: completed
         type: string
         enumValues: []
         exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      participation_locale:
+        custom: []
+        name: participation_locale
+        description: 'Filter by stored participation locale: uz, ru or en.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      locale:
+        custom: []
+        name: locale
+        description: 'Display language for question and option labels, not a participation filter.'
+        required: false
+        example: uz
+        type: string
+        enumValues:
+          - uz
+          - ru
+          - en
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
       page:
@@ -1479,6 +1833,7 @@ endpoints:
         deprecated: false
     cleanQueryParameters:
       status: completed
+      locale: uz
       page: 1
     bodyParameters: []
     cleanBodyParameters: []
@@ -1538,7 +1893,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1547,7 +1902,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1558,7 +1913,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1569,7 +1924,7 @@ endpoints:
         name: participation_id
         description: 'The ID of the participation.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1609,9 +1964,9 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
-      participation_id: 1
+      organization_id: 16
+      survey_id: 16
+      participation_id: 16
       organization: 1
       survey: 1
       participation: 1
@@ -1642,7 +1997,7 @@ endpoints:
                   "question_id": 1,
                   "question_title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
                   "type": "single_choice",
-                  "text_value": "Har kuni",
+                  "text_value": null,
                   "number_value": null,
                   "selected_options": [
                     {"id": 1, "label": "Har kuni"}
@@ -1676,11 +2031,11 @@ endpoints:
         Real-time analytics, response aggregates, respondent participation breakdown, and CSV data export.
       subgroupDescription: ''
       title: 'Export Results CSV'
-      description: 'Download completed survey responses as a CSV spreadsheet.'
+      description: 'Download filtered survey responses as a CSV spreadsheet. Defaults to both completed and in-progress records; pass status=completed for completed-only export.'
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1689,7 +2044,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1700,7 +2055,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1729,11 +2084,33 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters:
+      status:
+        custom: []
+        name: status
+        description: 'Filter by participation status: in_progress or completed.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      participation_locale:
+        custom: []
+        name: participation_locale
+        description: 'Filter by stored participation locale: uz, ru or en.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
       locale:
         custom: []
         name: locale
@@ -1787,7 +2164,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1796,7 +2173,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1807,7 +2184,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1836,8 +2213,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -1900,7 +2277,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1909,7 +2286,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1920,7 +2297,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1949,8 +2326,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2013,7 +2390,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2022,7 +2399,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2033,7 +2410,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2062,8 +2439,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2112,7 +2489,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2121,7 +2498,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2132,7 +2509,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2161,8 +2538,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2211,7 +2588,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2220,7 +2597,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2231,7 +2608,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2260,8 +2637,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2311,7 +2688,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2320,7 +2697,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2331,7 +2708,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2360,8 +2737,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2411,7 +2788,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2420,7 +2797,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2431,7 +2808,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2460,8 +2837,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters:
@@ -2516,11 +2893,10 @@ endpoints:
                   }
                 ]
               },
-              "is_first_page": true,
-              "is_last_page": false,
+              "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
               "next": {
                 "type": "page",
-                "page_id": 2
+                "id": 2
               }
             }
           }
@@ -2553,7 +2929,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2562,7 +2938,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2573,7 +2949,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2584,7 +2960,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2624,9 +3000,9 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
-      page_id: 1
+      organization_id: 16
+      survey_id: 16
+      page_id: 16
       organization: 1
       survey: 1
       page: 1
@@ -2647,11 +3023,21 @@ endpoints:
       answers:
         custom: []
         name: answers
-        description: 'Map of question IDs to answer objects.'
+        description: 'Map of question IDs to scalar/array answers.'
         required: true
         example:
-          1:
-            option_id: 1
+          1: 1
+        type: object
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      previous_answers:
+        custom: []
+        name: previous_answers
+        description: 'Answers from earlier applicable preview pages; used for conditional visibility and branching.'
+        required: false
+        example: []
         type: object
         enumValues: []
         exampleWasSpecified: true
@@ -2660,8 +3046,8 @@ endpoints:
     cleanBodyParameters:
       locale: uz
       answers:
-        1:
-          option_id: 1
+        1: 1
+      previous_answers: []
     fileParameters: []
     responses:
       -
@@ -2676,11 +3062,10 @@ endpoints:
                 "title": "Xizmatlardan foydalanish",
                 "position": 1
               },
-              "is_first_page": true,
-              "is_last_page": false,
+              "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
               "next": {
                 "type": "page",
-                "page_id": 2
+                "id": 2
               }
             }
           }
@@ -2692,8 +3077,8 @@ endpoints:
         content: |-
           {
             "error": {
-              "code": "VALIDATION_ERROR",
-              "message": "This question is required.",
+              "code": "INVALID_ANSWER",
+              "message": "One or more answers are invalid.",
               "fields": {
                 "answers.1": ["This question is required."]
               }
@@ -2728,7 +3113,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2737,7 +3122,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2748,7 +3133,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2777,8 +3162,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -2787,13 +3172,11 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Optional localized title map for the page.'
+        description: ''
         required: false
         example:
-          uz: 'Xizmatlardan foydalanish'
-          ru: 'Использование сервисов'
-          en: 'Service Usage'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -2801,26 +3184,20 @@ endpoints:
       description:
         custom: []
         name: description
-        description: 'Optional localized explanatory instructions for the page.'
+        description: ''
         required: false
         example:
-          uz: 'Iltimos, barcha savollarga xolis javob bering.'
-          ru: 'Пожалуйста, ответьте на все вопросы.'
-          en: 'Please answer all questions objectively.'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
       title:
-        uz: 'Xizmatlardan foydalanish'
-        ru: 'Использование сервисов'
-        en: 'Service Usage'
+        - architecto
       description:
-        uz: 'Iltimos, barcha savollarga xolis javob bering.'
-        ru: 'Пожалуйста, ответьте на все вопросы.'
-        en: 'Please answer all questions objectively.'
+        - architecto
     fileParameters: []
     responses:
       -
@@ -2866,7 +3243,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2875,7 +3252,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2886,7 +3263,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2915,8 +3292,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      page_id: 1
+      organization_id: 16
+      page_id: 16
       organization: 1
       page: 2
     queryParameters: []
@@ -2925,13 +3302,11 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Updated localized title map for the page.'
+        description: ''
         required: false
         example:
-          uz: 'Baholash va takliflar'
-          ru: 'Оценка и предложения'
-          en: 'Rating & Feedback'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -2939,26 +3314,20 @@ endpoints:
       description:
         custom: []
         name: description
-        description: 'Updated localized page instructions.'
+        description: ''
         required: false
         example:
-          uz: 'Yakuniy bahoni bering.'
-          ru: 'Поставьте итоговую оценку.'
-          en: 'Provide your final rating.'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
       title:
-        uz: 'Baholash va takliflar'
-        ru: 'Оценка и предложения'
-        en: 'Rating & Feedback'
+        - architecto
       description:
-        uz: 'Yakuniy bahoni bering.'
-        ru: 'Поставьте итоговую оценку.'
-        en: 'Provide your final rating.'
+        - architecto
     fileParameters: []
     responses:
       -
@@ -3003,7 +3372,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3012,7 +3381,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3023,7 +3392,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3052,8 +3421,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      page_id: 1
+      organization_id: 16
+      page_id: 16
       organization: 1
       page: 2
     queryParameters: []
@@ -3111,7 +3480,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3120,7 +3489,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3131,7 +3500,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3160,8 +3529,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      survey_id: 1
+      organization_id: 16
+      survey_id: 16
       organization: 1
       survey: 1
     queryParameters: []
@@ -3220,7 +3589,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3229,7 +3598,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3240,7 +3609,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3269,8 +3638,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      page_id: 1
+      organization_id: 16
+      page_id: 16
       organization: 1
       page: 1
     queryParameters: []
@@ -3295,27 +3664,23 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Localized question title map keyed by survey language codes.'
-        required: true
+        description: ''
+        required: false
         example:
-          uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
-          ru: 'Как часто вы пользуетесь нашим сервисом?'
-          en: 'How often do you use our service?'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       description:
         custom: []
         name: description
-        description: 'Optional localized helper text or subtitle for the question.'
+        description: ''
         required: false
         example:
-          uz: 'Faqat bitta variantni tanlang'
-          ru: 'Выберите один вариант'
-          en: 'Select one option only'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -3347,13 +3712,9 @@ endpoints:
     cleanBodyParameters:
       type: single_choice
       title:
-        uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
-        ru: 'Как часто вы пользуетесь нашим сервисом?'
-        en: 'How often do you use our service?'
+        - architecto
       description:
-        uz: 'Faqat bitta variantni tanlang'
-        ru: 'Выберите один вариант'
-        en: 'Select one option only'
+        - architecto
       is_required: true
       settings:
         min: 1
@@ -3410,7 +3771,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3419,7 +3780,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3430,7 +3791,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3459,8 +3820,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      question_id: 1
+      organization_id: 16
+      question_id: 16
       organization: 1
       question: 1
     queryParameters: []
@@ -3485,25 +3846,23 @@ endpoints:
       title:
         custom: []
         name: title
-        description: 'Updated localized question title map.'
+        description: ''
         required: false
         example:
-          uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)'
-          ru: 'Как часто вы пользуетесь нашим сервисом? (Обновлено)'
-          en: 'How often do you use our service? (Updated)'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       description:
         custom: []
         name: description
-        description: 'Updated localized description or instructions.'
+        description: ''
         required: false
         example:
-          uz: 'Iltimos, aniq javob bering.'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -3535,11 +3894,9 @@ endpoints:
     cleanBodyParameters:
       type: single_choice
       title:
-        uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)'
-        ru: 'Как часто вы пользуетесь нашим сервисом? (Обновлено)'
-        en: 'How often do you use our service? (Updated)'
+        - architecto
       description:
-        uz: 'Iltimos, aniq javob bering.'
+        - architecto
       is_required: true
       settings:
         min: 1
@@ -3591,7 +3948,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3600,7 +3957,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3611,7 +3968,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3640,8 +3997,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      question_id: 1
+      organization_id: 16
+      question_id: 16
       organization: 1
       question: 1
     queryParameters: []
@@ -3686,7 +4043,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3695,7 +4052,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3706,7 +4063,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3735,8 +4092,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      question_id: 1
+      organization_id: 16
+      question_id: 16
       organization: 1
       question: 1
     queryParameters: []
@@ -3791,7 +4148,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3800,7 +4157,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3811,7 +4168,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3840,8 +4197,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      page_id: 1
+      organization_id: 16
+      page_id: 16
       organization: 1
       page: 1
     queryParameters: []
@@ -3900,7 +4257,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3909,7 +4266,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3920,7 +4277,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -3949,8 +4306,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      question_id: 1
+      organization_id: 16
+      question_id: 16
       organization: 1
       question: 1
     queryParameters: []
@@ -3959,22 +4316,18 @@ endpoints:
       label:
         custom: []
         name: label
-        description: 'Localized choice option label map keyed by language code.'
-        required: true
+        description: ''
+        required: false
         example:
-          uz: 'Har kuni'
-          ru: 'Каждый день'
-          en: Daily
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
     cleanBodyParameters:
       label:
-        uz: 'Har kuni'
-        ru: 'Каждый день'
-        en: Daily
+        - architecto
     fileParameters: []
     responses:
       -
@@ -4023,7 +4376,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4032,7 +4385,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4043,7 +4396,7 @@ endpoints:
         name: option_id
         description: 'The ID of the option.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4072,8 +4425,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      option_id: 1
+      organization_id: 16
+      option_id: 16
       organization: 1
       option: 1
     queryParameters: []
@@ -4082,22 +4435,18 @@ endpoints:
       label:
         custom: []
         name: label
-        description: 'Updated localized option label map.'
-        required: true
+        description: ''
+        required: false
         example:
-          uz: 'Haftada bir necha marta'
-          ru: 'Несколько раз в неделю'
-          en: 'Several times a week'
-        type: object
+          - architecto
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
     cleanBodyParameters:
       label:
-        uz: 'Haftada bir necha marta'
-        ru: 'Несколько раз в неделю'
-        en: 'Several times a week'
+        - architecto
     fileParameters: []
     responses:
       -
@@ -4143,7 +4492,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4152,7 +4501,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4163,7 +4512,7 @@ endpoints:
         name: option_id
         description: 'The ID of the option.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4192,8 +4541,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      option_id: 1
+      organization_id: 16
+      option_id: 16
       organization: 1
       option: 1
     queryParameters: []
@@ -4238,7 +4587,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4247,7 +4596,7 @@ endpoints:
         name: organization_id
         description: 'The ID of the organization.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4258,7 +4607,7 @@ endpoints:
         name: question_id
         description: 'The ID of the question.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -4287,8 +4636,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      organization_id: 1
-      question_id: 1
+      organization_id: 16
+      question_id: 16
       organization: 1
       question: 1
     queryParameters: []

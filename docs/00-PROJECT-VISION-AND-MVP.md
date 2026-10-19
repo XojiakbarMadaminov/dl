@@ -39,6 +39,7 @@ The first complete product flow must support:
 4. Business chooses survey languages (`uz`, `ru`, `en`) and a default survey language.
 5. Business fills required survey titles for every selected language.
 6. Business creates pages, questions and options.
+   Business can configure conditional visibility, forward page branching, early completion and AND/OR groups through builder APIs.
 7. Business previews the survey.
 8. Business submits the survey for moderation.
 9. Admin approves the survey or returns it with a comment.
@@ -53,7 +54,7 @@ The first complete product flow must support:
 - Payments, rewards, wallets, payouts.
 - Microservices.
 - Survey versioning.
-- Full conditional-logic engine and visual rule editor.
+- Advanced logic (piping, carry-forward, randomization, scoring, nested condition groups, distinct disqualification) and a visual frontend rule editor.
 - Advanced audience targeting and quotas.
 - Interview module.
 - Usability-testing module.
@@ -72,7 +73,7 @@ The initial question set is:
 
 ## Source basis
 
-The uploaded functional specification defines the initial sequence as survey creation/listing, basic questions/pages, respondent participation, moderation/publishing, then basic results/export; design/languages, advanced questions, conditional logic and audience targeting come later in the source plan. This project decision brings UZ/RU/EN localization into the MVP while keeping advanced logic deferred.
+The source plan originally deferred conditional logic. Product-owner decisions bring UZ/RU/EN localization and, on 2026-10-19, basic conditional logic into the MVP. The implemented rule contract and explicit advanced-feature boundaries are in `API-SURVEY-LOGIC.md`.
 
 Source references:
 

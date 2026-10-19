@@ -5,9 +5,13 @@ namespace App\Modules\Participation\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Participation\Actions\BackParticipationAction;
 use App\Modules\Participation\Actions\CompleteParticipationAction;
 use App\Modules\Participation\Actions\SavePageAnswersAction;
 use App\Modules\Participation\Actions\StartOrResumeParticipationAction;
+use App\Modules\Participation\Http\Requests\BackParticipationRequest;
+use App\Modules\Participation\Http\Requests\SavePageAnswersRequest;
+use App\Modules\Participation\Http\Requests\StartParticipationRequest;
 use App\Modules\Participation\Models\Participation;
 use App\Modules\Participation\Services\SurveyFlow;
 use App\Modules\Survey\Models\Survey;
@@ -31,7 +35,7 @@ class RespondentParticipationController extends Controller
      *
      * @urlParam survey int required The ID of the active survey. Example: 1
      *
-     * @bodyParam locale string Preferred survey language (must be one of survey locales: uz, ru, en). Optional; defaults to user profile locale or survey default_locale. Example: uz
+     * @bodyParam locale string Preferred survey language (must be one of survey locales: uz, ru, en). Optional; defaults to survey default_locale. Example: uz
      *
      * @response 201 {
      *   "participation_id": 1,
@@ -61,11 +65,10 @@ class RespondentParticipationController extends Controller
      *         }
      *       ]
      *     },
-     *     "is_first_page": true,
-     *     "is_last_page": false,
+     *     "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
      *     "next": {
      *       "type": "page",
-     *       "page_id": 2
+     *       "id": 2
      *     }
      *   }
      * }
@@ -78,7 +81,7 @@ class RespondentParticipationController extends Controller
      * }
      */
     public function participate(
-        Request $request,
+        StartParticipationRequest $request,
         Survey $survey,
         StartOrResumeParticipationAction $action,
         SurveyFlow $flow,
@@ -93,12 +96,23 @@ class RespondentParticipationController extends Controller
             requestedLocale: is_string($locale) ? $locale : null,
         );
 
+        if ($participation->status->isCompleted()) {
+            return response()->json([
+                'participation_id' => $participation->id,
+                'status' => $participation->status->value,
+                'locale' => $participation->locale,
+                'completed' => true,
+                'thank_you_message' => $survey->thank_you_message[$participation->locale] ?? null,
+            ]);
+        }
+
         $currentPage = $participation->currentPage ?? $survey->pages()->orderBy('position')->firstOrFail();
-        $step = $flow->getStep($survey, $currentPage, $participation->locale);
+        $step = $flow->getStep($survey, $currentPage, $participation->locale, $flow->answers($participation));
 
         return response()->json([
             'participation_id' => $participation->id,
             'status' => $participation->status->value,
+            'locale' => $participation->locale,
             'survey' => [
                 'id' => $survey->id,
                 'title' => $survey->title[$participation->locale] ?? '',
@@ -126,11 +140,10 @@ class RespondentParticipationController extends Controller
      *       "title": "Xizmatlardan foydalanish",
      *       "position": 1
      *     },
-     *     "is_first_page": true,
-     *     "is_last_page": false,
+     *     "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
      *     "next": {
      *       "type": "page",
-     *       "page_id": 2
+     *       "id": 2
      *     }
      *   }
      * }
@@ -157,12 +170,20 @@ class RespondentParticipationController extends Controller
             throw new ApiException('Current page not found.', 'NOT_FOUND', 404);
         }
 
-        $step = $flow->getStep($participation->survey, $currentPage, $participation->locale);
+        $step = $flow->getStep($participation->survey, $currentPage, $participation->locale, $flow->answers($participation));
 
         return response()->json([
             'participation_id' => $participation->id,
             'status' => $participation->status->value,
+            'locale' => $participation->locale,
             'current_step' => $step,
+            'answers' => $participation->answers()->with('options')->get()->mapWithKeys(fn ($answer) => [
+                $answer->question_id => [
+                    'text_value' => $answer->text_value,
+                    'number_value' => $answer->number_value,
+                    'option_ids' => $answer->options->pluck('id')->all(),
+                ],
+            ]),
         ]);
     }
 
@@ -178,37 +199,21 @@ class RespondentParticipationController extends Controller
      * @urlParam participation int required The ID of the participation session. Example: 1
      * @urlParam page int required The ID of the page being submitted. Example: 1
      *
-     * @bodyParam answers object required Map of question IDs to answer objects. For single choice: `{"option_id": 1}`; multiple choice: `{"option_ids": [1, 2]}`; rating: `{"value": 5}`; text: `{"text": "Ajoyib xizmat"}`. Example: {"1": {"option_id": 1}}
+     * @bodyParam answers object required Map of question IDs to values: single choice integer option ID; multiple choice distinct option IDs array; rating integer; text string. Example: {"1": 1}
      *
      * @response 200 {
-     *   "success": true,
+     *   "next": {"type": "completed"},
+     *   "can_complete": true,
      *   "current_step": {
-     *     "page": {
-     *       "id": 2,
-     *       "title": "Baholash",
-     *       "position": 2,
-     *       "questions": [
-     *         {
-     *           "id": 2,
-     *           "type": "rating",
-     *           "title": "Xizmat ko‘rsatish sifatini baholang (1-5)",
-     *           "is_required": true,
-     *           "position": 1,
-     *           "settings": {"min": 1, "max": 5}
-     *         }
-     *       ]
-     *     },
-     *     "is_first_page": false,
-     *     "is_last_page": true,
-     *     "next": {
-     *       "type": "complete"
-     *     }
+     *     "page": {"id": 2, "position": 2, "title": "Baholash", "description": null, "questions": []},
+     *     "progress": {"current_step": 2, "total_steps": 2, "percent": 100, "is_first_page": false, "is_last_page": true},
+     *     "next": {"type": "completed"}
      *   }
      * }
      * @response 422 {
      *   "error": {
-     *     "code": "VALIDATION_ERROR",
-     *     "message": "This question is required.",
+     *     "code": "INVALID_ANSWER",
+     *     "message": "One or more answers are invalid.",
      *     "fields": {
      *       "answers.1": ["This question is required."]
      *     }
@@ -216,14 +221,14 @@ class RespondentParticipationController extends Controller
      * }
      */
     public function savePage(
-        Request $request,
+        SavePageAnswersRequest $request,
         Participation $participation,
         SurveyPage $page,
         SavePageAnswersAction $action,
     ): JsonResponse {
         $this->authorizeOwnership($request, $participation);
 
-        $answers = (array) $request->input('answers', []);
+        $answers = $request->validated('answers');
         $result = $action->execute($participation, $page, $answers);
 
         return response()->json($result);
@@ -265,5 +270,19 @@ class RespondentParticipationController extends Controller
                 statusCode: 403,
             );
         }
+    }
+
+    /**
+     * Previous Visited Page
+     *
+     * Returns to the actually visited previous page, not the previous page by position. On the first page this is a no-op.
+     *
+     * @authenticated
+     */
+    public function back(BackParticipationRequest $request, Participation $participation, BackParticipationAction $action, SurveyFlow $flow): JsonResponse
+    {
+        $this->authorizeOwnership($request, $participation);
+
+        return $this->show($request, $action->execute($participation), $flow);
     }
 }

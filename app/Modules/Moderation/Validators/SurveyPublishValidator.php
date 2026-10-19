@@ -5,12 +5,14 @@ namespace App\Modules\Moderation\Validators;
 use App\Exceptions\ApiException;
 use App\Modules\Survey\Models\Survey;
 use App\Modules\Survey\Validators\QuestionSettingsValidator;
+use App\Modules\Survey\Validators\SurveyLogicValidator;
 use App\Modules\Survey\Validators\SurveyTranslationValidator;
 
 class SurveyPublishValidator
 {
     public function __construct(
         protected SurveyTranslationValidator $translationValidator,
+        protected SurveyLogicValidator $logicValidator,
     ) {}
 
     public function validate(Survey $survey): void
@@ -38,6 +40,15 @@ class SurveyPublishValidator
 
         // Validate individual question settings & option count
         foreach ($survey->pages as $page) {
+            if ($page->questions->isEmpty()) {
+                throw new ApiException(
+                    message: 'Survey pages must contain at least one question.',
+                    errorCode: 'VALIDATION_ERROR',
+                    statusCode: 422,
+                    fields: ["pages.{$page->id}.questions" => ['At least one question is required.']],
+                );
+            }
+
             foreach ($page->questions as $question) {
                 QuestionSettingsValidator::validate($question->type, $question->settings);
 
@@ -49,10 +60,20 @@ class SurveyPublishValidator
                         fields: ["questions.{$question->id}.options" => ['At least 2 options required.']],
                     );
                 }
+
+                if ($question->type->requiresOptions() && (int) ($question->settings['min_selections'] ?? 1) > $question->options->count()) {
+                    throw new ApiException(
+                        message: 'Minimum selections exceeds the available options.',
+                        errorCode: 'INVALID_QUESTION_SETTINGS',
+                        statusCode: 422,
+                        fields: ["questions.{$question->id}.settings.min_selections" => ['Not enough options to satisfy the minimum.']],
+                    );
+                }
             }
         }
 
         // Validate translation completeness
         $this->translationValidator->validate($survey, throw: true);
+        $this->logicValidator->validate($survey, $survey->logicRules()->get()->toArray());
     }
 }

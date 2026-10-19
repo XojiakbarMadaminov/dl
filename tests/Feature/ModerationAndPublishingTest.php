@@ -3,6 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Modules\Moderation\Actions\ApproveSurveyAction;
+use App\Modules\Moderation\Actions\PublishSurveyAction;
+use App\Modules\Moderation\Actions\RequestChangesSurveyAction;
+use App\Modules\Moderation\Actions\SubmitSurveyForReviewAction;
 use App\Modules\Organization\Actions\CreateOrganizationAction;
 use App\Modules\Organization\Models\Organization;
 use App\Modules\Survey\Enums\QuestionType;
@@ -81,6 +85,56 @@ class ModerationAndPublishingTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonPath('error.code', 'VALIDATION_ERROR');
+    }
+
+    public function test_empty_pages_and_impossible_selection_limits_block_submission(): void
+    {
+        $survey = $this->createCompleteSurvey();
+        $emptyPage = SurveyPage::create(['survey_id' => $survey->id, 'position' => 2]);
+        $endpoint = "/api/v1/business/organizations/{$this->organization->id}/surveys/{$survey->id}/submit-review";
+        $this->actingAs($this->user)->postJson($endpoint)->assertUnprocessable()
+            ->assertJsonPath('error.code', 'VALIDATION_ERROR');
+        $emptyPage->delete();
+
+        $question = $survey->questions()->firstOrFail();
+        $question->update(['type' => QuestionType::MULTIPLE_CHOICE, 'settings' => ['min_selections' => 3]]);
+        foreach ([1, 2] as $position) {
+            $question->options()->create(['position' => $position, 'label' => ['uz' => "Option {$position}"]]);
+        }
+        $this->postJson($endpoint)->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_QUESTION_SETTINGS');
+        $this->assertDatabaseCount('survey_moderations', 0);
+    }
+
+    public function test_duplicate_moderation_and_publish_requests_do_not_repeat_side_effects(): void
+    {
+        $survey = $this->createCompleteSurvey();
+        $submit = app(SubmitSurveyForReviewAction::class);
+        $approve = app(ApproveSurveyAction::class);
+        $publish = app(PublishSurveyAction::class);
+        $submit->execute($survey, $this->user);
+        $submit->execute($survey, $this->user);
+        $approve->execute($survey, $this->admin);
+        $approve->execute($survey, $this->admin);
+        $publish->execute($survey, $this->user);
+        $publishedAt = $survey->fresh()->published_at;
+        $publish->execute($survey, $this->user);
+
+        $this->assertDatabaseCount('survey_moderations', 2);
+        $this->assertDatabaseCount('audit_logs', 3);
+        $this->assertEquals($publishedAt, $survey->fresh()->published_at);
+    }
+
+    public function test_survey_with_moderation_history_cannot_be_deleted(): void
+    {
+        $survey = $this->createCompleteSurvey();
+        app(SubmitSurveyForReviewAction::class)->execute($survey, $this->user);
+        app(RequestChangesSurveyAction::class)->execute($survey, $this->admin, 'Please clarify.');
+
+        $this->actingAs($this->user)->deleteJson(
+            "/api/v1/business/organizations/{$this->organization->id}/surveys/{$survey->id}"
+        )->assertUnprocessable()->assertJsonPath('error.code', 'SURVEY_HAS_HISTORY');
+        $this->assertDatabaseHas('surveys', ['id' => $survey->id]);
+        $this->assertDatabaseCount('survey_moderations', 2);
     }
 
     public function test_submit_for_review_approval_publish_and_archive_lifecycle(): void

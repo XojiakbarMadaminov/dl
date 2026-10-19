@@ -2,8 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\ApiException;
 use App\Models\User;
 use App\Modules\Organization\Actions\CreateOrganizationAction;
+use App\Modules\Participation\Actions\CompleteParticipationAction;
+use App\Modules\Participation\Actions\SavePageAnswersAction;
+use App\Modules\Participation\Actions\StartOrResumeParticipationAction;
 use App\Modules\Participation\Enums\ParticipationStatus;
 use App\Modules\Participation\Models\Participation;
 use App\Modules\Survey\Enums\QuestionType;
@@ -160,7 +164,7 @@ class RespondentParticipationTest extends TestCase
         );
 
         $answer1Response->assertStatus(200)
-            ->assertJsonPath('next', $this->page2->id)
+            ->assertJsonPath('next', ['type' => 'page', 'id' => $this->page2->id])
             ->assertJsonPath('can_complete', false);
 
         $this->assertDatabaseHas('answers', [
@@ -204,7 +208,7 @@ class RespondentParticipationTest extends TestCase
             ]
         );
         $valid2Response->assertStatus(200)
-            ->assertJsonPath('next', 'complete')
+            ->assertJsonPath('next', ['type' => 'completed'])
             ->assertJsonPath('can_complete', true);
 
         // 7. Complete participation
@@ -229,8 +233,82 @@ class RespondentParticipationTest extends TestCase
         // 9. Cannot start a new participation after completion
         $this->actingAs($this->respondentA)->postJson(
             "/api/v1/respondent/surveys/{$this->activeSurvey->id}/participate"
-        )->assertStatus(422)
-            ->assertJsonPath('error.code', 'SURVEY_ALREADY_COMPLETED');
+        )->assertOk()
+            ->assertJsonPath('participation_id', $participationId)
+            ->assertJsonPath('completed', true);
+
+        $this->assertDatabaseCount('participations', 1);
+    }
+
+    public function test_completion_requires_all_required_answers_and_an_active_survey(): void
+    {
+        $participation = app(StartOrResumeParticipationAction::class)
+            ->execute($this->activeSurvey, $this->respondentA);
+        $endpoint = "/api/v1/respondent/participations/{$participation->id}/complete";
+
+        $this->actingAs($this->respondentA)->postJson($endpoint)
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
+
+        $this->assertDatabaseHas('participations', ['id' => $participation->id, 'status' => 'in_progress', 'completed_at' => null]);
+
+        $this->activeSurvey->update(['status' => SurveyStatus::PAUSED]);
+        $this->postJson($endpoint)->assertUnprocessable()->assertJsonPath('error.code', 'SURVEY_NOT_ACTIVE');
+    }
+
+    public function test_malformed_answers_and_fractional_values_are_rejected_without_writes(): void
+    {
+        $participation = app(StartOrResumeParticipationAction::class)
+            ->execute($this->activeSurvey, $this->respondentA);
+        $endpoint = "/api/v1/respondent/participations/{$participation->id}/pages";
+
+        $this->actingAs($this->respondentA)->putJson("{$endpoint}/{$this->page1->id}", ['answers' => 'invalid'])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'VALIDATION_ERROR');
+        $this->putJson("{$endpoint}/{$this->page1->id}", ['answers' => [$this->question1->id => $this->opt1->id.'.9']])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
+        $this->putJson("{$endpoint}/{$this->page2->id}", ['answers' => [$this->question2->id => 5.9]])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
+
+        $this->question1->update(['type' => QuestionType::MULTIPLE_CHOICE, 'settings' => ['min_selections' => 2]]);
+        foreach ([[$this->opt1->id, $this->opt1->id], [['invalid'], $this->opt1->id]] as $value) {
+            $this->putJson("{$endpoint}/{$this->page1->id}", ['answers' => [$this->question1->id => $value]])
+                ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
+        }
+
+        $this->assertDatabaseCount('answers', 0);
+        $this->assertDatabaseCount('answer_options', 0);
+    }
+
+    public function test_resume_returns_saved_answers_and_original_locale(): void
+    {
+        $start = $this->actingAs($this->respondentA)->postJson(
+            "/api/v1/respondent/surveys/{$this->activeSurvey->id}/participate", ['locale' => 'ru']
+        )->assertCreated();
+        $participationId = $start->json('participation_id');
+        $this->putJson("/api/v1/respondent/participations/{$participationId}/pages/{$this->page1->id}", [
+            'answers' => [$this->question1->id => $this->opt1->id],
+        ])->assertOk();
+
+        $this->getJson("/api/v1/respondent/participations/{$participationId}")
+            ->assertOk()->assertJsonPath('locale', 'ru')
+            ->assertJsonPath("answers.{$this->question1->id}.option_ids", [$this->opt1->id]);
+    }
+
+    public function test_stale_models_cannot_overwrite_completed_answers(): void
+    {
+        $start = app(StartOrResumeParticipationAction::class);
+        $save = app(SavePageAnswersAction::class);
+        $complete = app(CompleteParticipationAction::class);
+        $participation = $start->execute($this->activeSurvey, $this->respondentA);
+        $stale = Participation::findOrFail($participation->id);
+        $save->execute($participation, $this->page1, [$this->question1->id => $this->opt1->id]);
+        $save->execute($participation, $this->page2, [$this->question2->id => 5]);
+        $complete->execute($participation);
+        $completedAt = $participation->fresh()->completed_at;
+        $complete->execute($stale);
+        $this->assertEquals($completedAt, $participation->fresh()->completed_at);
+
+        $this->expectException(ApiException::class);
+        $save->execute($stale, $this->page2, [$this->question2->id => 1]);
     }
 
     public function test_ownership_and_security_between_respondents(): void

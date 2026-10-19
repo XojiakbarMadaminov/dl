@@ -20,14 +20,16 @@ class QuestionSettingsValidator
             ],
             QuestionType::MULTIPLE_CHOICE => [
                 'min_selections' => ['sometimes', 'integer', 'min:1'],
-                'max_selections' => ['sometimes', 'integer', 'gte:min_selections'],
+                'max_selections' => ['sometimes', 'integer', 'min:1', ...(isset($settings['min_selections']) ? ['gte:min_selections'] : [])],
                 'randomize_options' => ['sometimes', 'boolean'],
             ],
             QuestionType::RATING => [
                 'min' => ['sometimes', 'integer', 'min:0'],
-                'max' => ['sometimes', 'integer', 'gt:min'],
+                'max' => ['sometimes', 'integer'],
                 'min_label' => ['sometimes', 'array'],
+                'min_label.*' => ['nullable', 'string'],
                 'max_label' => ['sometimes', 'array'],
+                'max_label.*' => ['nullable', 'string'],
             ],
             QuestionType::SHORT_TEXT, QuestionType::LONG_TEXT => [
                 'max_length' => ['sometimes', 'integer', 'min:1'],
@@ -35,6 +37,16 @@ class QuestionSettingsValidator
         };
 
         $validator = Validator::make($settings, $rules);
+
+        $validator->after(function ($validator) use ($type, $settings) {
+            if ($type !== QuestionType::RATING || $validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            if ((int) ($settings['min'] ?? 1) >= (int) ($settings['max'] ?? 5)) {
+                $validator->errors()->add('max', 'Maximum rating must exceed the minimum rating.');
+            }
+        });
 
         if ($validator->fails()) {
             throw new ApiException(

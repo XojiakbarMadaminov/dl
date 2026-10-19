@@ -6,9 +6,11 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Modules\Organization\Models\Organization;
 use App\Modules\Participation\Services\SurveyFlow;
-use App\Modules\Participation\Validators\AnswerValidator;
+use App\Modules\Survey\Actions\PreviewSurveyStepAction;
+use App\Modules\Survey\Http\Requests\PreviewStepRequest;
 use App\Modules\Survey\Models\Survey;
 use App\Modules\Survey\Models\SurveyPage;
+use App\Modules\Survey\Validators\SurveyLogicValidator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -63,11 +65,10 @@ class SurveyPreviewController extends Controller
      *         }
      *       ]
      *     },
-     *     "is_first_page": true,
-     *     "is_last_page": false,
+     *     "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
      *     "next": {
      *       "type": "page",
-     *       "page_id": 2
+     *       "id": 2
      *     }
      *   }
      * }
@@ -86,6 +87,7 @@ class SurveyPreviewController extends Controller
             );
         }
 
+        app(SurveyLogicValidator::class)->validate($survey, $survey->logicRules()->get()->toArray());
         $step = $flow->getInitialStep($survey, $locale);
 
         return response()->json([
@@ -114,7 +116,8 @@ class SurveyPreviewController extends Controller
      * @urlParam page int required The ID of the page being validated. Example: 1
      *
      * @bodyParam locale string The preview locale. Example: uz
-     * @bodyParam answers object required Map of question IDs to answer objects. Example: {"1": {"option_id": 1}}
+     * @bodyParam answers object required Map of question IDs to scalar/array answers. Example: {"1": 1}
+     * @bodyParam previous_answers object Answers from earlier applicable preview pages; used for conditional visibility and branching. Example: {}
      *
      * @response 200 {
      *   "valid": true,
@@ -124,18 +127,17 @@ class SurveyPreviewController extends Controller
      *       "title": "Xizmatlardan foydalanish",
      *       "position": 1
      *     },
-     *     "is_first_page": true,
-     *     "is_last_page": false,
+     *     "progress": {"current_step": 1, "total_steps": 2, "percent": 50, "is_first_page": true, "is_last_page": false},
      *     "next": {
      *       "type": "page",
-     *       "page_id": 2
+     *       "id": 2
      *     }
      *   }
      * }
      * @response 422 {
      *   "error": {
-     *     "code": "VALIDATION_ERROR",
-     *     "message": "This question is required.",
+     *     "code": "INVALID_ANSWER",
+     *     "message": "One or more answers are invalid.",
      *     "fields": {
      *       "answers.1": ["This question is required."]
      *     }
@@ -143,12 +145,11 @@ class SurveyPreviewController extends Controller
      * }
      */
     public function validateStep(
-        Request $request,
+        PreviewStepRequest $request,
         Organization $organization,
         Survey $survey,
         SurveyPage $page,
-        AnswerValidator $validator,
-        SurveyFlow $flow,
+        PreviewSurveyStepAction $action,
     ): JsonResponse {
         $this->authorize('view', $organization);
         $this->validateBelongsToOrg($survey, $organization);
@@ -158,18 +159,8 @@ class SurveyPreviewController extends Controller
         }
 
         $locale = (string) $request->input('locale', $survey->default_locale);
-        $answers = (array) $request->input('answers', []);
 
-        // Validate answers using production AnswerValidator
-        $validator->validatePageAnswers($page, $answers);
-
-        // Resolve next step in SurveyFlow
-        $step = $flow->getStep($survey, $page, $locale);
-
-        return response()->json([
-            'valid' => true,
-            'current_step' => $step,
-        ]);
+        return response()->json($action->execute($survey, $page, $locale, $request->validated('answers'), $request->validated('previous_answers', [])));
     }
 
     protected function validateBelongsToOrg(Survey $survey, Organization $organization): void

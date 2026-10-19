@@ -13,12 +13,15 @@ class AnswerValidator
      * @param  array<int|string, mixed>  $answers  Array keyed by question_id
      * @return array<string, array<int, string>>
      */
-    public function validatePageAnswers(SurveyPage $page, array $answers, bool $throw = true): array
+    public function validatePageAnswers(SurveyPage $page, array $answers, bool $throw = true, ?array $applicableQuestionIds = null): array
     {
         $page->loadMissing(['questions.options']);
         $fieldErrors = [];
 
         foreach ($page->questions as $question) {
+            if ($applicableQuestionIds !== null && ! in_array($question->id, $applicableQuestionIds, true)) {
+                continue;
+            }
             $questionKey = (string) $question->id;
             $hasAnswer = array_key_exists($questionKey, $answers) || array_key_exists($question->id, $answers);
             $value = $hasAnswer ? ($answers[$questionKey] ?? $answers[$question->id]) : null;
@@ -46,7 +49,7 @@ class AnswerValidator
      */
     public function validateQuestionAnswer(SurveyQuestion $question, mixed $value): array
     {
-        $isEmpty = $value === null || $value === '' || $value === [];
+        $isEmpty = $value === null || (is_string($value) && trim($value) === '') || $value === [];
 
         if ($question->is_required && $isEmpty) {
             return ['This question is required.'];
@@ -61,7 +64,7 @@ class AnswerValidator
         switch ($question->type) {
             case QuestionType::SINGLE_CHOICE:
                 $optionIds = $question->options->pluck('id')->all();
-                if (! is_numeric($value) || ! in_array((int) $value, $optionIds, true)) {
+                if ((! is_int($value) && ! is_string($value)) || filter_var($value, FILTER_VALIDATE_INT) === false || ! in_array((int) $value, $optionIds, true)) {
                     $errors[] = 'Selected option is invalid.';
                 }
                 break;
@@ -73,7 +76,19 @@ class AnswerValidator
                 }
 
                 $optionIds = $question->options->pluck('id')->all();
+                foreach ($value as $selectedValue) {
+                    if (! is_int($selectedValue) && ! is_string($selectedValue)) {
+                        return ['Selected options must be integer IDs.'];
+                    }
+                    if (filter_var($selectedValue, FILTER_VALIDATE_INT) === false) {
+                        return ['Selected options must be integer IDs.'];
+                    }
+                }
                 $selectedIds = array_map('intval', $value);
+
+                if (count(array_unique($selectedIds)) !== count($selectedIds)) {
+                    $errors[] = 'Selected options must be distinct.';
+                }
 
                 foreach ($selectedIds as $selectedId) {
                     if (! in_array($selectedId, $optionIds, true)) {
@@ -93,8 +108,8 @@ class AnswerValidator
                 break;
 
             case QuestionType::RATING:
-                if (! is_numeric($value)) {
-                    $errors[] = 'Rating must be a numeric value.';
+                if (! is_numeric($value) || ! is_finite((float) $value) || (float) $value !== floor((float) $value)) {
+                    $errors[] = 'Rating must be an integer value.';
                     break;
                 }
 

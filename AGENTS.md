@@ -29,7 +29,7 @@ Read these files in order:
 - Use public random tokens only for resources that truly need a public/shareable identifier.
 - Do not add survey versioning in the current MVP.
 - Once a survey is active/published, its question/page structure is immutable in the current MVP.
-- Do not add survey-logic database tables in the current MVP. The code must still use a `SurveyFlow` abstraction so logic can be added later without changing the frontend contract.
+- MVP includes conditional question visibility, forward page branching, early completion and AND/OR conditions. Use `SurveyFlow` and the rule contract in `docs/API-SURVEY-LOGIC.md`; advanced logic remains deferred.
 - Do not add MyID/KYC/payment/reward functionality now.
 - Platform UI supports `uz`, `ru`, `en`.
 - Survey content languages are selected by the business user when creating a survey. All selected-language survey titles are required.
@@ -66,4 +66,4 @@ The following are intentionally not frozen yet and must not be invented by an ag
 - Exact local Redis installation/provisioning method.
 - MyID provider details.
 - Payment/reward provider details.
-- Full conditional-logic rule editor and rule storage schema.
+- Advanced conditional-logic editor beyond the MVP rule contract.

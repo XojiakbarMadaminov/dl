@@ -25,6 +25,55 @@ class LocalizationAndPreviewTest extends TestCase
 
     private Organization $organization;
 
+    public function test_preview_resolves_rating_endpoint_label_translation_maps(): void
+    {
+        $survey = Survey::create([
+            'organization_id' => $this->organization->id,
+            'created_by' => $this->user->id,
+            'status' => SurveyStatus::DRAFT,
+            'locales' => ['uz', 'ru'],
+            'default_locale' => 'uz',
+            'title' => ['uz' => 'So‘rov', 'ru' => 'Опрос'],
+        ]);
+        $page = $survey->pages()->create(['position' => 1]);
+        $page->questions()->create([
+            'position' => 1,
+            'type' => QuestionType::RATING,
+            'title' => ['uz' => 'Baho', 'ru' => 'Оценка'],
+            'settings' => ['min_label' => ['uz' => 'Yomon', 'ru' => 'Плохо'], 'max_label' => ['uz' => 'Yaxshi', 'ru' => 'Хорошо']],
+        ]);
+
+        $this->actingAs($this->user)->getJson(
+            "/api/v1/business/organizations/{$this->organization->id}/surveys/{$survey->id}/preview?locale=ru"
+        )->assertOk()->assertJsonPath('current_step.page.questions.0.settings.min_label', 'Плохо')
+            ->assertJsonPath('current_step.page.questions.0.settings.max_label', 'Хорошо')
+            ->assertJsonPath('current_step.next', ['type' => 'completed']);
+        $this->assertDatabaseCount('participations', 0);
+        $this->assertDatabaseCount('answers', 0);
+    }
+
+    public function test_used_page_titles_and_rating_labels_require_all_selected_locales(): void
+    {
+        $survey = Survey::create([
+            'organization_id' => $this->organization->id,
+            'created_by' => $this->user->id,
+            'status' => SurveyStatus::DRAFT,
+            'locales' => ['uz', 'ru'],
+            'default_locale' => 'uz',
+            'title' => ['uz' => 'So‘rov', 'ru' => 'Опрос'],
+        ]);
+        $page = $survey->pages()->create(['position' => 1, 'title' => ['uz' => 'Sahifa']]);
+        $question = $page->questions()->create([
+            'position' => 1,
+            'type' => QuestionType::RATING,
+            'title' => ['uz' => 'Baho', 'ru' => 'Оценка'],
+            'settings' => ['min_label' => ['uz' => 'Yomon']],
+        ]);
+        $errors = app(SurveyTranslationValidator::class)->validate($survey, throw: false);
+        $this->assertArrayHasKey("pages.{$page->id}.title.ru", $errors);
+        $this->assertArrayHasKey("questions.{$question->id}.settings.min_label.ru", $errors);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -243,7 +292,7 @@ class LocalizationAndPreviewTest extends TestCase
             ->assertJsonPath('survey.welcome_message', 'Добро пожаловать')
             ->assertJsonPath('current_step.progress.current_step', 1)
             ->assertJsonPath('current_step.progress.total_steps', 2)
-            ->assertJsonPath('current_step.next', $page2->id)
+            ->assertJsonPath('current_step.next', ['type' => 'page', 'id' => $page2->id])
             ->assertJsonPath('current_step.page.questions.0.title', 'Ваше имя?');
 
         // Test answering preview step
@@ -259,7 +308,7 @@ class LocalizationAndPreviewTest extends TestCase
 
         $validateResponse->assertStatus(200)
             ->assertJsonPath('valid', true)
-            ->assertJsonPath('current_step.next', $page2->id);
+            ->assertJsonPath('current_step.next', ['type' => 'page', 'id' => $page2->id]);
 
         // Preview does not write answers to database
         $this->assertDatabaseEmpty('participations');

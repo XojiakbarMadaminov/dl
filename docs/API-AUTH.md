@@ -1,133 +1,36 @@
-# Dialog API Authentication Guide
+# Dialog authentication API
 
-This document describes authentication workflows for frontend applications integrating with Dialog, including Single Page Applications (Next.js, Vue, Nuxt, React, Vite) and API clients using Bearer tokens.
+## Implemented transport
 
----
+The current API uses Laravel Sanctum **Bearer tokens**. Registration and login return a `user` resource plus a plaintext `token`. Send it in `Authorization: Bearer <token>` on subsequent requests.
 
-## 1. Authentication Mechanisms
+Although first-party SPA cookie authentication is recommended by `04-AUTH-AUTHORIZATION-ORGANIZATION.md`, the current login action does not establish a session and the stateful API middleware is not enabled. Calling `/sanctum/csrf-cookie` alone does not log a client in. Do not integrate a cookie-only flow until it is implemented and tested.
 
-Dialog supports two primary authentication modes via Laravel Sanctum:
+## Endpoints
 
-1. **SPA Session Cookie Authentication (Recommended for Web Browsers)**
-   - Uses `HttpOnly` secure cookies and CSRF protection.
-   - Ideal for client-side web apps on the same top-level domain.
+- `POST /api/v1/auth/register`: `name`, `email`, `password`, `password_confirmation`, optional `locale` (uz/ru/en). Returns HTTP 201.
+- `POST /api/v1/auth/login`: `email`, `password`, optional `device_name`. Returns HTTP 200.
+- `GET /api/v1/auth/me`: requires Bearer authentication; returns `user`.
+- `POST /api/v1/auth/logout`: revokes the current token; returns a success message.
 
-2. **Bearer Token Authentication (Mobile Apps & API Integrations)**
-   - Uses the `Authorization: Bearer <token>` header.
-   - Returned upon successful login or registration.
-
----
-
-## 2. SPA Cookie Authentication Flow
-
-For browser-based SPAs:
-
-### Step 1: Initialize CSRF Protection
-Before sending login or register requests, call the CSRF endpoint:
-```http
-GET /sanctum/csrf-cookie
-Host: api.dialog.uz
-```
-The server responds with HTTP 204 and sets the `XSRF-TOKEN` cookie.
-
-### Step 2: Login or Register
-Send the credentials along with `X-XSRF-TOKEN` (most HTTP libraries like Axios do this automatically):
 ```http
 POST /api/v1/auth/login
-Content-Type: application/json
 Accept: application/json
+Content-Type: application/json
 
-{
-  "email": "owner@dialog.uz",
-  "password": "Secret123!"
-}
+{"email":"owner@example.com","password":"your-password"}
 ```
-Response:
+
 ```json
-{
-  "user": {
-    "id": 2,
-    "name": "Dilshod Karimov",
-    "email": "owner@dialog.uz",
-    "locale": "uz",
-    "platform_role": "user",
-    "status": "active",
-    "created_at": "2026-10-17T12:00:00.000000Z"
-  },
-  "token": "2|AbCd...token"
-}
+{"user":{"id":2,"name":"Owner","email":"owner@example.com","locale":"uz","platform_role":"user","status":"active"},"token":"2|example-token"}
 ```
 
-### Step 3: Fetch Current User
-On subsequent page reloads, verify the session:
 ```http
 GET /api/v1/auth/me
 Accept: application/json
+Authorization: Bearer 2|example-token
 ```
 
-### Step 4: Logout
-```http
-POST /api/v1/auth/logout
-Accept: application/json
-```
+Do not log tokens or passwords. Invalid credentials return HTTP 401 `INVALID_CREDENTIALS`; inactive accounts cannot log in (HTTP 403 `ACCOUNT_INACTIVE`). Missing/revoked tokens return HTTP 401 `UNAUTHORIZED`. Request validation uses the standard error envelope. Backend messages are currently English; no Accept-Language negotiation is implemented.
 
----
-
-## 3. Bearer Token Flow (Mobile & Postman)
-
-Pass the token returned from `/api/v1/auth/login` in the `Authorization` header for every request:
-
-```http
-GET /api/v1/business/organizations
-Authorization: Bearer 2|AbCd...token
-Accept: application/json
-```
-
----
-
-## 4. Frontend Client Setup Example (Axios)
-
-```typescript
-import axios from 'axios';
-
-export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api/v1',
-  withCredentials: true, // Required for Sanctum session cookies
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
-
-// Attach Bearer token fallback if present in localStorage
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('dialog_token');
-  if (token && !config.headers.Authorization) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Automatic CSRF init helper
-export async function initializeCsrf() {
-  await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-    withCredentials: true,
-  });
-}
-```
-
----
-
-## 5. Troubleshooting Common Authentication Issues
-
-### 419 CSRF Token Mismatch / Unknown Status
-- **Cause**: The `/sanctum/csrf-cookie` endpoint was not called prior to `POST /api/v1/auth/login`, or the `X-XSRF-TOKEN` header was omitted.
-- **Fix**: Call `GET /sanctum/csrf-cookie` before making login/registration calls. Ensure `withCredentials: true` is configured in Axios/Fetch.
-
-### 401 Unauthorized
-- **Cause**: Session expired, cookie missing, or Bearer token is invalid/revoked.
-- **Fix**: Clear cached user in frontend store and redirect the user to `/login`.
-
-### CORS (Cross-Origin Resource Sharing) Errors
-- **Cause**: Frontend origin (e.g. `http://localhost:3000`) is not listed in backend `config/cors.php`.
-- **Fix**: Ensure `SANCTUM_STATEFUL_DOMAINS` or `CORS_ALLOWED_ORIGINS` includes your frontend origin.
+Password-reset endpoints are not implemented. The database token table alone does not constitute an available reset flow.

@@ -21,7 +21,9 @@ class CreateQuestionRequest extends FormRequest
         return [
             'type' => ['required', 'string', Rule::in(QuestionType::values())],
             'title' => ['required', 'array'],
+            'title.*' => ['nullable', 'string'],
             'description' => ['nullable', 'array'],
+            'description.*' => ['nullable', 'string'],
             'is_required' => ['nullable', 'boolean'],
             'settings' => ['nullable', 'array'],
         ];

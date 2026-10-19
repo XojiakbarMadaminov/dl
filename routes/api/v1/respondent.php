@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('participations/{participation}', [RespondentParticipationController::class, 'show']);
     Route::put('participations/{participation}/pages/{page}', [RespondentParticipationController::class, 'savePage']);
     Route::post('participations/{participation}/complete', [RespondentParticipationController::class, 'complete']);
+    Route::post('participations/{participation}/back', [RespondentParticipationController::class, 'back']);
 });

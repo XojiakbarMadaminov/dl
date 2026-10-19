@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Organization\Models\Organization;
 use App\Modules\Survey\Actions\CreateSurveyAction;
+use App\Modules\Survey\Actions\DeleteSurveyAction;
 use App\Modules\Survey\Actions\UpdateSurveyAction;
 use App\Modules\Survey\Http\Requests\CreateSurveyRequest;
 use App\Modules\Survey\Http\Requests\UpdateSurveyRequest;
@@ -244,7 +245,7 @@ class SurveyController extends Controller
     /**
      * Delete Survey
      *
-     * Permanently delete a survey. Only draft surveys or surveys requesting changes can be deleted. Active surveys cannot be deleted.
+     * Permanently delete a draft survey without moderation or participation history. Surveys with history must be preserved.
      *
      * @authenticated
      *
@@ -262,13 +263,11 @@ class SurveyController extends Controller
      *   }
      * }
      */
-    public function destroy(Request $request, Organization $organization, Survey $survey): JsonResponse
+    public function destroy(Request $request, Organization $organization, Survey $survey, DeleteSurveyAction $action): JsonResponse
     {
         $this->authorize('editSurvey', $organization);
         $this->validateBelongsToOrg($survey, $organization);
-        $survey->assertEditable();
-
-        $survey->delete();
+        $action->execute($survey);
 
         return response()->json([
             'message' => 'Survey deleted successfully.',

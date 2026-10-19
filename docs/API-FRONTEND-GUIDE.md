@@ -8,31 +8,33 @@ Welcome to the Dialog API documentation for frontend engineers. This guide is yo
 
 | Resource | Path / URL | Description |
 |:---|:---|:---|
-| **Interactive Docs (HTML)** | `/docs` or [`public/docs/index.html`](file:///home/xojiakbar/PhpstormProjects/dl/public/docs/index.html) | Complete interactive API explorer with Try It Out |
-| **OpenAPI Specification** | [`public/docs/openapi.yaml`](file:///home/xojiakbar/PhpstormProjects/dl/public/docs/openapi.yaml) | Standard OpenAPI 3.0.3 YAML for code generators |
-| **Postman Collection** | [`postman/Dialog_API_Collection.postman_collection.json`](file:///home/xojiakbar/PhpstormProjects/dl/postman/Dialog_API_Collection.postman_collection.json) | Ready-to-import Postman request collection |
-| **Postman Environment** | [`postman/Dialog_Local_Environment.postman_environment.json`](file:///home/xojiakbar/PhpstormProjects/dl/postman/Dialog_Local_Environment.postman_environment.json) | Pre-configured environment variables for local testing |
+| **Interactive Docs (HTML)** | `/docs` or [`public/docs/index.html`](../public/docs/index.html) | Complete interactive API explorer with Try It Out |
+| **OpenAPI Specification** | [`public/docs/openapi.yaml`](../public/docs/openapi.yaml) | Standard OpenAPI 3.0.3 YAML for code generators |
+| **Postman Collection** | [`postman/Dialog_API_Collection.postman_collection.json`](../postman/Dialog_API_Collection.postman_collection.json) | Ready-to-import Postman request collection |
+| **Postman Environment** | [`postman/Dialog_Local_Environment.postman_environment.json`](../postman/Dialog_Local_Environment.postman_environment.json) | Pre-configured environment variables for local testing |
 
 ---
 
 ## 2. API Companion Guides
 
-1. [**API Authentication (`API-AUTH.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-AUTH.md)  
-   Sanctum SPA cookie flow (`/sanctum/csrf-cookie`), Bearer token auth, headers, and CORS troubleshooting.
-2. [**API Errors Envelope (`API-ERRORS.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-ERRORS.md)  
+1. [**API Authentication (`API-AUTH.md`)**](API-AUTH.md)
+   Implemented Sanctum Bearer token auth, headers, and the current limitation of cookie-only SPA authentication.
+2. [**API Errors Envelope (`API-ERRORS.md`)**](API-ERRORS.md)
    Unified error response envelope, HTTP status mapping, error codes, and frontend error handlers.
-3. [**API Enums Reference (`API-ENUMS.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-ENUMS.md)  
+3. [**API Enums Reference (`API-ENUMS.md`)**](API-ENUMS.md)
    All statuses, platform roles, organization roles, question types, and TypeScript types.
-4. [**Localization Guide (`API-LOCALIZATION.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-LOCALIZATION.md)  
+4. [**Localization Guide (`API-LOCALIZATION.md`)**](API-LOCALIZATION.md)
    Platform vs survey content localization, multi-language dictionaries (`uz`, `ru`, `en`), and resolved respondent payloads.
-5. [**Survey Builder Guide (`API-SURVEY-BUILDER.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-SURVEY-BUILDER.md)  
+5. [**Survey Builder Guide (`API-SURVEY-BUILDER.md`)**](API-SURVEY-BUILDER.md)
    Step-by-step API guide to creating surveys, managing pages, questions, options, reordering, and moderation submission.
-6. [**Respondent Flow (`API-RESPONDENT-FLOW.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-RESPONDENT-FLOW.md)  
+6. [**Respondent Flow (`API-RESPONDENT-FLOW.md`)**](API-RESPONDENT-FLOW.md)
    Participation lifecycle, backend-owned `SurveyFlow` navigation, answer submission formats, and idempotent completion.
-7. [**Moderation & Lifecycle (`API-MODERATION.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-MODERATION.md)  
+7. [**Moderation & Lifecycle (`API-MODERATION.md`)**](API-MODERATION.md)
    Lifecycle transitions (`draft` → `pending_review` → `approved` → `active` → `paused` → `closed` → `archived`) and immutability invariants.
-8. [**Results & Analytics (`API-RESULTS.md`)**](file:///home/xojiakbar/PhpstormProjects/dl/docs/API-RESULTS.md)  
+8. [**Results & Analytics (`API-RESULTS.md`)**](API-RESULTS.md)
    Summary metrics, question aggregates, respondent answer breakdown, and CSV data export.
+9. [**MVP Conditional Logic (`API-SURVEY-LOGIC.md`)**](API-SURVEY-LOGIC.md)
+   Builder rule API, type-specific AND/OR conditions, visibility, forward jumps, early completion, Back and stateless preview context.
 
 ---
 
@@ -41,6 +43,21 @@ Welcome to the Dialog API documentation for frontend engineers. This guide is yo
 - **Local Development**: `http://localhost:8000/api/v1`
 - **CSRF Cookie Endpoint**: `http://localhost:8000/sanctum/csrf-cookie`
 - **Documentation Web View**: `http://localhost:8000/docs`
+
+### Local frontend CORS
+
+In `local`/`testing`, HTTP and HTTPS origins on `localhost`, `127.0.0.1` and `[::1]` are allowed on any port (for example 3000, 5173 or 4200). Preflight OPTIONS allows the API methods and Authorization/JSON headers without requiring login. The actual request still requires a valid Bearer token where applicable. CORS headers also accompany API validation/authentication errors, so the frontend can read their error envelopes.
+
+Credentialed browser requests are permitted for allowed origins, but this does not implement cookie-only SPA authentication. Continue sending `Authorization: Bearer <token>`. CSV downloads expose `Content-Disposition` for reading the filename.
+
+Other origins require an explicit comma-separated allowlist:
+
+```env
+CORS_ALLOWED_ORIGINS=https://frontend.example.com,https://admin.example.com
+CORS_ALLOW_LOCALHOST=false
+```
+
+Loopback origins default to disabled outside `local`/`testing`. If copying `.env.example` to production, explicitly set `CORS_ALLOW_LOCALHOST=false`; opt in with true only if local frontend access is intended. Wildcard `*` entries are ignored. After changing these values, run `php8.4 artisan config:clear` locally, or rebuild the configuration cache during deployment. CORS grants browser access to responses, not API authorization; never disable auth to fix CORS.
 
 ---
 
@@ -63,11 +80,11 @@ Run `php artisan migrate:fresh --seed` to initialize the database with predictab
 
 ## 5. Golden Rules for Frontend Engineers
 
-1. **Backend Owns Navigation**:  
-   Never calculate the next survey page on the client. Always read `current_step.next` from the backend `SurveyFlow` response.
-2. **Handle the Standard Error Envelope**:  
+1. **Backend Owns Navigation**:
+   Never calculate the next survey page on the client. Read typed `next` destinations from the backend; render `next_step` after non-final saves and `current_step` on preview/current-page reads.
+2. **Handle the Standard Error Envelope**:
    All error responses have the format `{"error": {"code": "...", "message": "...", "fields": {...}}}`. Field errors map directly to input validation states.
-3. **Surveys are Immutable Once Live**:  
+3. **Surveys are Immutable Once Live**:
    Draft surveys can be edited. As soon as a survey is submitted and published, structural modifications (deleting/reordering/adding questions) are permanently locked.
-4. **Localization is Object-Based**:  
+4. **Localization is Object-Based**:
    Multilingual survey fields must be sent as dictionary objects keyed by ISO language code: `{"uz": "...", "ru": "...", "en": "..."}`.

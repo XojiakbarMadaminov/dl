@@ -6,6 +6,8 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Modules\Organization\Models\Organization;
 use App\Modules\Participation\Models\Participation;
+use App\Modules\Results\Http\Requests\SurveyResultsRequest;
+use App\Modules\Results\Queries\SurveyParticipationsQuery;
 use App\Modules\Results\Services\SurveyExportService;
 use App\Modules\Results\Services\SurveyResultsService;
 use App\Modules\Survey\Models\Survey;
@@ -42,7 +44,7 @@ class SurveyResultsController extends Controller
      * }
      */
     public function summary(
-        Request $request,
+        SurveyResultsRequest $request,
         Organization $organization,
         Survey $survey,
         SurveyResultsService $service,
@@ -50,7 +52,7 @@ class SurveyResultsController extends Controller
         $this->authorize('view', $organization);
         $this->validateBelongsToOrg($survey, $organization);
 
-        $summary = $service->getSummary($survey);
+        $summary = $service->getSummary($survey, $request->validated());
 
         return response()->json($summary);
     }
@@ -66,16 +68,18 @@ class SurveyResultsController extends Controller
      * @urlParam survey int required The ID of the survey. Example: 1
      * @urlParam question int required The ID of the question. Example: 1
      *
+     * @queryParam status string Filter by participation status: in_progress or completed. No-example
+     * @queryParam participation_locale string Filter by stored participation locale: uz, ru or en. No-example
      * @queryParam locale string Optional locale to label choice options. Defaults to survey default_locale. Example: uz
      *
      * @response 200 {
      *   "question_id": 1,
      *   "type": "single_choice",
      *   "title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
-     *   "total_answers": 8,
-     *   "options": [
+     *   "total_responses": 8,
+     *   "distribution": [
      *     {
-     *       "id": 1,
+     *       "option_id": 1,
      *       "label": "Har kuni",
      *       "count": 6,
      *       "percentage": 75.0
@@ -90,7 +94,7 @@ class SurveyResultsController extends Controller
      * }
      */
     public function questionAggregate(
-        Request $request,
+        SurveyResultsRequest $request,
         Organization $organization,
         Survey $survey,
         SurveyQuestion $question,
@@ -104,6 +108,7 @@ class SurveyResultsController extends Controller
             survey: $survey,
             question: $question,
             locale: is_string($locale) ? $locale : null,
+            filters: $request->validated(),
         );
 
         return response()->json($aggregate);
@@ -119,7 +124,8 @@ class SurveyResultsController extends Controller
      * @urlParam organization int required The ID of the organization. Example: 1
      * @urlParam survey int required The ID of the survey. Example: 1
      *
-     * @queryParam status string Filter by status (in_progress, completed, abandoned). Example: completed
+     * @queryParam status string Filter by status (in_progress, completed). Example: completed
+     * @queryParam participation_locale string Filter by stored participation locale: uz, ru or en. No-example
      * @queryParam page int Page number. Example: 1
      *
      * @response 200 {
@@ -145,18 +151,16 @@ class SurveyResultsController extends Controller
      * }
      */
     public function participations(
-        Request $request,
+        SurveyResultsRequest $request,
         Organization $organization,
         Survey $survey,
+        SurveyParticipationsQuery $query,
     ): JsonResponse {
         $this->authorize('view', $organization);
         $this->validateBelongsToOrg($survey, $organization);
 
-        $status = $request->query('status');
-
-        $paginated = Participation::where('survey_id', $survey->id)
-            ->when($status, fn ($q) => $q->where('status', $status))
-            ->with('user')
+        $paginated = $query->build($survey, $request->validated())
+            ->with('user:id,name,email')
             ->latest('started_at')
             ->paginate(20);
 
@@ -191,7 +195,7 @@ class SurveyResultsController extends Controller
      *         "question_id": 1,
      *         "question_title": "Xizmatimizdan qanchalik tez-tez foydalanasiz?",
      *         "type": "single_choice",
-     *         "text_value": "Har kuni",
+     *         "text_value": null,
      *         "number_value": null,
      *         "selected_options": [
      *           {"id": 1, "label": "Har kuni"}
@@ -246,13 +250,15 @@ class SurveyResultsController extends Controller
     /**
      * Export Results CSV
      *
-     * Download completed survey responses as a CSV spreadsheet.
+     * Download filtered survey responses as a CSV spreadsheet. Defaults to both completed and in-progress records; pass status=completed for completed-only export.
      *
      * @authenticated
      *
      * @urlParam organization int required The ID of the organization. Example: 1
      * @urlParam survey int required The ID of the survey. Example: 1
      *
+     * @queryParam status string Filter by participation status: in_progress or completed. No-example
+     * @queryParam participation_locale string Filter by stored participation locale: uz, ru or en. No-example
      * @queryParam locale string Optional locale for question and option headers. Defaults to survey default_locale. Example: uz
      *
      * @response 200 {
@@ -260,7 +266,7 @@ class SurveyResultsController extends Controller
      * }
      */
     public function export(
-        Request $request,
+        SurveyResultsRequest $request,
         Organization $organization,
         Survey $survey,
         SurveyExportService $exportService,
@@ -269,7 +275,7 @@ class SurveyResultsController extends Controller
         $this->validateBelongsToOrg($survey, $organization);
 
         $locale = $request->query('locale');
-        $csv = $exportService->exportCsv($survey, is_string($locale) ? $locale : null);
+        $csv = $exportService->exportCsv($survey, is_string($locale) ? $locale : null, $request->validated());
 
         $filename = "survey_{$survey->id}_results_".now()->format('Ymd_His').'.csv';
 

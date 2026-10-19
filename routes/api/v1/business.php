@@ -4,6 +4,7 @@ use App\Modules\Organization\Http\Controllers\Business\OrganizationController;
 use App\Modules\Results\Http\Controllers\Business\SurveyResultsController;
 use App\Modules\Survey\Http\Controllers\Business\BusinessSurveyLifecycleController;
 use App\Modules\Survey\Http\Controllers\Business\SurveyController;
+use App\Modules\Survey\Http\Controllers\Business\SurveyLogicController;
 use App\Modules\Survey\Http\Controllers\Business\SurveyOptionController;
 use App\Modules\Survey\Http\Controllers\Business\SurveyPageController;
 use App\Modules\Survey\Http\Controllers\Business\SurveyPreviewController;
@@ -36,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('surveys/{survey}', [SurveyController::class, 'show']);
         Route::patch('surveys/{survey}', [SurveyController::class, 'update']);
         Route::delete('surveys/{survey}', [SurveyController::class, 'destroy']);
+        Route::get('surveys/{survey}/logic', [SurveyLogicController::class, 'index']);
+        Route::put('surveys/{survey}/logic', [SurveyLogicController::class, 'update']);
 
         // Results & Analytics
         Route::get('surveys/{survey}/results/summary', [SurveyResultsController::class, 'summary']);

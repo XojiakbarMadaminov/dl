@@ -21,7 +21,9 @@ class UpdateQuestionRequest extends FormRequest
         return [
             'type' => ['sometimes', 'string', Rule::in(QuestionType::values())],
             'title' => ['sometimes', 'array'],
+            'title.*' => ['nullable', 'string'],
             'description' => ['nullable', 'array'],
+            'description.*' => ['nullable', 'string'],
             'is_required' => ['nullable', 'boolean'],
             'settings' => ['nullable', 'array'],
         ];

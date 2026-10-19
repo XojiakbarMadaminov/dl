@@ -209,6 +209,26 @@ Moderation statuses:
 
 Every resubmission creates a new moderation round so history is preserved.
 
+### survey_logic_rules
+
+MVP decision updated on 2026-10-19. One rule row stores:
+
+```text
+id                  BIGINT PK
+survey_id           BIGINT FK -> surveys.id, cascade delete
+action              varchar (show_question, skip_to_page, complete)
+source_page_id      BIGINT nullable
+target_page_id      BIGINT nullable
+target_question_id  BIGINT nullable
+priority            integer
+match               varchar (all, any)
+conditions          jsonb
+created_at
+updated_at
+```
+
+Index `(survey_id, priority)`. Conditions are a bounded JSONB list, not a separate table. Page/question IDs intentionally retain broken references after draft edits (no FK/cascade on these fields); application validation rejects cross-survey/deleted/forward-condition/backward-target references at rule writes, preview, review submission and publication. See `API-SURVEY-LOGIC.md` for the complete schema and semantics.
+
 ### participations
 
 ```text
@@ -218,6 +238,7 @@ user_id             BIGINT FK
 locale              varchar
 status              varchar
 current_page_id     BIGINT nullable FK -> survey_pages.id
+page_history        jsonb default []
 started_at          timestamp
 completed_at        timestamp nullable
 last_activity_at    timestamp
@@ -236,7 +257,7 @@ MVP statuses:
 - `in_progress`
 - `completed`
 
-Future logic may add terminal statuses such as `disqualified`.
+MVP early finish uses `completed`; a distinct screening status such as `disqualified` remains deferred. `page_history` records visited pages for Back; legacy in-progress rows derive history from the compatible current path until the next write.
 
 ### answers
 

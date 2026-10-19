@@ -111,4 +111,10 @@ class Survey extends Model
             );
         }
     }
+
+    /** @return HasMany<SurveyLogicRule, $this> */
+    public function logicRules(): HasMany
+    {
+        return $this->hasMany(SurveyLogicRule::class)->orderBy('priority')->orderBy('id');
+    }
 }

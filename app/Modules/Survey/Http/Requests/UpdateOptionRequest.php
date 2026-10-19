@@ -18,6 +18,7 @@ class UpdateOptionRequest extends FormRequest
     {
         return [
             'label' => ['required', 'array'],
+            'label.*' => ['nullable', 'string'],
         ];
     }
 

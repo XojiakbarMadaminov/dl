@@ -5,7 +5,7 @@ namespace App\Modules\Results\Services;
 use App\Exceptions\ApiException;
 use App\Modules\Participation\Enums\ParticipationStatus;
 use App\Modules\Participation\Models\Answer;
-use App\Modules\Participation\Models\Participation;
+use App\Modules\Results\Queries\SurveyParticipationsQuery;
 use App\Modules\Survey\Enums\QuestionType;
 use App\Modules\Survey\Models\Survey;
 use App\Modules\Survey\Models\SurveyQuestion;
@@ -13,13 +13,17 @@ use Illuminate\Support\Facades\DB;
 
 class SurveyResultsService
 {
+    public function __construct(protected SurveyParticipationsQuery $participationsQuery) {}
+
     /**
+     * @param  array<string, mixed>  $filters
      * @return array<string, mixed>
      */
-    public function getSummary(Survey $survey): array
+    public function getSummary(Survey $survey, array $filters = []): array
     {
-        $startedCount = Participation::where('survey_id', $survey->id)->count();
-        $completedCount = Participation::where('survey_id', $survey->id)
+        $query = $this->participationsQuery->build($survey, $filters);
+        $startedCount = (clone $query)->count();
+        $completedCount = (clone $query)
             ->where('status', ParticipationStatus::COMPLETED)
             ->count();
 
@@ -38,9 +42,10 @@ class SurveyResultsService
     }
 
     /**
+     * @param  array<string, mixed>  $filters
      * @return array<string, mixed>
      */
-    public function getQuestionAggregate(Survey $survey, SurveyQuestion $question, ?string $locale = null): array
+    public function getQuestionAggregate(Survey $survey, SurveyQuestion $question, ?string $locale = null, array $filters = []): array
     {
         $surveyPageIds = $survey->pages()->pluck('id')->all();
         if (! in_array($question->page_id, $surveyPageIds, true)) {
@@ -50,8 +55,7 @@ class SurveyResultsService
         $locale = $locale ?? $survey->default_locale;
         $question->loadMissing('options');
 
-        $participationIds = Participation::where('survey_id', $survey->id)
-            ->pluck('id');
+        $participationIds = $this->participationsQuery->build($survey, $filters)->select('id');
 
         $totalAnswers = Answer::whereIn('participation_id', $participationIds)
             ->where('question_id', $question->id)

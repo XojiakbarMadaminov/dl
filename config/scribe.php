@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Survey\Http\Documentation\SurveyLogicOpenApiGenerator;
 use Knuckles\Scribe\Config\AuthIn;
 
 use function Knuckles\Scribe\Config\configureStrategy;
@@ -68,7 +69,7 @@ INTRO,
     'try_it_out' => [
         'enabled' => true,
         'base_url' => null,
-        'use_csrf' => true,
+        'use_csrf' => false,
         'csrf_url' => '/sanctum/csrf-cookie',
     ],
 
@@ -78,8 +79,8 @@ INTRO,
         'in' => AuthIn::BEARER->value,
         'name' => 'Authorization',
         'use_value' => env('SCRIBE_AUTH_KEY'),
-        'placeholder' => 'Bearer {YOUR_AUTH_TOKEN}',
-        'extra_info' => 'For SPA clients, Sanctum uses session cookies with CSRF protection (`/sanctum/csrf-cookie`). For token clients (mobile or API testing), pass the header `Authorization: Bearer <plainTextToken>` returned by `/api/v1/auth/login` or `/api/v1/auth/register`.',
+        'placeholder' => '{YOUR_AUTH_TOKEN}',
+        'extra_info' => 'Pass Authorization: Bearer <plainTextToken> using the token returned by /api/v1/auth/login or /api/v1/auth/register. Cookie-only SPA authentication is not implemented.',
     ],
 
     'example_languages' => [
@@ -104,7 +105,7 @@ INTRO,
             'info.version' => '1.0.0',
             'info.description' => 'Dialog survey platform API specification for frontend integration.',
         ],
-        'generators' => [],
+        'generators' => [SurveyLogicOpenApiGenerator::class],
     ],
 
     'groups' => [

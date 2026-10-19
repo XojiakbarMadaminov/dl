@@ -2,20 +2,11 @@
 
 This document exists so agents do not accidentally build future functionality now while still preserving obvious extension points.
 
-## Survey conditional logic
+## Advanced survey conditional logic
 
-Future implementation may add:
+Basic conditional logic was explicitly moved into MVP on 2026-10-19. `SurveyFlow`, `survey_logic_rules` (JSONB conditions), builder rule APIs and actual-history Back implement the bounded contract in `API-SURVEY-LOGIC.md`.
 
-```text
-survey_logic_rules
-survey_logic_conditions
-```
-
-or another deliberately designed rule model.
-
-Do not add these tables in the current MVP.
-
-The extension point is `SurveyFlow`.
+Still deferred: same-page reactive visibility, nested condition groups, a distinct screening/disqualification outcome, piping, carry-forward, randomization, scoring and a visual frontend rule editor. Do not add separate condition tables or survey versions for hypothetical extensions.
 
 ## Survey versioning
 

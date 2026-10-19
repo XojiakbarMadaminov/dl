@@ -27,7 +27,7 @@ Before a survey can enter `pending_review`, backend validation must verify at le
 - min/max settings are consistent;
 - no empty invalid pages remain;
 - all required selected-locale translations are complete;
-- future: logic rules are valid when the logic feature exists.
+- logic rules have valid survey-local references, type-specific operators and forward-only navigation targets; revalidate at review submission and publication.
 
 Use dedicated validators, for example:
 

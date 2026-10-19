@@ -23,6 +23,6 @@ Some intentionally non-blocking decisions remain open and are listed in `AGENTS.
 - UZ/RU/EN platform localization.
 - Survey languages chosen at creation; selected-language survey titles required.
 - Survey content translations stored as JSONB maps.
-- SurveyFlow abstraction exists now; full logic engine is later.
+- SurveyFlow includes MVP visibility/branching/early completion and AND/OR rules; see `docs/API-SURVEY-LOGIC.md` for integration and advanced-feature boundaries.
 - Respondent login required; one participation per survey per user.
 - Preview does not pollute real participation/results.

@@ -120,4 +120,4 @@ Participation
   -> next destination
 ```
 
-In the MVP `SurveyFlow` is linear. Later, conditional logic can replace the internal decision algorithm without changing the respondent API contract.
+In the MVP `SurveyFlow` supports conditional question visibility, forward page branching and early completion, with linear fallback. It evaluates AND/OR rule groups while preserving the typed respondent destination contract. See `API-SURVEY-LOGIC.md`.

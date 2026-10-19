@@ -17,41 +17,60 @@ class TransitionSurveyStatusAction
 
     public function pause(Survey $survey, User $user, ?string $ipAddress = null): Survey
     {
-        if ($survey->status !== SurveyStatus::ACTIVE) {
-            throw new ApiException(
-                message: "Cannot pause survey from status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
+        return DB::transaction(function () use ($survey, $user, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::PAUSED) {
+                return $survey;
+            }
 
-        return $this->applyTransition($survey, SurveyStatus::PAUSED, 'survey.paused', $user, $ipAddress);
+            if ($survey->status !== SurveyStatus::ACTIVE) {
+                throw new ApiException(
+                    message: "Cannot pause survey from status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
+            return $this->applyTransition($survey, SurveyStatus::PAUSED, 'survey.paused', $user, $ipAddress);
+        });
     }
 
     public function resume(Survey $survey, User $user, ?string $ipAddress = null): Survey
     {
-        if ($survey->status !== SurveyStatus::PAUSED) {
-            throw new ApiException(
-                message: "Cannot resume survey from status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
+        return DB::transaction(function () use ($survey, $user, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::ACTIVE) {
+                return $survey;
+            }
 
-        return $this->applyTransition($survey, SurveyStatus::ACTIVE, 'survey.resumed', $user, $ipAddress);
+            if ($survey->status !== SurveyStatus::PAUSED) {
+                throw new ApiException(
+                    message: "Cannot resume survey from status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
+            return $this->applyTransition($survey, SurveyStatus::ACTIVE, 'survey.resumed', $user, $ipAddress);
+        });
     }
 
     public function close(Survey $survey, User $user, ?string $ipAddress = null): Survey
     {
-        if (! in_array($survey->status, [SurveyStatus::ACTIVE, SurveyStatus::PAUSED], true)) {
-            throw new ApiException(
-                message: "Cannot close survey from status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
-
         return DB::transaction(function () use ($survey, $user, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::CLOSED) {
+                return $survey;
+            }
+
+            if (! in_array($survey->status, [SurveyStatus::ACTIVE, SurveyStatus::PAUSED], true)) {
+                throw new ApiException(
+                    message: "Cannot close survey from status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
             $survey->update([
                 'status' => SurveyStatus::CLOSED,
                 'closed_at' => now(),
@@ -71,15 +90,20 @@ class TransitionSurveyStatusAction
 
     public function archive(Survey $survey, User $user, ?string $ipAddress = null): Survey
     {
-        if ($survey->status !== SurveyStatus::CLOSED) {
-            throw new ApiException(
-                message: "Cannot archive survey from status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
-
         return DB::transaction(function () use ($survey, $user, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::ARCHIVED) {
+                return $survey;
+            }
+
+            if ($survey->status !== SurveyStatus::CLOSED) {
+                throw new ApiException(
+                    message: "Cannot archive survey from status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
             $survey->update([
                 'status' => SurveyStatus::ARCHIVED,
                 'archived_at' => now(),

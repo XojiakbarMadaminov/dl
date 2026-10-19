@@ -19,15 +19,20 @@ class RequestChangesSurveyAction
 
     public function execute(Survey $survey, User $moderator, string $comment, ?string $ipAddress = null): Survey
     {
-        if ($survey->status !== SurveyStatus::PENDING_REVIEW) {
-            throw new ApiException(
-                message: "Cannot request changes for survey with status '{$survey->status->value}'.",
-                errorCode: 'INVALID_STATUS_TRANSITION',
-                statusCode: 422,
-            );
-        }
-
         return DB::transaction(function () use ($survey, $moderator, $comment, $ipAddress) {
+            $survey = Survey::query()->lockForUpdate()->findOrFail($survey->id);
+            if ($survey->status === SurveyStatus::CHANGES_REQUESTED) {
+                return $survey;
+            }
+
+            if ($survey->status !== SurveyStatus::PENDING_REVIEW) {
+                throw new ApiException(
+                    message: "Cannot request changes for survey with status '{$survey->status->value}'.",
+                    errorCode: 'INVALID_STATUS_TRANSITION',
+                    statusCode: 422,
+                );
+            }
+
             $survey->update([
                 'status' => SurveyStatus::CHANGES_REQUESTED,
             ]);

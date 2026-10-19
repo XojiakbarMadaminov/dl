@@ -39,14 +39,18 @@ Every 4xx and 5xx response from Dialog APIs is formatted consistently:
 | **403** | `FORBIDDEN` | Authenticated user lacks required permissions | Display unauthorized banner or redirect to dashboard |
 | **403** | `ACCOUNT_INACTIVE` | User account is suspended or pending verification | Display account inactive modal |
 | **404** | `NOT_FOUND` | Resource not found or does not belong to organization | Display 404 screen or redirect to entity list |
-| **409** | `CONFLICT` | Concurrent update conflict or unique constraint | Prompt user to refresh data and retry |
 | **422** | `VALIDATION_ERROR` | Request payload failed schema or business validation rules | Map `error.fields` directly to form input errors |
 | **422** | `SURVEY_NOT_EDITABLE` | Survey is in a non-editable state (`active`, `closed`, `archived`) | Lock builder UI; show "Survey is locked" banner |
 | **422** | `INVALID_STATUS_TRANSITION` | Attempted invalid lifecycle transition (e.g. publishing draft without review) | Refresh survey status and update action buttons |
 | **422** | `SURVEY_NOT_ACTIVE` | Respondent attempted to answer non-active survey | Show "Survey not open" screen |
 | **422** | `UNSUPPORTED_SURVEY_LOCALE`| Requested locale is not enabled for this survey | Default to survey `default_locale` |
 | **422** | `CANNOT_DELETE_LAST_PAGE` | Attempted to delete the only remaining page in survey | Show alert: "Survey must contain at least 1 page" |
-| **500** | `INTERNAL_SERVER_ERROR` | Unexpected server crash or exception | Display global error fallback toast |
+| **422** | `SURVEY_HAS_HISTORY` | Survey has moderation or participation history and cannot be hard-deleted | Preserve history; use the supported lifecycle instead |
+| **422** | `INVALID_ANSWER` | Question-type answer validation failed | Map `error.fields` to question inputs |
+| **422** | `INVALID_SURVEY_LOGIC` | Rule references, operator/value or forward-only flow constraint is invalid | Map `rules.{index}` errors to the rule editor; repair invalid rules before review |
+| **422** | `INVALID_PAGE_FLOW` | Page is unvisited/skipped or completion has not reached the applicable path's end | Use backend navigation and refresh the current participation |
+| **422** | `PARTICIPATION_ALREADY_COMPLETED` | Attempt to edit completed answers | Show read-only completion state |
+| **500** | `INTERNAL_ERROR` | Unexpected server crash or exception | Display global error fallback toast |
 
 ---
 

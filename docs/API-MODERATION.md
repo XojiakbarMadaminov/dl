@@ -7,34 +7,14 @@ This document defines the moderation workflow, status transitions, role authoriz
 ## 1. Complete Lifecycle State Machine
 
 ```text
- [ draft ]  <------------------------+
-     |                               |
-     | (business: submit-review)     |
-     v                               |
- [ pending_review ]                  |
-   |           |                     |
-   | (admin:   | (admin:             |
-   |  approve) |  request-changes)   |
-   |           v                     |
-   |     [ changes_requested ] ------+
-   v
- [ approved ]
-     |
-     | (business: publish)
-     v
- [ active ] <------------------+
-   |    |                      |
-   |    | (business: pause)    | (business: resume)
-   |    v                      |
-   |  [ paused ] --------------+
-   |    |
-   |    | (business: close)
-   v    v
- [ closed ]
-     |
-     | (business: archive)
-     v
- [ archived ]
+draft -> pending_review -> approved -> active
+             |                        |  ^
+             v                        v  |
+       changes_requested           paused
+             |
+             +-> pending_review
+
+active / paused -> closed -> archived
 ```
 
 ---
@@ -43,14 +23,14 @@ This document defines the moderation workflow, status transitions, role authoriz
 
 | Transition | Action Endpoint | Required Role | Pre-condition | Post-condition |
 |:---|:---|:---|:---|:---|
-| **Submit Review** | `POST /business/.../submit-review` | Business `OWNER`/`MANAGER`/`EDITOR` | `draft` or `changes_requested`. Survey must have ≥1 page with questions and complete translations. | Status becomes `pending_review`. Content locked. |
+| **Submit Review** | `POST /business/.../submit-review` | Business `owner`/`manager`/`researcher` | `draft` or `changes_requested`. Survey must have ≥1 page with questions and complete translations. | Status becomes `pending_review`. Content locked. |
 | **Approve** | `POST /admin/.../approve` | Platform `admin` | `pending_review` | Status becomes `approved`. Ready to publish. |
 | **Request Changes**| `POST /admin/.../request-changes` | Platform `admin` | `pending_review`. Mandatory reviewer comment. | Status becomes `changes_requested`. Content unlocked for editing. |
-| **Publish** | `POST /business/.../publish` | Business `OWNER`/`MANAGER`/`EDITOR` | `approved` | Status becomes `active`. Responses accepted. Immutability locked. |
-| **Pause** | `POST /business/.../pause` | Business `OWNER`/`MANAGER`/`EDITOR` | `active` | Status becomes `paused`. New respondents blocked. |
-| **Resume** | `POST /business/.../resume` | Business `OWNER`/`MANAGER`/`EDITOR` | `paused` | Status becomes `active`. Responses accepted. |
-| **Close** | `POST /business/.../close` | Business `OWNER`/`MANAGER`/`EDITOR` | `active` or `paused` | Status becomes `closed`. Permanently closed to responses. |
-| **Archive** | `POST /business/.../archive` | Business `OWNER`/`MANAGER`/`EDITOR` | `closed` | Status becomes `archived`. Read-only historic state. |
+| **Publish** | `POST /business/.../publish` | Business `owner`/`manager`/`researcher` | `approved` | Status becomes `active`. Responses accepted. Immutability locked. |
+| **Pause** | `POST /business/.../pause` | Business `owner`/`manager`/`researcher` | `active` | Status becomes `paused`. New respondents blocked. |
+| **Resume** | `POST /business/.../resume` | Business `owner`/`manager`/`researcher` | `paused` | Status becomes `active`. Responses accepted. |
+| **Close** | `POST /business/.../close` | Business `owner`/`manager`/`researcher` | `active` or `paused` | Status becomes `closed`. Permanently closed to responses. |
+| **Archive** | `POST /business/.../archive` | Business `owner`/`manager`/`researcher` | `closed` | Status becomes `archived`. Read-only historic state. |
 
 ---
 
@@ -103,3 +83,9 @@ Response:
   "message": "Changes requested successfully."
 }
 ```
+
+## Duplicate requests and deletion
+
+Submit/approve/request-changes/publish lock the survey row inside a transaction and return without repeating moderation/audit records if already at the requested target state. Publication retries preserve `published_at`.
+
+Hard deletion is restricted to drafts with no moderation or participation history. A survey returned for changes cannot be deleted along with its review history. The moderation database currently stores events, not the round schema in the architecture document; see `AUDIT-DOCS-CODE.md`.

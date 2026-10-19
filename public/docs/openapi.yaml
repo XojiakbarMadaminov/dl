@@ -27,7 +27,7 @@ components:
     default:
       type: http
       scheme: bearer
-      description: 'For SPA clients, Sanctum uses session cookies with CSRF protection (`/sanctum/csrf-cookie`). For token clients (mobile or API testing), pass the header `Authorization: Bearer <plainTextToken>` returned by `/api/v1/auth/login` or `/api/v1/auth/register`.'
+      description: 'Pass Authorization: Bearer <plainTextToken> using the token returned by /api/v1/auth/login or /api/v1/auth/register. Cookie-only SPA authentication is not implemented.'
 security:
   -
     default: []
@@ -669,7 +669,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1022,7 +1022,7 @@ paths:
                   type: array
                   description: ''
                   example:
-                    - en
+                    - ru
                   items:
                     type: string
                     enum:
@@ -1030,40 +1030,37 @@ paths:
                       - ru
                       - en
                 title:
-                  type: object
-                  description: 'Localized survey title map. Must contain non-empty strings for all selected survey locales.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Mijozlar qoniqishi so‘rovi'
-                    ru: 'Опрос удовлетворенности клиентов'
-                    en: 'Customer Satisfaction Survey'
-                  properties: {}
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Optional localized survey subtitle/description map.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xizmatlar sifatini yaxshilash bo‘yicha fikringiz'
-                    ru: 'Ваше мнение для улучшения качества сервиса'
-                    en: 'Your feedback to improve service quality'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 welcome_message:
-                  type: object
-                  description: 'Optional greeting displayed to respondents prior to answering.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Assalomu alaykum! So‘rovnomamizga xush kelibsiz.'
-                    ru: 'Добро пожаловать в наш опрос!'
-                    en: 'Welcome to our satisfaction survey!'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 thank_you_message:
-                  type: object
-                  description: 'Optional completion message displayed after submission.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Ishtirokingiz uchun katta rahmat!'
-                    ru: 'Спасибо за участие!'
-                    en: 'Thank you for your valuable participation!'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 internal_note:
                   type: string
                   description: 'Internal note for researchers (not visible to respondents). Must not be greater than 5000 characters.'
@@ -1072,13 +1069,12 @@ paths:
               required:
                 - default_locale
                 - locales
-                - title
     parameters:
       -
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1374,7 +1370,7 @@ paths:
                   type: array
                   description: ''
                   example:
-                    - ru
+                    - en
                   items:
                     type: string
                     enum:
@@ -1382,40 +1378,37 @@ paths:
                       - ru
                       - en
                 title:
-                  type: object
-                  description: 'Localized survey title map keyed by language code.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Mijozlar qoniqishi so‘rovi (Yangilangan)'
-                    ru: 'Опрос удовлетворенности клиентов (Обновленный)'
-                    en: 'Customer Satisfaction Survey (Updated)'
-                  properties: {}
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Optional localized survey subtitle/description map.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xizmatlar sifatini oshirish bo‘yicha fikrlar'
-                    ru: 'Мнения для улучшения качества сервиса'
-                    en: 'Feedback to improve service quality'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 welcome_message:
-                  type: object
-                  description: 'Optional greeting displayed to respondents.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xush kelibsiz!'
-                    ru: 'Добро пожаловать!'
-                    en: Welcome!
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 thank_you_message:
-                  type: object
-                  description: 'Optional message displayed after completion.'
+                  type: array
+                  description: ''
                   example:
-                    uz: Rahmat!
-                    ru: Спасибо!
-                    en: 'Thank you!'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 internal_note:
                   type: string
                   description: 'Internal note for researchers. Must not be greater than 5000 characters.'
@@ -1424,7 +1417,7 @@ paths:
     delete:
       summary: 'Delete Survey'
       operationId: deleteSurvey
-      description: 'Permanently delete a survey. Only draft surveys or surveys requesting changes can be deleted. Active surveys cannot be deleted.'
+      description: 'Permanently delete a draft survey without moderation or participation history. Surveys with history must be preserved.'
       parameters: []
       responses:
         200:
@@ -1470,7 +1463,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1478,7 +1471,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1498,12 +1491,322 @@ paths:
         required: true
         schema:
           type: integer
+  '/api/v1/business/organizations/{organization_id}/surveys/{survey_id}/logic':
+    get:
+      summary: 'Read Survey Logic'
+      operationId: readSurveyLogic
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  rules: []
+                properties:
+                  rules:
+                    type: array
+                    example: []
+      tags:
+        - Business
+    put:
+      summary: 'Replace Survey Logic'
+      operationId: replaceSurveyLogic
+      description: 'Atomically replaces all rules. Send rules: [] to remove all logic. See API-SURVEY-LOGIC.md for the contract.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  rules:
+                    -
+                      id: 1
+                      action: show_question
+                      source_page_id: null
+                      target_page_id: null
+                      target_question_id: 202
+                      priority: 0
+                      match: all
+                      conditions:
+                        -
+                          question_id: 101
+                          operator: equals
+                          value: 501
+                properties:
+                  rules:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        action: show_question
+                        source_page_id: null
+                        target_page_id: null
+                        target_question_id: 202
+                        priority: 0
+                        match: all
+                        conditions:
+                          -
+                            question_id: 101
+                            operator: equals
+                            value: 501
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        action:
+                          type: string
+                          example: show_question
+                        source_page_id:
+                          type: string
+                          example: null
+                          nullable: true
+                        target_page_id:
+                          type: string
+                          example: null
+                          nullable: true
+                        target_question_id:
+                          type: integer
+                          example: 202
+                        priority:
+                          type: integer
+                          example: 0
+                        match:
+                          type: string
+                          example: all
+                        conditions:
+                          type: array
+                          example:
+                            -
+                              question_id: 101
+                              operator: equals
+                              value: 501
+                          items:
+                            type: object
+                            properties:
+                              question_id:
+                                type: integer
+                                example: 101
+                              operator:
+                                type: string
+                                example: equals
+                              value:
+                                type: integer
+                                example: 501
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: INVALID_SURVEY_LOGIC
+                    message: 'Invalid survey logic.'
+                    fields:
+                      rules.0:
+                        - 'Navigation may only target a later page in this survey.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: INVALID_SURVEY_LOGIC
+                      message:
+                        type: string
+                        example: 'Invalid survey logic.'
+                      fields:
+                        type: object
+                        properties:
+                          rules.0:
+                            type: array
+                            example:
+                              - 'Navigation may only target a later page in this survey.'
+                            items:
+                              type: string
+      tags:
+        - Business
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rules:
+                  type: array
+                  description: 'One conditional rule. Maximum 100 rules per survey.'
+                  example:
+                    -
+                      action: show_question
+                      target_question_id: 202
+                      priority: 0
+                      match: all
+                      conditions:
+                        -
+                          question_id: 101
+                          operator: equals
+                          value: 501
+                  items:
+                    type: object
+                    properties:
+                      action:
+                        type: string
+                        description: 'show_question, skip_to_page, or complete.'
+                        example: show_question
+                        enum:
+                          - show_question
+                          - skip_to_page
+                          - complete
+                      source_page_id:
+                        type: integer
+                        description: 'Required only for navigation rules. Must be at least 1.'
+                        example: null
+                        nullable: true
+                      target_page_id:
+                        type: integer
+                        description: 'Required only for skip_to_page; must be a later page. Must be at least 1.'
+                        example: null
+                        nullable: true
+                      target_question_id:
+                        type: integer
+                        description: 'Required only for show_question. Must be at least 1.'
+                        example: 202
+                        nullable: true
+                      priority:
+                        type: integer
+                        description: 'Smaller values win; ties use input order. Must be at least 0. Must not be greater than 1000000.'
+                        example: 0
+                      match:
+                        type: string
+                        description: 'all for AND, any for OR.'
+                        example: all
+                        enum:
+                          - all
+                          - any
+                      conditions:
+                        type: array
+                        description: 'One condition. Maximum 20 per group.'
+                        example:
+                          -
+                            question_id: 101
+                            operator: equals
+                            value: 501
+                        items:
+                          type: object
+                          properties:
+                            question_id:
+                              type: integer
+                              description: 'Earlier-page question for visibility, earlier/current-page question for navigation. Must be at least 1.'
+                              example: 101
+                            operator:
+                              type: string
+                              description: 'Question-type-specific operator; see API-SURVEY-LOGIC.md.'
+                              example: equals
+                              enum:
+                                - equals
+                                - not_equals
+                                - contains
+                                - not_contains
+                                - greater_than
+                                - less_than
+                                - answered
+                                - not_answered
+                            value:
+                              description: 'Integer option ID, integer rating, or text. Omit for answered/not_answered.'
+                              example: 501
+                              oneOf:
+                                -
+                                  type: integer
+                                -
+                                  type: string
+                                  nullable: true
+                          required:
+                            - question_id
+                            - operator
+                        minItems: 1
+                        maxItems: 20
+                    required:
+                      - action
+                      - priority
+                      - match
+                      - conditions
+                  maxItems: 100
+              required:
+                - rules
+    parameters:
+      -
+        in: path
+        name: organization_id
+        description: 'The ID of the organization.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: survey_id
+        description: 'The ID of the survey.'
+        example: 16
+        required: true
+        schema:
+          type: integer
   '/api/v1/business/organizations/{organization_id}/surveys/{survey_id}/results/summary':
     get:
       summary: 'Survey Summary Metrics'
       operationId: surveySummaryMetrics
       description: 'Returns high-level metrics: total starts, completions, in-progress count, and completion rate percentage.'
-      parameters: []
+      parameters:
+        -
+          in: query
+          name: status
+          description: 'Filter by participation status; omit to include both statuses.'
+          example: completed
+          required: false
+          schema:
+            type: string
+            description: 'Filter by participation status; omit to include both statuses.'
+            example: completed
+            enum:
+              - in_progress
+              - completed
+        -
+          in: query
+          name: participation_locale
+          description: 'Filter by stored participation locale.'
+          example: ru
+          required: false
+          schema:
+            type: string
+            description: 'Filter by stored participation locale.'
+            example: ru
+            enum:
+              - uz
+              - ru
+              - en
+        -
+          in: query
+          name: locale
+          description: 'Display language for question and option labels, not a participation filter.'
+          example: uz
+          required: false
+          schema:
+            type: string
+            description: 'Display language for question and option labels, not a participation filter.'
+            example: uz
+            enum:
+              - uz
+              - ru
+              - en
       responses:
         200:
           description: ''
@@ -1540,7 +1843,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1548,7 +1851,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1576,6 +1879,26 @@ paths:
       parameters:
         -
           in: query
+          name: status
+          description: 'Filter by participation status: in_progress or completed.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filter by participation status: in_progress or completed.'
+            example: null
+        -
+          in: query
+          name: participation_locale
+          description: 'Filter by stored participation locale: uz, ru or en.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filter by stored participation locale: uz, ru or en.'
+            example: null
+        -
+          in: query
           name: locale
           description: 'Optional locale to label choice options. Defaults to survey default_locale.'
           example: uz
@@ -1595,10 +1918,10 @@ paths:
                   question_id: 1
                   type: single_choice
                   title: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
-                  total_answers: 8
-                  options:
+                  total_responses: 8
+                  distribution:
                     -
-                      id: 1
+                      option_id: 1
                       label: 'Har kuni'
                       count: 6
                       percentage: 75.0
@@ -1617,14 +1940,14 @@ paths:
                   title:
                     type: string
                     example: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
-                  total_answers:
+                  total_responses:
                     type: integer
                     example: 8
-                  options:
+                  distribution:
                     type: array
                     example:
                       -
-                        id: 1
+                        option_id: 1
                         label: 'Har kuni'
                         count: 6
                         percentage: 75
@@ -1636,7 +1959,7 @@ paths:
                     items:
                       type: object
                       properties:
-                        id:
+                        option_id:
                           type: integer
                           example: 1
                         label:
@@ -1655,7 +1978,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1663,7 +1986,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1671,7 +1994,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1708,13 +2031,37 @@ paths:
         -
           in: query
           name: status
-          description: 'Filter by status (in_progress, completed, abandoned).'
+          description: 'Filter by status (in_progress, completed).'
           example: completed
           required: false
           schema:
             type: string
-            description: 'Filter by status (in_progress, completed, abandoned).'
+            description: 'Filter by status (in_progress, completed).'
             example: completed
+        -
+          in: query
+          name: participation_locale
+          description: 'Filter by stored participation locale: uz, ru or en.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filter by stored participation locale: uz, ru or en.'
+            example: null
+        -
+          in: query
+          name: locale
+          description: 'Display language for question and option labels, not a participation filter.'
+          example: uz
+          required: false
+          schema:
+            type: string
+            description: 'Display language for question and option labels, not a participation filter.'
+            example: uz
+            enum:
+              - uz
+              - ru
+              - en
         -
           in: query
           name: page
@@ -1817,7 +2164,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1825,7 +2172,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1874,7 +2221,7 @@ paths:
                         question_id: 1
                         question_title: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
                         type: single_choice
-                        text_value: 'Har kuni'
+                        text_value: null
                         number_value: null
                         selected_options:
                           -
@@ -1918,7 +2265,7 @@ paths:
                             question_id: 1
                             question_title: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
                             type: single_choice
-                            text_value: 'Har kuni'
+                            text_value: null
                             number_value: null
                             selected_options:
                               -
@@ -1938,7 +2285,8 @@ paths:
                               example: single_choice
                             text_value:
                               type: string
-                              example: 'Har kuni'
+                              example: null
+                              nullable: true
                             number_value:
                               type: string
                               example: null
@@ -1965,7 +2313,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1973,7 +2321,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -1981,7 +2329,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2013,8 +2361,28 @@ paths:
     get:
       summary: 'Export Results CSV'
       operationId: exportResultsCSV
-      description: 'Download completed survey responses as a CSV spreadsheet.'
+      description: 'Download filtered survey responses as a CSV spreadsheet. Defaults to both completed and in-progress records; pass status=completed for completed-only export.'
       parameters:
+        -
+          in: query
+          name: status
+          description: 'Filter by participation status: in_progress or completed.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filter by participation status: in_progress or completed.'
+            example: null
+        -
+          in: query
+          name: participation_locale
+          description: 'Filter by stored participation locale: uz, ru or en.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filter by stored participation locale: uz, ru or en.'
+            example: null
         -
           in: query
           name: locale
@@ -2045,7 +2413,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2053,7 +2421,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2143,7 +2511,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2151,7 +2519,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2237,7 +2605,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2245,7 +2613,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2303,7 +2671,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2311,7 +2679,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2369,7 +2737,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2377,7 +2745,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2439,7 +2807,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2447,7 +2815,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2509,7 +2877,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2517,7 +2885,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2588,11 +2956,15 @@ paths:
                               id: 1
                               label: 'Har kuni'
                               position: 1
-                    is_first_page: true
-                    is_last_page: false
+                    progress:
+                      current_step: 1
+                      total_steps: 2
+                      percent: 50
+                      is_first_page: true
+                      is_last_page: false
                     next:
                       type: page
-                      page_id: 2
+                      id: 2
                 properties:
                   survey:
                     type: object
@@ -2687,19 +3059,31 @@ paths:
                                       id: { type: integer, example: 1 }
                                       label: { type: string, example: 'Har kuni' }
                                       position: { type: integer, example: 1 }
-                      is_first_page:
-                        type: boolean
-                        example: true
-                      is_last_page:
-                        type: boolean
-                        example: false
+                      progress:
+                        type: object
+                        properties:
+                          current_step:
+                            type: integer
+                            example: 1
+                          total_steps:
+                            type: integer
+                            example: 2
+                          percent:
+                            type: integer
+                            example: 50
+                          is_first_page:
+                            type: boolean
+                            example: true
+                          is_last_page:
+                            type: boolean
+                            example: false
                       next:
                         type: object
                         properties:
                           type:
                             type: string
                             example: page
-                          page_id:
+                          id:
                             type: integer
                             example: 2
       tags:
@@ -2709,7 +3093,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2717,7 +3101,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2757,11 +3141,15 @@ paths:
                       id: 1
                       title: 'Xizmatlardan foydalanish'
                       position: 1
-                    is_first_page: true
-                    is_last_page: false
+                    progress:
+                      current_step: 1
+                      total_steps: 2
+                      percent: 50
+                      is_first_page: true
+                      is_last_page: false
                     next:
                       type: page
-                      page_id: 2
+                      id: 2
                 properties:
                   valid:
                     type: boolean
@@ -2781,19 +3169,31 @@ paths:
                           position:
                             type: integer
                             example: 1
-                      is_first_page:
-                        type: boolean
-                        example: true
-                      is_last_page:
-                        type: boolean
-                        example: false
+                      progress:
+                        type: object
+                        properties:
+                          current_step:
+                            type: integer
+                            example: 1
+                          total_steps:
+                            type: integer
+                            example: 2
+                          percent:
+                            type: integer
+                            example: 50
+                          is_first_page:
+                            type: boolean
+                            example: true
+                          is_last_page:
+                            type: boolean
+                            example: false
                       next:
                         type: object
                         properties:
                           type:
                             type: string
                             example: page
-                          page_id:
+                          id:
                             type: integer
                             example: 2
         422:
@@ -2804,8 +3204,8 @@ paths:
                 type: object
                 example:
                   error:
-                    code: VALIDATION_ERROR
-                    message: 'This question is required.'
+                    code: INVALID_ANSWER
+                    message: 'One or more answers are invalid.'
                     fields:
                       answers.1:
                         - 'This question is required.'
@@ -2815,10 +3215,10 @@ paths:
                     properties:
                       code:
                         type: string
-                        example: VALIDATION_ERROR
+                        example: INVALID_ANSWER
                       message:
                         type: string
-                        example: 'This question is required.'
+                        example: 'One or more answers are invalid.'
                       fields:
                         type: object
                         properties:
@@ -2843,10 +3243,14 @@ paths:
                   example: uz
                 answers:
                   type: object
-                  description: 'Map of question IDs to answer objects.'
+                  description: 'Map of question IDs to scalar/array answers.'
                   example:
-                    1:
-                      option_id: 1
+                    1: 1
+                  properties: {}
+                previous_answers:
+                  type: object
+                  description: 'Answers from earlier applicable preview pages; used for conditional visibility and branching.'
+                  example: []
                   properties: {}
               required:
                 - answers
@@ -2855,7 +3259,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2863,7 +3267,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2871,7 +3275,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2965,29 +3369,27 @@ paths:
               type: object
               properties:
                 title:
-                  type: object
-                  description: 'Optional localized title map for the page.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xizmatlardan foydalanish'
-                    ru: 'Использование сервисов'
-                    en: 'Service Usage'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Optional localized explanatory instructions for the page.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Iltimos, barcha savollarga xolis javob bering.'
-                    ru: 'Пожалуйста, ответьте на все вопросы.'
-                    en: 'Please answer all questions objectively.'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
     parameters:
       -
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -2995,7 +3397,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3069,23 +3471,21 @@ paths:
               type: object
               properties:
                 title:
-                  type: object
-                  description: 'Updated localized title map for the page.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Baholash va takliflar'
-                    ru: 'Оценка и предложения'
-                    en: 'Rating & Feedback'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Updated localized page instructions.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Yakuniy bahoni bering.'
-                    ru: 'Поставьте итоговую оценку.'
-                    en: 'Provide your final rating.'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
     delete:
       summary: 'Delete Page'
       operationId: deletePage
@@ -3135,7 +3535,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3143,7 +3543,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3205,7 +3605,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3213,7 +3613,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3322,22 +3722,21 @@ paths:
                     - long_text
                     - rating
                 title:
-                  type: object
-                  description: 'Localized question title map keyed by survey language codes.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz?'
-                    ru: 'Как часто вы пользуетесь нашим сервисом?'
-                    en: 'How often do you use our service?'
-                  properties: {}
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Optional localized helper text or subtitle for the question.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Faqat bitta variantni tanlang'
-                    ru: 'Выберите один вариант'
-                    en: 'Select one option only'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 is_required:
                   type: boolean
                   description: 'Whether the respondent must answer this question before progressing.'
@@ -3353,13 +3752,12 @@ paths:
                   nullable: true
               required:
                 - type
-                - title
     parameters:
       -
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3367,7 +3765,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3454,20 +3852,21 @@ paths:
                     - long_text
                     - rating
                 title:
-                  type: object
-                  description: 'Updated localized question title map.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Xizmatimizdan qanchalik tez-tez foydalanasiz? (Yangilangan)'
-                    ru: 'Как часто вы пользуетесь нашим сервисом? (Обновлено)'
-                    en: 'How often do you use our service? (Updated)'
-                  properties: {}
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 description:
-                  type: object
-                  description: 'Updated localized description or instructions.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Iltimos, aniq javob bering.'
-                  properties: {}
-                  nullable: true
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
                 is_required:
                   type: boolean
                   description: 'Mandatory answer requirement toggle.'
@@ -3506,7 +3905,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3514,7 +3913,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3592,7 +3991,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3600,7 +3999,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3662,7 +4061,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3670,7 +4069,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3744,28 +4143,26 @@ paths:
       tags:
         - Business
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
                 label:
-                  type: object
-                  description: 'Localized choice option label map keyed by language code.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Har kuni'
-                    ru: 'Каждый день'
-                    en: Daily
-                  properties: {}
-              required:
-                - label
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
     parameters:
       -
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3773,7 +4170,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3835,22 +4232,20 @@ paths:
       tags:
         - Business
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
                 label:
-                  type: object
-                  description: 'Updated localized option label map.'
+                  type: array
+                  description: ''
                   example:
-                    uz: 'Haftada bir necha marta'
-                    ru: 'Несколько раз в неделю'
-                    en: 'Several times a week'
-                  properties: {}
-              required:
-                - label
+                    - architecto
+                  items:
+                    type: string
+                    nullable: true
     delete:
       summary: 'Delete Option'
       operationId: deleteOption
@@ -3876,7 +4271,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3884,7 +4279,7 @@ paths:
         in: path
         name: option_id
         description: 'The ID of the option.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3946,7 +4341,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -3954,7 +4349,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4016,11 +4411,15 @@ paths:
                               id: 2
                               label: 'Haftada bir necha marta'
                               position: 2
-                    is_first_page: true
-                    is_last_page: false
+                    progress:
+                      current_step: 1
+                      total_steps: 2
+                      percent: 50
+                      is_first_page: true
+                      is_last_page: false
                     next:
                       type: page
-                      page_id: 2
+                      id: 2
                 properties:
                   participation_id:
                     type: integer
@@ -4112,19 +4511,31 @@ paths:
                                       id: { type: integer, example: 1 }
                                       label: { type: string, example: 'Har kuni' }
                                       position: { type: integer, example: 1 }
-                      is_first_page:
-                        type: boolean
-                        example: true
-                      is_last_page:
-                        type: boolean
-                        example: false
+                      progress:
+                        type: object
+                        properties:
+                          current_step:
+                            type: integer
+                            example: 1
+                          total_steps:
+                            type: integer
+                            example: 2
+                          percent:
+                            type: integer
+                            example: 50
+                          is_first_page:
+                            type: boolean
+                            example: true
+                          is_last_page:
+                            type: boolean
+                            example: false
                       next:
                         type: object
                         properties:
                           type:
                             type: string
                             example: page
-                          page_id:
+                          id:
                             type: integer
                             example: 2
         422:
@@ -4162,14 +4573,15 @@ paths:
               properties:
                 locale:
                   type: string
-                  description: 'Preferred survey language (must be one of survey locales: uz, ru, en). Optional; defaults to user profile locale or survey default_locale.'
+                  description: 'Preferred survey language (must be one of survey locales: uz, ru, en). Optional; defaults to survey default_locale.'
                   example: uz
+                  nullable: true
     parameters:
       -
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4205,11 +4617,15 @@ paths:
                           id: 1
                           title: 'Xizmatlardan foydalanish'
                           position: 1
-                        is_first_page: true
-                        is_last_page: false
+                        progress:
+                          current_step: 1
+                          total_steps: 2
+                          percent: 50
+                          is_first_page: true
+                          is_last_page: false
                         next:
                           type: page
-                          page_id: 2
+                          id: 2
                     properties:
                       participation_id:
                         type: integer
@@ -4232,19 +4648,31 @@ paths:
                               position:
                                 type: integer
                                 example: 1
-                          is_first_page:
-                            type: boolean
-                            example: true
-                          is_last_page:
-                            type: boolean
-                            example: false
+                          progress:
+                            type: object
+                            properties:
+                              current_step:
+                                type: integer
+                                example: 1
+                              total_steps:
+                                type: integer
+                                example: 2
+                              percent:
+                                type: integer
+                                example: 50
+                              is_first_page:
+                                type: boolean
+                                example: true
+                              is_last_page:
+                                type: boolean
+                                example: false
                           next:
                             type: object
                             properties:
                               type:
                                 type: string
                                 example: page
-                              page_id:
+                              id:
                                 type: integer
                                 example: 2
                   -
@@ -4271,7 +4699,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4297,28 +4725,32 @@ paths:
               schema:
                 type: object
                 example:
-                  success: true
+                  next:
+                    type: completed
+                  can_complete: true
                   current_step:
                     page:
                       id: 2
-                      title: Baholash
                       position: 2
-                      questions:
-                        -
-                          id: 2
-                          type: rating
-                          title: 'Xizmat ko‘rsatish sifatini baholang (1-5)'
-                          is_required: true
-                          position: 1
-                          settings:
-                            min: 1
-                            max: 5
-                    is_first_page: false
-                    is_last_page: true
+                      title: Baholash
+                      description: null
+                      questions: []
+                    progress:
+                      current_step: 2
+                      total_steps: 2
+                      percent: 100
+                      is_first_page: false
+                      is_last_page: true
                     next:
-                      type: complete
+                      type: completed
                 properties:
-                  success:
+                  next:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: completed
+                  can_complete:
                     type: boolean
                     example: true
                   current_step:
@@ -4330,63 +4762,43 @@ paths:
                           id:
                             type: integer
                             example: 2
-                          title:
-                            type: string
-                            example: Baholash
                           position:
                             type: integer
                             example: 2
+                          title:
+                            type: string
+                            example: Baholash
+                          description:
+                            type: string
+                            example: null
+                            nullable: true
                           questions:
                             type: array
-                            example:
-                              -
-                                id: 2
-                                type: rating
-                                title: 'Xizmat ko‘rsatish sifatini baholang (1-5)'
-                                is_required: true
-                                position: 1
-                                settings:
-                                  min: 1
-                                  max: 5
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                  example: 2
-                                type:
-                                  type: string
-                                  example: rating
-                                title:
-                                  type: string
-                                  example: 'Xizmat ko‘rsatish sifatini baholang (1-5)'
-                                is_required:
-                                  type: boolean
-                                  example: true
-                                position:
-                                  type: integer
-                                  example: 1
-                                settings:
-                                  type: object
-                                  properties:
-                                    min:
-                                      type: integer
-                                      example: 1
-                                    max:
-                                      type: integer
-                                      example: 5
-                      is_first_page:
-                        type: boolean
-                        example: false
-                      is_last_page:
-                        type: boolean
-                        example: true
+                            example: []
+                      progress:
+                        type: object
+                        properties:
+                          current_step:
+                            type: integer
+                            example: 2
+                          total_steps:
+                            type: integer
+                            example: 2
+                          percent:
+                            type: integer
+                            example: 100
+                          is_first_page:
+                            type: boolean
+                            example: false
+                          is_last_page:
+                            type: boolean
+                            example: true
                       next:
                         type: object
                         properties:
                           type:
                             type: string
-                            example: complete
+                            example: completed
         422:
           description: ''
           content:
@@ -4395,8 +4807,8 @@ paths:
                 type: object
                 example:
                   error:
-                    code: VALIDATION_ERROR
-                    message: 'This question is required.'
+                    code: INVALID_ANSWER
+                    message: 'One or more answers are invalid.'
                     fields:
                       answers.1:
                         - 'This question is required.'
@@ -4406,10 +4818,10 @@ paths:
                     properties:
                       code:
                         type: string
-                        example: VALIDATION_ERROR
+                        example: INVALID_ANSWER
                       message:
                         type: string
-                        example: 'This question is required.'
+                        example: 'One or more answers are invalid.'
                       fields:
                         type: object
                         properties:
@@ -4430,10 +4842,9 @@ paths:
               properties:
                 answers:
                   type: object
-                  description: 'Map of question IDs to answer objects. For single choice: `{"option_id": 1}`; multiple choice: `{"option_ids": [1, 2]}`; rating: `{"value": 5}`; text: `{"text": "Ajoyib xizmat"}`.'
+                  description: 'Map of question IDs to values: single choice integer option ID; multiple choice distinct option IDs array; rating integer; text string.'
                   example:
-                    1:
-                      option_id: 1
+                    1: 1
                   properties: {}
               required:
                 - answers
@@ -4442,7 +4853,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4450,7 +4861,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4500,7 +4911,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4509,6 +4920,24 @@ paths:
         name: participation
         description: 'The ID of the participation session.'
         example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/respondent/participations/{participation_id}/back':
+    post:
+      summary: 'Previous Visited Page'
+      operationId: previousVisitedPage
+      description: 'Returns to the actually visited previous page, not the previous page by position. On the first page this is a no-op.'
+      parameters: []
+      responses: {}
+      tags:
+        - Respondent
+    parameters:
+      -
+        in: path
+        name: participation_id
+        description: 'The ID of the participation.'
+        example: 16
         required: true
         schema:
           type: integer
@@ -4719,7 +5148,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4793,7 +5222,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4888,7 +5317,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 1
+        example: 16
         required: true
         schema:
           type: integer
@@ -4916,7 +5345,7 @@ paths:
                 example:
                   status: ok
                   version: v1
-                  timestamp: '2026-10-17T12:28:35+00:00'
+                  timestamp: '2026-10-19T05:13:33+00:00'
                 properties:
                   status:
                     type: string
@@ -4926,7 +5355,7 @@ paths:
                     example: v1
                   timestamp:
                     type: string
-                    example: '2026-10-17T12:28:35+00:00'
+                    example: '2026-10-19T05:13:33+00:00'
       tags:
         - General
       security: []

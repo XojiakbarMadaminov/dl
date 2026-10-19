@@ -1,4 +1,4 @@
-# Dialog — Participation, SurveyFlow and future survey logic
+# Dialog — Participation, SurveyFlow and MVP conditional logic
 
 ## Respondent participation rules
 
@@ -55,20 +55,20 @@ Responsibilities:
 - determine the initial page;
 - determine which questions are applicable/visible;
 - determine the next destination;
-- support back-navigation history/semantics when logic is introduced;
+- support Back through the actual visited-page history;
 - return terminal states such as `completed` (and `disqualified` later).
 
 ### MVP implementation
 
-MVP flow is linear:
+MVP flow is linear by default:
 
 ```text
 Page 1 -> Page 2 -> Page 3 -> Complete
 ```
 
-Do not create logic-rule tables yet.
+The 2026-10-19 scope decision adds conditional question visibility, forward page jumps, early completion and AND/OR groups. Rule storage is `survey_logic_rules` with JSONB conditions; `participations.page_history` stores actual visited pages. The authoritative API/operator/storage contract is `API-SURVEY-LOGIC.md`.
 
-Do not hard-code navigation in controllers or frontend using `position + 1` assumptions. Linear navigation belongs inside `SurveyFlow`.
+Do not hard-code navigation in controllers or frontend using `position + 1` assumptions. Conditional and fallback navigation belong inside `SurveyFlow`.
 
 ## Validation
 
@@ -82,7 +82,7 @@ Examples:
 - short/long text: string rules/limits;
 - rating: value inside configured min/max.
 
-When future logic hides a required question, that hidden question must not block progress.
+Hidden required questions do not block progress. Skipped/hidden answers are removed transactionally when an earlier answer changes applicability. Only the actual applicable path is validated on completion.
 
 ## Preview
 
@@ -94,9 +94,9 @@ Recommended approach:
 - reuse `AnswerValidator` and `SurveyFlow`;
 - no real `participations` record for normal preview.
 
-## Future conditional logic supported by the source design
+## Source-design capabilities and MVP boundary
 
-The source materials define future capabilities including:
+The source materials define the following capabilities. MVP includes items 1, 2, AND/OR in 4, 8, 9, 10, 11 and 12. Item 3 currently means early completion only; distinct disqualification is deferred. Items 5, 6 and 7 remain future work:
 
 1. show a question based on a previous answer;
 2. skip to another page;
@@ -111,9 +111,9 @@ The source materials define future capabilities including:
 11. clear/exclude downstream answers that become inapplicable after an earlier answer changes;
 12. make Back return to the actually visited previous page.
 
-When this feature is implemented later, add dedicated logic rule storage and replace only the internal `SurveyFlow` algorithm. The respondent API contract should remain stable.
+Visibility conditions use earlier pages only; navigation conditions use earlier/current pages. Only forward targets and flat AND/OR groups are accepted. Respondent typed destinations remain stable. See `API-SURVEY-LOGIC.md` for preview and Back payloads.
 
-## Future logic invariants
+## MVP logic invariants
 
 - hidden required questions do not block navigation;
 - broken rule references block publishing;
