@@ -3,7 +3,7 @@
 Complete REST API reference for the Dialog survey research platform. Covers Authentication, Business Survey Management, Respondent Participation Flow, and Admin Moderation.
 
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost:8000</code>
+    <strong>Base URL</strong>: <code>http://dl.test</code>
 </aside>
 
 This documentation provides the complete API contract for frontend integration of the Dialog platform.

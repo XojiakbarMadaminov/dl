@@ -16,7 +16,7 @@ Route::get('ping', function () {
     return response()->json(['status' => 'ok', 'context' => 'respondent']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::post('surveys/{survey}/participate', [RespondentParticipationController::class, 'participate']);
     Route::get('participations/{participation}', [RespondentParticipationController::class, 'show']);
     Route::put('participations/{participation}/pages/{page}', [RespondentParticipationController::class, 'savePage']);

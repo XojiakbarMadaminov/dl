@@ -17,8 +17,8 @@ class ReorderOptionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'options' => ['required', 'array', 'min:1'],
-            'options.*' => ['required', 'integer'],
+            'options' => ['required', 'array', 'list', 'min:1'],
+            'options.*' => ['required', 'integer', 'distinct'],
         ];
     }
 

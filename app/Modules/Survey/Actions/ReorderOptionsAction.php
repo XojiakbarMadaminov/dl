@@ -18,7 +18,7 @@ class ReorderOptionsAction
 
         $existingIds = $question->options()->pluck('id')->all();
 
-        if (count($orderedOptionIds) !== count($existingIds) || array_diff($orderedOptionIds, $existingIds)) {
+        if (! array_is_list($orderedOptionIds) || count(array_unique($orderedOptionIds)) !== count($orderedOptionIds) || count($orderedOptionIds) !== count($existingIds) || array_diff($orderedOptionIds, $existingIds)) {
             throw new ApiException(
                 message: 'All existing option IDs for this question must be provided for reordering.',
                 errorCode: 'INVALID_REORDER_PAYLOAD',

@@ -8,6 +8,13 @@ use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if (is_string($this->input('email'))) {
+            $this->merge(['email' => strtolower(trim($this->input('email')))]);
+        }
+    }
+
     public function authorize(): bool
     {
         return true;
@@ -22,6 +29,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
+            'password_confirmation' => ['sometimes', 'required', 'string', 'same:password'],
             'locale' => ['nullable', 'string', Rule::in(PlatformLocale::values())],
             'organization_name' => ['nullable', 'string', 'min:2', 'max:255'],
         ];

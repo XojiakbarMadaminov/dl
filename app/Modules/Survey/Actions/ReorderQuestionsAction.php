@@ -18,7 +18,7 @@ class ReorderQuestionsAction
 
         $existingIds = $page->questions()->pluck('id')->all();
 
-        if (count($orderedQuestionIds) !== count($existingIds) || array_diff($orderedQuestionIds, $existingIds)) {
+        if (! array_is_list($orderedQuestionIds) || count(array_unique($orderedQuestionIds)) !== count($orderedQuestionIds) || count($orderedQuestionIds) !== count($existingIds) || array_diff($orderedQuestionIds, $existingIds)) {
             throw new ApiException(
                 message: 'All existing question IDs on this page must be provided for reordering.',
                 errorCode: 'INVALID_REORDER_PAYLOAD',

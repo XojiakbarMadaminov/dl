@@ -16,10 +16,10 @@ Route::get('ping', function () {
     return response()->json(['status' => 'ok', 'context' => 'auth']);
 });
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register'])->middleware('throttle:auth');
+Route::post('login', [AuthController::class, 'login'])->middleware('throttle:auth');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
 });

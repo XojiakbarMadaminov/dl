@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost:8000'
+    url: 'http://dl.test'
 tags:
   -
     name: Authentication
@@ -136,6 +136,10 @@ paths:
                   type: string
                   description: 'Account password (minimum 8 characters). Must be at least 8 characters.'
                   example: Secret123!
+                password_confirmation:
+                  type: string
+                  description: 'The value and <code>password</code> must match.'
+                  example: architecto
                 locale:
                   type: string
                   description: 'Preferred interface language (uz, ru, en). Default is uz.'
@@ -265,12 +269,17 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Registered user email address. Must be a valid email address.'
+                  description: 'Registered user email address. Must be a valid email address. Must not be greater than 255 characters.'
                   example: owner@dialog.uz
                 password:
                   type: string
                   description: 'User account password.'
                   example: Secret123!
+                device_name:
+                  type: string
+                  description: 'Optional access-token device name. Defaults to web. Must not be greater than 255 characters.'
+                  example: Android
+                  nullable: true
               required:
                 - email
                 - password
@@ -669,7 +678,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1074,7 +1083,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1463,7 +1472,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1471,7 +1480,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1748,7 +1757,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1756,7 +1765,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1843,7 +1852,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1851,7 +1860,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1978,7 +1987,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1986,7 +1995,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -1994,7 +2003,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2164,7 +2173,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2172,7 +2181,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2313,7 +2322,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2321,7 +2330,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2329,7 +2338,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2413,7 +2422,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2421,7 +2430,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2511,7 +2520,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2519,7 +2528,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2605,7 +2614,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2613,7 +2622,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2671,7 +2680,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2679,7 +2688,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2737,7 +2746,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2745,7 +2754,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2807,7 +2816,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2815,7 +2824,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2877,7 +2886,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -2885,7 +2894,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3093,7 +3102,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3101,7 +3110,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3259,7 +3268,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3267,7 +3276,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3275,7 +3284,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3389,7 +3398,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3397,7 +3406,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3535,7 +3544,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3543,7 +3552,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3605,7 +3614,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3613,7 +3622,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3757,7 +3766,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3765,7 +3774,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3905,7 +3914,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3913,7 +3922,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3991,7 +4000,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -3999,7 +4008,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4061,7 +4070,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4069,7 +4078,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4162,7 +4171,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4170,7 +4179,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4271,7 +4280,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4279,7 +4288,7 @@ paths:
         in: path
         name: option_id
         description: 'The ID of the option.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4341,7 +4350,7 @@ paths:
         in: path
         name: organization_id
         description: 'The ID of the organization.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4349,7 +4358,7 @@ paths:
         in: path
         name: question_id
         description: 'The ID of the question.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4581,7 +4590,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4699,7 +4708,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4853,7 +4862,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4861,7 +4870,7 @@ paths:
         in: path
         name: page_id
         description: 'The ID of the page.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4911,7 +4920,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -4937,7 +4946,7 @@ paths:
         in: path
         name: participation_id
         description: 'The ID of the participation.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -5148,7 +5157,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -5222,7 +5231,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -5317,7 +5326,7 @@ paths:
         in: path
         name: survey_id
         description: 'The ID of the survey.'
-        example: 16
+        example: 1
         required: true
         schema:
           type: integer
@@ -5345,7 +5354,7 @@ paths:
                 example:
                   status: ok
                   version: v1
-                  timestamp: '2026-10-19T05:13:33+00:00'
+                  timestamp: '2026-10-20T15:57:00+00:00'
                 properties:
                   status:
                     type: string
@@ -5355,7 +5364,7 @@ paths:
                     example: v1
                   timestamp:
                     type: string
-                    example: '2026-10-19T05:13:33+00:00'
+                    example: '2026-10-20T15:57:00+00:00'
       tags:
         - General
       security: []

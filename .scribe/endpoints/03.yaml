@@ -30,7 +30,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -48,7 +48,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 16
+      survey_id: 1
       survey: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -157,7 +157,7 @@ endpoints:
         name: participation_id
         description: 'The ID of the participation.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -175,7 +175,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      participation_id: 16
+      participation_id: 1
       participation: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -254,7 +254,7 @@ endpoints:
         name: participation_id
         description: 'The ID of the participation.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -265,7 +265,7 @@ endpoints:
         name: page_id
         description: 'The ID of the page.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -294,8 +294,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      participation_id: 16
-      page_id: 16
+      participation_id: 1
+      page_id: 1
       participation: 1
       page: 1
     queryParameters: []
@@ -383,7 +383,7 @@ endpoints:
         name: participation_id
         description: 'The ID of the participation.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -401,7 +401,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      participation_id: 16
+      participation_id: 1
       participation: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -454,14 +454,14 @@ endpoints:
         name: participation_id
         description: 'The ID of the participation.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      participation_id: 16
+      participation_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

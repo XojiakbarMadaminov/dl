@@ -121,7 +121,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -139,7 +139,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 16
+      survey_id: 1
       survey: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -213,7 +213,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -231,7 +231,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 16
+      survey_id: 1
       survey: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -301,7 +301,7 @@ endpoints:
         name: survey_id
         description: 'The ID of the survey.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -319,7 +319,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      survey_id: 16
+      survey_id: 1
       survey: 1
     queryParameters: []
     cleanQueryParameters: []

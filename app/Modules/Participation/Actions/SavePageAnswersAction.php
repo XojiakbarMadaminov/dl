@@ -38,11 +38,11 @@ class SavePageAnswersAction
 
             $persistedAnswers = $this->surveyFlow->answers($participation);
             $path = $this->surveyFlow->path($participation->survey, $persistedAnswers);
-            $this->answerValidator->validatePageAnswers($page, $answers, applicableQuestionIds: $path['question_ids']);
             $history = $participation->page_history ?: array_slice($path['page_ids'], 0, (int) array_search($participation->current_page_id, $path['page_ids'], true) + 1);
             if (! in_array($page->id, $path['page_ids'], true) || ($page->id !== $participation->current_page_id && ! in_array($page->id, $history, true))) {
                 throw new ApiException('Page has not been reached in this participation.', 'INVALID_PAGE_FLOW', 422);
             }
+            $this->answerValidator->validatePageAnswers($page, $answers, applicableQuestionIds: $path['question_ids']);
             $history = array_slice($history, 0, (int) array_search($page->id, $history, true) + 1);
 
             $questionIds = $page->questions()->pluck('id')->all();

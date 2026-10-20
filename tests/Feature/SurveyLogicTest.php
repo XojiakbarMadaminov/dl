@@ -176,6 +176,19 @@ class SurveyLogicTest extends TestCase
         $this->save($participation, 2, 5)->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_PAGE_FLOW');
     }
 
+    public function test_unvisited_and_skipped_pages_are_rejected_before_answer_validation(): void
+    {
+        $this->rules([$this->jumpRule()]);
+        $participation = $this->start();
+        $this->putJson("{$participation}/pages/{$this->pages[2]->id}", ['answers' => []])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_PAGE_FLOW');
+        $this->save($participation, 0, $this->options[1]->id)->assertOk();
+        $this->putJson("{$participation}/pages/{$this->pages[1]->id}", ['answers' => []])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_PAGE_FLOW');
+        $this->assertDatabaseCount('answers', 1);
+        $this->assertDatabaseCount('answer_options', 1);
+    }
+
     public function test_changing_an_earlier_answer_removes_downstream_answers_from_results(): void
     {
         $this->rules([$this->jumpRule()]);

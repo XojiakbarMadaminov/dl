@@ -18,7 +18,7 @@ class ReorderPagesAction
 
         $existingIds = $survey->pages()->pluck('id')->all();
 
-        if (count($orderedPageIds) !== count($existingIds) || array_diff($orderedPageIds, $existingIds)) {
+        if (! array_is_list($orderedPageIds) || count(array_unique($orderedPageIds)) !== count($orderedPageIds) || count($orderedPageIds) !== count($existingIds) || array_diff($orderedPageIds, $existingIds)) {
             throw new ApiException(
                 message: 'All existing page IDs must be provided for reordering.',
                 errorCode: 'INVALID_REORDER_PAYLOAD',

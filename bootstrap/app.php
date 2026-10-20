@@ -88,7 +88,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     code: 'METHOD_NOT_ALLOWED',
                     message: $e->getMessage() ?: 'Method not allowed.',
                     status: 405,
-                );
+                )->withHeaders($e->getHeaders());
             }
         });
 
@@ -109,7 +109,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     code: $code,
                     message: $e->getMessage() ?: 'An HTTP error occurred.',
                     status: $e->getStatusCode(),
-                );
+                )->withHeaders($e->getHeaders());
             }
         });
 

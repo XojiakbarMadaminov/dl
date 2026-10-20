@@ -17,8 +17,8 @@ class ReorderPagesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pages' => ['required', 'array', 'min:1'],
-            'pages.*' => ['required', 'integer'],
+            'pages' => ['required', 'array', 'list', 'min:1'],
+            'pages.*' => ['required', 'integer', 'distinct'],
         ];
     }
 

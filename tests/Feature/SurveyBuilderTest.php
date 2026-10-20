@@ -321,4 +321,42 @@ class SurveyBuilderTest extends TestCase
             "/api/v1/business/organizations/{$otherOrg->id}/surveys/{$survey->id}"
         )->assertStatus(403);
     }
+
+    public function test_reorder_requires_each_resource_exactly_once_and_a_list_payload(): void
+    {
+        $base = "/api/v1/business/organizations/{$this->organization->id}";
+        $survey = $this->actingAs($this->user)->postJson("{$base}/surveys", [
+            'default_locale' => 'uz', 'locales' => ['uz'], 'title' => ['uz' => 'Reorder'],
+        ])->assertCreated();
+        $surveyId = $survey->json('survey.id');
+        $pageId = $survey->json('survey.pages.0.id');
+        $this->postJson("{$base}/surveys/{$surveyId}/pages", [])->assertCreated();
+        $questionIds = [];
+        foreach ([1, 2] as $index) {
+            $questionIds[] = $this->postJson("{$base}/pages/{$pageId}/questions", [
+                'type' => 'single_choice', 'title' => ['uz' => "Savol {$index}"],
+            ])->assertCreated()->json('question.id');
+        }
+        $questionId = $questionIds[0];
+        $optionIds = [];
+        foreach ([1, 2] as $index) {
+            $optionIds[] = $this->postJson("{$base}/questions/{$questionId}/options", [
+                'label' => ['uz' => "Variant {$index}"],
+            ])->assertCreated()->json('option.id');
+        }
+
+        foreach ([
+            ["{$base}/surveys/{$surveyId}/pages/reorder", 'pages', $pageId],
+            ["{$base}/pages/{$pageId}/questions/reorder", 'questions', $questionId],
+            ["{$base}/questions/{$questionId}/options/reorder", 'options', $optionIds[0]],
+        ] as [$url, $key, $id]) {
+            $this->putJson($url, [$key => [$id, $id]])->assertUnprocessable();
+            $this->putJson($url, [$key => ['first' => $id, 'second' => $id]])->assertUnprocessable();
+        }
+
+        $this->assertSame([1, 2], Survey::findOrFail($surveyId)->pages()->pluck('position')->all());
+        $this->assertSame($questionIds, SurveyPage::findOrFail($pageId)->questions()->pluck('id')->all());
+        $this->assertDatabaseHas('survey_question_options', ['id' => $optionIds[0], 'position' => 1]);
+        $this->assertDatabaseHas('survey_question_options', ['id' => $optionIds[1], 'position' => 2]);
+    }
 }

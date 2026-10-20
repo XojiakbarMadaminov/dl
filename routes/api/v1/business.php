@@ -24,7 +24,7 @@ Route::get('ping', function () {
     return response()->json(['status' => 'ok', 'context' => 'business']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::get('organizations', [OrganizationController::class, 'index']);
     Route::post('organizations', [OrganizationController::class, 'store']);
     Route::get('organizations/{organization}', [OrganizationController::class, 'show']);

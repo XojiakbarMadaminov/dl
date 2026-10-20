@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost:8000"
+            "value": "http:\/\/dl.test"
         }
     ],
     "info": {
         "name": "Dialog API Collection",
-        "_postman_id": "94246bea-eedc-4433-adc9-202d884a4954",
+        "_postman_id": "fed59842-39cc-4171-bc35-26a1879026a9",
         "description": "Dialog Survey Platform API collection for frontend engineers",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json",
         "version": "1.0.0"
@@ -42,7 +42,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"Dilshod Karimov\",\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\",\"locale\":\"uz\",\"organization_name\":\"Dialog Analytics Group\"}"
+                            "raw": "{\"name\":\"Dilshod Karimov\",\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\",\"password_confirmation\":\"architecto\",\"locale\":\"uz\",\"organization_name\":\"Dialog Analytics Group\"}"
                         },
                         "description": "Create a new user account with email and password. Optionally supply `organization_name` to automatically provision a new business organization with the user as OWNER.",
                         "auth": {
@@ -86,7 +86,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\"}"
+                            "raw": "{\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\",\"device_name\":\"Android\"}"
                         },
                         "description": "Authenticate with email and password to receive a Sanctum bearer token and user profile.",
                         "auth": {
@@ -279,7 +279,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -331,7 +331,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -399,7 +399,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -445,7 +445,7 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
@@ -500,13 +500,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -558,13 +558,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -625,13 +625,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -695,13 +695,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         }
                                     ]
@@ -741,13 +741,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         }
                                     ]
@@ -821,13 +821,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -898,19 +898,19 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -993,13 +993,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1051,19 +1051,19 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "participation_id",
                                             "key": "participation_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the participation."
                                         },
                                         {
@@ -1140,13 +1140,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1204,13 +1204,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1268,13 +1268,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1332,13 +1332,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1390,13 +1390,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1448,13 +1448,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1506,13 +1506,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1577,13 +1577,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1635,19 +1635,19 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1720,13 +1720,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1781,13 +1781,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1842,13 +1842,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -1906,13 +1906,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -1973,13 +1973,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -2034,13 +2034,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2095,13 +2095,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2153,13 +2153,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2211,13 +2211,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "page_id",
                                             "key": "page_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the page."
                                         },
                                         {
@@ -2278,13 +2278,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2339,13 +2339,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "option_id",
                                             "key": "option_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the option."
                                         },
                                         {
@@ -2400,13 +2400,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "option_id",
                                             "key": "option_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the option."
                                         },
                                         {
@@ -2458,13 +2458,13 @@
                                         {
                                             "id": "organization_id",
                                             "key": "organization_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the organization."
                                         },
                                         {
                                             "id": "question_id",
                                             "key": "question_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the question."
                                         },
                                         {
@@ -2527,7 +2527,7 @@
                                 {
                                     "id": "survey_id",
                                     "key": "survey_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the survey."
                                 },
                                 {
@@ -2582,7 +2582,7 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the participation."
                                 },
                                 {
@@ -2634,13 +2634,13 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the participation."
                                 },
                                 {
                                     "id": "page_id",
                                     "key": "page_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the page."
                                 },
                                 {
@@ -2701,7 +2701,7 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the participation."
                                 },
                                 {
@@ -2747,7 +2747,7 @@
                                 {
                                     "id": "participation_id",
                                     "key": "participation_id",
-                                    "value": 16,
+                                    "value": 1,
                                     "description": "The ID of the participation."
                                 }
                             ]
@@ -2841,7 +2841,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -2887,7 +2887,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -2939,7 +2939,7 @@
                                         {
                                             "id": "survey_id",
                                             "key": "survey_id",
-                                            "value": 16,
+                                            "value": 1,
                                             "description": "The ID of the survey."
                                         },
                                         {
@@ -3028,12 +3028,12 @@
                                     "value": "application\/json"
                                 },
                                 {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
+                                    "key": "vary",
+                                    "value": "Origin"
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":\"ok\",\"version\":\"v1\",\"timestamp\":\"2026-10-19T05:13:33+00:00\"}",
+                            "body": "{\"status\":\"ok\",\"version\":\"v1\",\"timestamp\":\"2026-10-20T15:57:00+00:00\"}",
                             "name": ""
                         }
                     ]

@@ -105,6 +105,58 @@ class IdentityAndOrganizationTest extends TestCase
             ->assertJsonStructure(['token', 'user']);
     }
 
+    public function test_registration_checks_uniqueness_after_normalizing_email(): void
+    {
+        User::factory()->create(['email' => 'owner@example.com']);
+
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'Duplicate Owner',
+            'email' => ' OWNER@EXAMPLE.COM ',
+            'password' => 'SecurePass123!',
+            'organization_name' => 'Duplicate Organization',
+        ])->assertUnprocessable()->assertJsonPath('error.code', 'VALIDATION_ERROR')
+            ->assertJsonStructure(['error' => ['fields' => ['email']]]);
+
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('organizations', 0);
+    }
+
+    public function test_password_confirmation_is_checked_when_supplied(): void
+    {
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'New User', 'email' => 'new@example.com',
+            'password' => 'SecurePass123!', 'password_confirmation' => 'Different123!',
+        ])->assertUnprocessable()->assertJsonPath('error.code', 'VALIDATION_ERROR');
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    public function test_login_uses_validated_device_name_and_logout_only_revokes_current_token(): void
+    {
+        $user = User::factory()->create(['email' => 'device@example.com', 'password' => 'SecurePass123!']);
+        $otherToken = $user->createToken('other-device')->plainTextToken;
+        $login = $this->postJson('/api/v1/auth/login', [
+            'email' => ' DEVICE@EXAMPLE.COM ', 'password' => 'SecurePass123!', 'device_name' => 'Android',
+        ])->assertOk();
+        $this->assertDatabaseHas('personal_access_tokens', ['tokenable_id' => $user->id, 'name' => 'Android']);
+
+        $this->withToken($login->json('token'))->postJson('/api/v1/auth/logout')->assertOk();
+        app('auth')->forgetGuards();
+        $this->withToken($login->json('token'))->getJson('/api/v1/auth/me')->assertUnauthorized();
+        app('auth')->forgetGuards();
+        $this->withToken($otherToken)->getJson('/api/v1/auth/me')->assertOk();
+        $this->assertDatabaseCount('personal_access_tokens', 1);
+    }
+
+    public function test_login_rejects_invalid_device_names(): void
+    {
+        foreach ([['nested'], str_repeat('x', 256)] as $deviceName) {
+            $this->postJson('/api/v1/auth/login', [
+                'email' => 'device@example.com', 'password' => 'SecurePass123!', 'device_name' => $deviceName,
+            ])->assertUnprocessable()->assertJsonPath('error.code', 'VALIDATION_ERROR');
+        }
+    }
+
     public function test_login_fails_with_invalid_credentials(): void
     {
         User::factory()->create([
@@ -119,6 +171,29 @@ class IdentityAndOrganizationTest extends TestCase
 
         $response->assertStatus(401)
             ->assertJsonPath('error.code', 'INVALID_CREDENTIALS');
+    }
+
+    public function test_auth_rate_limit_is_shared_by_login_and_registration(): void
+    {
+        for ($attempt = 0; $attempt < 20; $attempt++) {
+            $this->postJson('/api/v1/auth/login', [
+                'email' => 'missing@example.com', 'password' => 'WrongPassword!',
+            ])->assertUnauthorized();
+        }
+
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'missing@example.com', 'password' => 'WrongPassword!',
+        ])->assertStatus(429)->assertJsonPath('error.code', 'TOO_MANY_REQUESTS')
+            ->assertHeader('Retry-After')->assertHeader('X-RateLimit-Limit', '20');
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'New User', 'email' => 'new@example.com', 'password' => 'SecurePass123!',
+        ])->assertStatus(429)->assertJsonPath('error.code', 'TOO_MANY_REQUESTS');
+        $this->assertDatabaseCount('users', 0);
+
+        $this->travel(61)->seconds();
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'missing@example.com', 'password' => 'WrongPassword!',
+        ])->assertUnauthorized();
     }
 
     public function test_inactive_user_cannot_login(): void

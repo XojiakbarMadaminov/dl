@@ -147,6 +147,14 @@ Details and explicit architecture conflicts: `docs/AUDIT-DOCS-CODE.md`.
 - [x] Use the same logic in stateless preview and revalidate rules before review/publication.
 - [x] Add feature/operator regression tests.
 
+## API acceptance audit — 2026-10-20
+
+- [x] Exercise registration/login/logout with real Bearer tokens through multilingual builder, conditional preview, moderation/publication and respondent completion.
+- [x] Cover all five question types, AND/OR, navigation priority, Back, resume, branch-change cleanup and results/export in the authenticated journey.
+- [x] Fix normalized-email uniqueness, optional password confirmation, validated device names and duplicate/non-list reorder payloads with regression tests.
+- [x] Check reached-page authorization before answer validation and preserve its stable flow error code.
+- [x] Connect configured auth/API rate limits to routes and preserve HTTP retry headers in structured errors.
+
 ## Future phases — do not implement until explicitly approved
 
 - [ ] Same-page reactive visibility, nested groups and additional advanced operators.

@@ -63,6 +63,17 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'The value and <code>password</code> must match.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
       locale:
         custom: []
         name: locale
@@ -92,6 +103,7 @@ endpoints:
       name: 'Dilshod Karimov'
       email: owner@dialog.uz
       password: Secret123!
+      password_confirmation: architecto
       locale: uz
       organization_name: 'Dialog Analytics Group'
     fileParameters: []
@@ -162,7 +174,7 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Registered user email address. Must be a valid email address.'
+        description: 'Registered user email address. Must be a valid email address. Must not be greater than 255 characters.'
         required: true
         example: owner@dialog.uz
         type: string
@@ -181,9 +193,21 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'Optional access-token device name. Defaults to web. Must not be greater than 255 characters.'
+        required: false
+        example: Android
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     cleanBodyParameters:
       email: owner@dialog.uz
       password: Secret123!
+      device_name: Android
     fileParameters: []
     responses:
       -

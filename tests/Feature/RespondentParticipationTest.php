@@ -265,9 +265,6 @@ class RespondentParticipationTest extends TestCase
             ->assertUnprocessable()->assertJsonPath('error.code', 'VALIDATION_ERROR');
         $this->putJson("{$endpoint}/{$this->page1->id}", ['answers' => [$this->question1->id => $this->opt1->id.'.9']])
             ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
-        $this->putJson("{$endpoint}/{$this->page2->id}", ['answers' => [$this->question2->id => 5.9]])
-            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
-
         $this->question1->update(['type' => QuestionType::MULTIPLE_CHOICE, 'settings' => ['min_selections' => 2]]);
         foreach ([[$this->opt1->id, $this->opt1->id], [['invalid'], $this->opt1->id]] as $value) {
             $this->putJson("{$endpoint}/{$this->page1->id}", ['answers' => [$this->question1->id => $value]])
@@ -276,6 +273,13 @@ class RespondentParticipationTest extends TestCase
 
         $this->assertDatabaseCount('answers', 0);
         $this->assertDatabaseCount('answer_options', 0);
+
+        $this->question1->update(['type' => QuestionType::SINGLE_CHOICE, 'settings' => []]);
+        $this->putJson("{$endpoint}/{$this->page1->id}", ['answers' => [$this->question1->id => $this->opt1->id]])->assertOk();
+        $this->putJson("{$endpoint}/{$this->page2->id}", ['answers' => [$this->question2->id => 5.9]])
+            ->assertUnprocessable()->assertJsonPath('error.code', 'INVALID_ANSWER');
+        $this->assertDatabaseCount('answers', 1);
+        $this->assertDatabaseMissing('answers', ['question_id' => $this->question2->id]);
     }
 
     public function test_resume_returns_saved_answers_and_original_locale(): void

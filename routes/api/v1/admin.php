@@ -16,7 +16,7 @@ Route::get('ping', function () {
     return response()->json(['status' => 'ok', 'context' => 'admin']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::prefix('moderation')->group(function () {
         Route::get('surveys', [AdminModerationController::class, 'index']);
         Route::get('surveys/{survey}', [AdminModerationController::class, 'show']);

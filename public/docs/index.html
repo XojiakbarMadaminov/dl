@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost:8000";
+        var tryItOutBaseUrl = "http://dl.test";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -331,7 +331,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: October 19, 2026</li>
+        <li>Last updated: October 20, 2026</li>
     </ul>
 </div>
 
@@ -341,7 +341,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
         <h1 id="introduction">Introduction</h1>
 <p>Complete REST API reference for the Dialog survey research platform. Covers Authentication, Business Survey Management, Respondent Participation Flow, and Admin Moderation.</p>
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost:8000</code>
+    <strong>Base URL</strong>: <code>http://dl.test</code>
 </aside>
 <p>This documentation provides the complete API contract for frontend integration of the Dialog platform.</p>
 <h3 id="conventions-principles">Conventions &amp; Principles</h3>
@@ -374,13 +374,14 @@ Platform moderation queue for reviewing submitted business surveys, approving or
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/auth/register" \
+    "http://dl.test/api/v1/auth/register" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"name\": \"Dilshod Karimov\",
     \"email\": \"owner@dialog.uz\",
     \"password\": \"Secret123!\",
+    \"password_confirmation\": \"architecto\",
     \"locale\": \"uz\",
     \"organization_name\": \"Dialog Analytics Group\"
 }"
@@ -389,7 +390,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/register"
+    "http://dl.test/api/v1/auth/register"
 );
 
 const headers = {
@@ -401,6 +402,7 @@ let body = {
     "name": "Dilshod Karimov",
     "email": "owner@dialog.uz",
     "password": "Secret123!",
+    "password_confirmation": "architecto",
     "locale": "uz",
     "organization_name": "Dialog Analytics Group"
 };
@@ -559,6 +561,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Account password (minimum 8 characters). Must be at least 8 characters. Example: <code>Secret123!</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password_confirmation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password_confirmation"                data-endpoint="POSTapi-v1-auth-register"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>The value and <code>password</code> must match. Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>locale</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -599,19 +613,20 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/auth/login" \
+    "http://dl.test/api/v1/auth/login" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"email\": \"owner@dialog.uz\",
-    \"password\": \"Secret123!\"
+    \"password\": \"Secret123!\",
+    \"device_name\": \"Android\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/login"
+    "http://dl.test/api/v1/auth/login"
 );
 
 const headers = {
@@ -621,7 +636,8 @@ const headers = {
 
 let body = {
     "email": "owner@dialog.uz",
-    "password": "Secret123!"
+    "password": "Secret123!",
+    "device_name": "Android"
 };
 
 fetch(url, {
@@ -760,7 +776,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="owner@dialog.uz"
                data-component="body">
     <br>
-<p>Registered user email address. Must be a valid email address. Example: <code>owner@dialog.uz</code></p>
+<p>Registered user email address. Must be a valid email address. Must not be greater than 255 characters. Example: <code>owner@dialog.uz</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -773,6 +789,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="body">
     <br>
 <p>User account password. Example: <code>Secret123!</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="device_name"                data-endpoint="POSTapi-v1-auth-login"
+               value="Android"
+               data-component="body">
+    <br>
+<p>Optional access-token device name. Defaults to web. Must not be greater than 255 characters. Example: <code>Android</code></p>
         </div>
         </form>
 
@@ -790,7 +818,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/auth/me" \
+    --get "http://dl.test/api/v1/auth/me" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -798,7 +826,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/me"
+    "http://dl.test/api/v1/auth/me"
 );
 
 const headers = {
@@ -946,7 +974,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/auth/logout" \
+    "http://dl.test/api/v1/auth/logout" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -954,7 +982,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/logout"
+    "http://dl.test/api/v1/auth/logout"
 );
 
 const headers = {
@@ -1088,7 +1116,7 @@ Manage business organizations, memberships, and role assignments.</h2>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations" \
+    --get "http://dl.test/api/v1/business/organizations" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1096,7 +1124,7 @@ Manage business organizations, memberships, and role assignments.</h2>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations"
+    "http://dl.test/api/v1/business/organizations"
 );
 
 const headers = {
@@ -1232,7 +1260,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations" \
+    "http://dl.test/api/v1/business/organizations" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1244,7 +1272,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations"
+    "http://dl.test/api/v1/business/organizations"
 );
 
 const headers = {
@@ -1412,7 +1440,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16" \
+    --get "http://dl.test/api/v1/business/organizations/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1420,7 +1448,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16"
+    "http://dl.test/api/v1/business/organizations/1"
 );
 
 const headers = {
@@ -1559,10 +1587,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -1592,7 +1620,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:8000/api/v1/business/organizations/16" \
+    "http://dl.test/api/v1/business/organizations/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1604,7 +1632,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16"
+    "http://dl.test/api/v1/business/organizations/1"
 );
 
 const headers = {
@@ -1747,10 +1775,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -1796,7 +1824,7 @@ Manage organization surveys, metadata, localized titles, and lifecycles.</h2>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys?page=1" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys?page=1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1804,7 +1832,7 @@ Manage organization surveys, metadata, localized titles, and lifecycles.</h2>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys"
+    "http://dl.test/api/v1/business/organizations/1/surveys"
 );
 
 const params = {
@@ -1968,10 +1996,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -2014,7 +2042,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys" \
+    "http://dl.test/api/v1/business/organizations/1/surveys" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2042,7 +2070,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys"
+    "http://dl.test/api/v1/business/organizations/1/surveys"
 );
 
 const headers = {
@@ -2221,10 +2249,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -2353,7 +2381,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2361,7 +2389,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1"
 );
 
 const headers = {
@@ -2530,10 +2558,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -2542,10 +2570,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -2587,7 +2615,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2615,7 +2643,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1"
 );
 
 const headers = {
@@ -2780,10 +2808,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -2792,10 +2820,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -2936,7 +2964,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2944,7 +2972,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1"
 );
 
 const headers = {
@@ -3076,10 +3104,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -3088,10 +3116,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -3134,7 +3162,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/logic" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/logic" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3142,7 +3170,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/logic"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/logic"
 );
 
 const headers = {
@@ -3261,10 +3289,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--logic"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -3273,10 +3301,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--logic"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -3294,7 +3322,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/logic" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/logic" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3320,7 +3348,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/logic"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/logic"
 );
 
 const headers = {
@@ -3491,10 +3519,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--surveys--survey_id--logic"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -3503,10 +3531,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--surveys--survey_id--logic"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -3666,7 +3694,7 @@ Real-time analytics, response aggregates, respondent participation breakdown, an
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/summary?status=completed&amp;participation_locale=ru&amp;locale=uz" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/results/summary?status=completed&amp;participation_locale=ru&amp;locale=uz" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3674,7 +3702,7 @@ Real-time analytics, response aggregates, respondent participation breakdown, an
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/summary"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/results/summary"
 );
 
 const params = {
@@ -3805,10 +3833,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-summary"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -3817,10 +3845,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-summary"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -3905,7 +3933,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/questions/16?locale=uz" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/results/questions/1?locale=uz" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3913,7 +3941,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/questions/16"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/results/questions/1"
 );
 
 const params = {
@@ -4055,10 +4083,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -4067,10 +4095,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -4079,10 +4107,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -4173,7 +4201,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/participations?status=completed&amp;locale=uz&amp;page=1" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/participations?status=completed&amp;locale=uz&amp;page=1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4181,7 +4209,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/participations"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/participations"
 );
 
 const params = {
@@ -4326,10 +4354,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--participations"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -4338,10 +4366,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--participations"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -4434,7 +4462,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/participations/16" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/participations/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4442,7 +4470,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/participations/16"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/participations/1"
 );
 
 const headers = {
@@ -4587,10 +4615,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--participations--participation_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -4599,10 +4627,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--participations--participation_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>participation_id</code></b>&nbsp;&nbsp;
@@ -4611,10 +4639,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="participation_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--participations--participation_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the participation. Example: <code>16</code></p>
+<p>The ID of the participation. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -4668,7 +4696,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/export?locale=uz" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/results/export?locale=uz" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4676,7 +4704,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/results/export"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/results/export"
 );
 
 const params = {
@@ -4801,10 +4829,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-export"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -4813,10 +4841,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--results-export"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -4898,7 +4926,7 @@ Manage survey status transitions: submit for review, publish, pause, resume, clo
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/submit-review" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/submit-review" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4906,7 +4934,7 @@ Manage survey status transitions: submit for review, publish, pause, resume, clo
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/submit-review"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/submit-review"
 );
 
 const headers = {
@@ -5045,10 +5073,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--submit-review"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -5057,10 +5085,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--submit-review"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -5102,7 +5130,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/publish" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/publish" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5110,7 +5138,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/publish"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/publish"
 );
 
 const headers = {
@@ -5247,10 +5275,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--publish"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -5259,10 +5287,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--publish"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -5304,7 +5332,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pause" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pause" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5312,7 +5340,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pause"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pause"
 );
 
 const headers = {
@@ -5435,10 +5463,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--pause"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -5447,10 +5475,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--pause"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -5492,7 +5520,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/resume" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/resume" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5500,7 +5528,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/resume"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/resume"
 );
 
 const headers = {
@@ -5623,10 +5651,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--resume"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -5635,10 +5663,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--resume"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -5680,7 +5708,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/close" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/close" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5688,7 +5716,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/close"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/close"
 );
 
 const headers = {
@@ -5812,10 +5840,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--close"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -5824,10 +5852,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--close"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -5869,7 +5897,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/archive" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/archive" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5877,7 +5905,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/archive"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/archive"
 );
 
 const headers = {
@@ -6001,10 +6029,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--archive"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -6013,10 +6041,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--archive"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -6061,7 +6089,7 @@ Stateless survey preview and test-validation endpoints. Allows business users to
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/business/organizations/16/surveys/16/preview?locale=uz" \
+    --get "http://dl.test/api/v1/business/organizations/1/surveys/1/preview?locale=uz" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6069,7 +6097,7 @@ Stateless survey preview and test-validation endpoints. Allows business users to
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/preview"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/preview"
 );
 
 const params = {
@@ -6238,10 +6266,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--preview"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -6250,10 +6278,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-business-organizations--organization_id--surveys--survey_id--preview"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -6308,7 +6336,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/preview/pages/16/validate" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/preview/pages/1/validate" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -6324,7 +6352,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/preview/pages/16/validate"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/preview/pages/1/validate"
 );
 
 const headers = {
@@ -6486,10 +6514,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--preview-pages--page_id--validate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -6498,10 +6526,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--preview-pages--page_id--validate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -6510,10 +6538,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--preview-pages--page_id--validate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -6607,7 +6635,7 @@ Manage survey pages, localized page titles/descriptions, and page sequence.</h2>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pages" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pages" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -6624,7 +6652,7 @@ Manage survey pages, localized page titles/descriptions, and page sequence.</h2>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pages"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pages"
 );
 
 const headers = {
@@ -6763,10 +6791,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--pages"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -6775,10 +6803,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--surveys--survey_id--pages"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -6849,7 +6877,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16" \
+    "http://dl.test/api/v1/business/organizations/1/pages/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -6866,7 +6894,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16"
+    "http://dl.test/api/v1/business/organizations/1/pages/1"
 );
 
 const headers = {
@@ -7002,10 +7030,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -7014,10 +7042,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -7088,7 +7116,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16" \
+    "http://dl.test/api/v1/business/organizations/1/pages/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7096,7 +7124,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16"
+    "http://dl.test/api/v1/business/organizations/1/pages/1"
 );
 
 const headers = {
@@ -7228,10 +7256,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -7240,10 +7268,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -7285,7 +7313,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pages/reorder" \
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pages/reorder" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -7299,7 +7327,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/surveys/16/pages/reorder"
+    "http://dl.test/api/v1/business/organizations/1/surveys/1/pages/reorder"
 );
 
 const headers = {
@@ -7424,10 +7452,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--surveys--survey_id--pages-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey_id</code></b>&nbsp;&nbsp;
@@ -7436,10 +7464,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--surveys--survey_id--pages-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -7499,7 +7527,7 @@ Manage survey questions, types, localized labels, validation settings, and seque
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16/questions" \
+    "http://dl.test/api/v1/business/organizations/1/pages/1/questions" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -7522,7 +7550,7 @@ Manage survey questions, types, localized labels, validation settings, and seque
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16/questions"
+    "http://dl.test/api/v1/business/organizations/1/pages/1/questions"
 );
 
 const headers = {
@@ -7670,10 +7698,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--pages--page_id--questions"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -7682,10 +7710,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--pages--page_id--questions"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -7804,7 +7832,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16" \
+    "http://dl.test/api/v1/business/organizations/1/questions/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -7827,7 +7855,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16"
+    "http://dl.test/api/v1/business/organizations/1/questions/1"
 );
 
 const headers = {
@@ -7970,10 +7998,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -7982,10 +8010,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -8104,7 +8132,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16" \
+    "http://dl.test/api/v1/business/organizations/1/questions/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8112,7 +8140,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16"
+    "http://dl.test/api/v1/business/organizations/1/questions/1"
 );
 
 const headers = {
@@ -8231,10 +8259,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -8243,10 +8271,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--questions--question_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -8288,7 +8316,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/duplicate" \
+    "http://dl.test/api/v1/business/organizations/1/questions/1/duplicate" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8296,7 +8324,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/duplicate"
+    "http://dl.test/api/v1/business/organizations/1/questions/1/duplicate"
 );
 
 const headers = {
@@ -8425,10 +8453,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--questions--question_id--duplicate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -8437,10 +8465,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--questions--question_id--duplicate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -8482,7 +8510,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16/questions/reorder" \
+    "http://dl.test/api/v1/business/organizations/1/pages/1/questions/reorder" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -8496,7 +8524,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/pages/16/questions/reorder"
+    "http://dl.test/api/v1/business/organizations/1/pages/1/questions/reorder"
 );
 
 const headers = {
@@ -8621,10 +8649,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--pages--page_id--questions-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -8633,10 +8661,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--pages--page_id--questions-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -8696,7 +8724,7 @@ Manage choice options for single_choice and multiple_choice questions.</h2>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/options" \
+    "http://dl.test/api/v1/business/organizations/1/questions/1/options" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -8710,7 +8738,7 @@ Manage choice options for single_choice and multiple_choice questions.</h2>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/options"
+    "http://dl.test/api/v1/business/organizations/1/questions/1/options"
 );
 
 const headers = {
@@ -8845,10 +8873,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--questions--question_id--options"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -8857,10 +8885,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="POSTapi-v1-business-organizations--organization_id--questions--question_id--options"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -8917,7 +8945,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:8000/api/v1/business/organizations/16/options/16" \
+    "http://dl.test/api/v1/business/organizations/1/options/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -8931,7 +8959,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/options/16"
+    "http://dl.test/api/v1/business/organizations/1/options/1"
 );
 
 const headers = {
@@ -9063,10 +9091,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--options--option_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>option_id</code></b>&nbsp;&nbsp;
@@ -9075,10 +9103,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="option_id"                data-endpoint="PATCHapi-v1-business-organizations--organization_id--options--option_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the option. Example: <code>16</code></p>
+<p>The ID of the option. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -9135,7 +9163,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/v1/business/organizations/16/options/16" \
+    "http://dl.test/api/v1/business/organizations/1/options/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9143,7 +9171,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/options/16"
+    "http://dl.test/api/v1/business/organizations/1/options/1"
 );
 
 const headers = {
@@ -9262,10 +9290,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--options--option_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>option_id</code></b>&nbsp;&nbsp;
@@ -9274,10 +9302,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="option_id"                data-endpoint="DELETEapi-v1-business-organizations--organization_id--options--option_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the option. Example: <code>16</code></p>
+<p>The ID of the option. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -9319,7 +9347,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/options/reorder" \
+    "http://dl.test/api/v1/business/organizations/1/questions/1/options/reorder" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -9333,7 +9361,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/business/organizations/16/questions/16/options/reorder"
+    "http://dl.test/api/v1/business/organizations/1/questions/1/options/reorder"
 );
 
 const headers = {
@@ -9458,10 +9486,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="organization_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--questions--question_id--options-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the organization. Example: <code>16</code></p>
+<p>The ID of the organization. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>question_id</code></b>&nbsp;&nbsp;
@@ -9470,10 +9498,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="question_id"                data-endpoint="PUTapi-v1-business-organizations--organization_id--questions--question_id--options-reorder"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the question. Example: <code>16</code></p>
+<p>The ID of the question. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
@@ -9534,7 +9562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/respondent/surveys/16/participate" \
+    "http://dl.test/api/v1/respondent/surveys/1/participate" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -9546,7 +9574,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/respondent/surveys/16/participate"
+    "http://dl.test/api/v1/respondent/surveys/1/participate"
 );
 
 const headers = {
@@ -9728,10 +9756,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-respondent-surveys--survey_id--participate"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey</code></b>&nbsp;&nbsp;
@@ -9774,7 +9802,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/respondent/participations/16" \
+    --get "http://dl.test/api/v1/respondent/participations/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9782,7 +9810,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/respondent/participations/16"
+    "http://dl.test/api/v1/respondent/participations/1"
 );
 
 const headers = {
@@ -9931,10 +9959,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="participation_id"                data-endpoint="GETapi-v1-respondent-participations--participation_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the participation. Example: <code>16</code></p>
+<p>The ID of the participation. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>participation</code></b>&nbsp;&nbsp;
@@ -9965,7 +9993,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/respondent/participations/16/pages/16" \
+    "http://dl.test/api/v1/respondent/participations/1/pages/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -9979,7 +10007,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/respondent/participations/16/pages/16"
+    "http://dl.test/api/v1/respondent/participations/1/pages/1"
 );
 
 const headers = {
@@ -10143,10 +10171,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="participation_id"                data-endpoint="PUTapi-v1-respondent-participations--participation_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the participation. Example: <code>16</code></p>
+<p>The ID of the participation. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>page_id</code></b>&nbsp;&nbsp;
@@ -10155,10 +10183,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page_id"                data-endpoint="PUTapi-v1-respondent-participations--participation_id--pages--page_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the page. Example: <code>16</code></p>
+<p>The ID of the page. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>participation</code></b>&nbsp;&nbsp;
@@ -10213,7 +10241,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/respondent/participations/16/complete" \
+    "http://dl.test/api/v1/respondent/participations/1/complete" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10221,7 +10249,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/respondent/participations/16/complete"
+    "http://dl.test/api/v1/respondent/participations/1/complete"
 );
 
 const headers = {
@@ -10341,10 +10369,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="participation_id"                data-endpoint="POSTapi-v1-respondent-participations--participation_id--complete"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the participation. Example: <code>16</code></p>
+<p>The ID of the participation. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>participation</code></b>&nbsp;&nbsp;
@@ -10374,7 +10402,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/respondent/participations/16/back" \
+    "http://dl.test/api/v1/respondent/participations/1/back" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10382,7 +10410,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/respondent/participations/16/back"
+    "http://dl.test/api/v1/respondent/participations/1/back"
 );
 
 const headers = {
@@ -10492,10 +10520,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="participation_id"                data-endpoint="POSTapi-v1-respondent-participations--participation_id--back"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the participation. Example: <code>16</code></p>
+<p>The ID of the participation. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -10520,7 +10548,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/admin/moderation/surveys?status=pending_review&amp;page=1" \
+    --get "http://dl.test/api/v1/admin/moderation/surveys?status=pending_review&amp;page=1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10528,7 +10556,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/admin/moderation/surveys"
+    "http://dl.test/api/v1/admin/moderation/surveys"
 );
 
 const params = {
@@ -10710,7 +10738,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/admin/moderation/surveys/16" \
+    --get "http://dl.test/api/v1/admin/moderation/surveys/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10718,7 +10746,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/admin/moderation/surveys/16"
+    "http://dl.test/api/v1/admin/moderation/surveys/1"
 );
 
 const headers = {
@@ -10862,10 +10890,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="GETapi-v1-admin-moderation-surveys--survey_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey</code></b>&nbsp;&nbsp;
@@ -10895,7 +10923,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/admin/moderation/surveys/16/approve" \
+    "http://dl.test/api/v1/admin/moderation/surveys/1/approve" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10903,7 +10931,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/admin/moderation/surveys/16/approve"
+    "http://dl.test/api/v1/admin/moderation/surveys/1/approve"
 );
 
 const headers = {
@@ -11039,10 +11067,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-admin-moderation-surveys--survey_id--approve"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey</code></b>&nbsp;&nbsp;
@@ -11072,7 +11100,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/admin/moderation/surveys/16/request-changes" \
+    "http://dl.test/api/v1/admin/moderation/surveys/1/request-changes" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -11084,7 +11112,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/admin/moderation/surveys/16/request-changes"
+    "http://dl.test/api/v1/admin/moderation/surveys/1/request-changes"
 );
 
 const headers = {
@@ -11228,10 +11256,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="survey_id"                data-endpoint="POSTapi-v1-admin-moderation-surveys--survey_id--request-changes"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the survey. Example: <code>16</code></p>
+<p>The ID of the survey. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>survey</code></b>&nbsp;&nbsp;
@@ -11277,14 +11305,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/health" \
+    --get "http://dl.test/api/v1/health" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/health"
+    "http://dl.test/api/v1/health"
 );
 
 const headers = {
@@ -11310,13 +11338,13 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-access-control-allow-origin: *
+vary: Origin
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;status&quot;: &quot;ok&quot;,
     &quot;version&quot;: &quot;v1&quot;,
-    &quot;timestamp&quot;: &quot;2026-10-19T05:13:33+00:00&quot;
+    &quot;timestamp&quot;: &quot;2026-10-20T15:57:00+00:00&quot;
 }</code>
  </pre>
     </span>
