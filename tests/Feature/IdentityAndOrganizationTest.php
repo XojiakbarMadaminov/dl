@@ -7,8 +7,10 @@ use App\Modules\Identity\Enums\PlatformRole;
 use App\Modules\Identity\Enums\UserStatus;
 use App\Modules\Organization\Actions\CreateOrganizationAction;
 use App\Modules\Organization\Enums\OrganizationRole;
+use App\Modules\Organization\Models\Organization;
 use App\Modules\Organization\Models\OrganizationMember;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class IdentityAndOrganizationTest extends TestCase
@@ -36,7 +38,7 @@ class IdentityAndOrganizationTest extends TestCase
         ]);
     }
 
-    public function test_business_registration_with_organization_creates_org_and_owner(): void
+    public function test_registration_does_not_create_an_organization_from_a_legacy_organization_name(): void
     {
         $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Biznes Egasi',
@@ -49,16 +51,13 @@ class IdentityAndOrganizationTest extends TestCase
         $response->assertStatus(201);
         $userId = $response->json('user.id');
 
-        $this->assertDatabaseHas('organizations', [
-            'name' => 'Katta Biznes MCHJ',
-            'created_by' => $userId,
-            'status' => 'active',
-        ]);
+        $this->assertDatabaseHas('users', ['id' => $userId]);
+        $this->assertDatabaseCount('organizations', 0);
+        $this->assertDatabaseCount('organization_members', 0);
 
-        $this->assertDatabaseHas('organization_members', [
-            'user_id' => $userId,
-            'role' => 'owner',
-        ]);
+        $this->withToken($response->json('token'))->getJson('/api/v1/auth/me')
+            ->assertOk()
+            ->assertJsonPath('organizations', []);
     }
 
     public function test_admin_privilege_cannot_be_self_assigned(): void
@@ -220,7 +219,8 @@ class IdentityAndOrganizationTest extends TestCase
 
         $meResponse = $this->withToken($token)->getJson('/api/v1/auth/me');
         $meResponse->assertStatus(200)
-            ->assertJsonPath('user.id', $user->id);
+            ->assertJsonPath('user.id', $user->id)
+            ->assertJsonPath('organizations', []);
 
         $logoutResponse = $this->withToken($token)->postJson('/api/v1/auth/logout');
         $logoutResponse->assertStatus(200);
@@ -235,16 +235,86 @@ class IdentityAndOrganizationTest extends TestCase
             ->assertJsonPath('error.code', 'UNAUTHORIZED');
     }
 
+    public function test_profile_lists_only_the_users_organizations_with_their_membership_roles(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $action = new CreateOrganizationAction;
+        $ownedOrganization = $action->execute('Owned Organization', $user, '123456789');
+        $sharedOrganization = $action->execute('Shared Organization', $otherUser, '234567890');
+        $action->execute('Unrelated Organization', $otherUser, '345678901');
+
+        OrganizationMember::create([
+            'organization_id' => $sharedOrganization->id,
+            'user_id' => $user->id,
+            'role' => OrganizationRole::VIEWER,
+            'joined_at' => now()->addMinute(),
+        ]);
+
+        $token = $user->createToken('test')->plainTextToken;
+
+        $this->withToken($token)->getJson('/api/v1/auth/me')
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id)
+            ->assertJsonPath('user.platform_role', 'user')
+            ->assertJsonPath('organizations', [
+                [
+                    'id' => $sharedOrganization->id,
+                    'name' => 'Shared Organization',
+                    'inn' => '234567890',
+                    'current_user_role' => 'viewer',
+                ],
+                [
+                    'id' => $ownedOrganization->id,
+                    'name' => 'Owned Organization',
+                    'inn' => '123456789',
+                    'current_user_role' => 'owner',
+                ],
+            ])
+            ->assertJsonMissingPath('user.password');
+    }
+
+    public function test_admin_profile_does_not_include_organizations_without_membership(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $otherUser = User::factory()->create();
+        $action = new CreateOrganizationAction;
+        $action->execute('Unrelated Organization', $otherUser, '123456789');
+        $organization = $action->execute('Member Organization', $otherUser, '234567890');
+
+        OrganizationMember::create([
+            'organization_id' => $organization->id,
+            'user_id' => $admin->id,
+            'role' => OrganizationRole::MANAGER,
+        ]);
+
+        $token = $admin->createToken('test')->plainTextToken;
+
+        $this->withToken($token)->getJson('/api/v1/auth/me')
+            ->assertOk()
+            ->assertJsonPath('user.platform_role', 'admin')
+            ->assertJsonPath('organizations', [
+                [
+                    'id' => $organization->id,
+                    'name' => 'Member Organization',
+                    'inn' => '234567890',
+                    'current_user_role' => 'manager',
+                ],
+            ]);
+    }
+
     public function test_user_can_create_organization_and_becomes_owner(): void
     {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/v1/business/organizations', [
             'name' => 'Acme Research Corp',
+            'inn' => '001234567',
         ]);
 
         $response->assertStatus(201)
             ->assertJsonPath('organization.name', 'Acme Research Corp')
+            ->assertJsonPath('organization.inn', '001234567')
             ->assertJsonPath('organization.current_user_role', 'owner')
             ->assertJsonPath('organization.created_by', $user->id);
 
@@ -253,6 +323,7 @@ class IdentityAndOrganizationTest extends TestCase
         $this->assertDatabaseHas('organizations', [
             'id' => $organizationId,
             'name' => 'Acme Research Corp',
+            'inn' => '001234567',
             'created_by' => $user->id,
             'status' => 'active',
         ]);
@@ -264,14 +335,137 @@ class IdentityAndOrganizationTest extends TestCase
         ]);
     }
 
+    public function test_organization_creation_requires_a_non_empty_string_inn(): void
+    {
+        $user = User::factory()->create();
+
+        foreach ([[], ['inn' => null], ['inn' => ''], ['inn' => '   '], ['inn' => 123456789], ['inn' => ['123456789']], ['inn' => str_repeat('1', 256)]] as $payload) {
+            $this->actingAs($user)->postJson('/api/v1/business/organizations', [
+                'name' => 'New Organization',
+                ...$payload,
+            ])->assertUnprocessable()
+                ->assertJsonPath('error.code', 'VALIDATION_ERROR')
+                ->assertJsonStructure(['error' => ['fields' => ['inn']]]);
+        }
+
+        $this->assertDatabaseCount('organizations', 0);
+        $this->assertDatabaseCount('organization_members', 0);
+    }
+
+    public function test_organization_inn_is_unique_across_all_users(): void
+    {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        (new CreateOrganizationAction)->execute('Existing Organization', $owner, '123456789');
+
+        $this->actingAs($otherUser)->postJson('/api/v1/business/organizations', [
+            'name' => 'Duplicate Organization',
+            'inn' => ' 123456789 ',
+        ])->assertUnprocessable()
+            ->assertJsonPath('error.code', 'VALIDATION_ERROR')
+            ->assertJsonStructure(['error' => ['fields' => ['inn']]]);
+
+        $this->assertDatabaseCount('organizations', 1);
+        $this->assertDatabaseCount('organization_members', 1);
+    }
+
+    public function test_database_rejects_duplicate_inn_without_creating_partial_memberships(): void
+    {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $action = new CreateOrganizationAction;
+        $action->execute('Existing Organization', $owner, '123456789');
+
+        try {
+            // Bypass FormRequest validation to exercise the database unique constraint.
+            $action->execute('Duplicate Organization', $otherUser, '123456789');
+            $this->fail('Duplicate INNs must be rejected by the database.');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('inn', $exception->errors());
+        }
+
+        $this->assertDatabaseCount('organizations', 1);
+        $this->assertDatabaseCount('organization_members', 1);
+    }
+
+    public function test_inn_updates_remain_unique_and_require_organization_permissions(): void
+    {
+        $owner = User::factory()->create();
+        $viewer = User::factory()->create();
+        $action = new CreateOrganizationAction;
+        $organization = $action->execute('Original Organization', $owner, '123456789');
+        $action->execute('Other Organization', $owner, '234567890');
+        OrganizationMember::create([
+            'organization_id' => $organization->id,
+            'user_id' => $viewer->id,
+            'role' => OrganizationRole::VIEWER,
+        ]);
+        $endpoint = "/api/v1/business/organizations/{$organization->id}";
+
+        $this->actingAs($owner)->patchJson($endpoint, [
+            'name' => 'Renamed Organization', 'inn' => '123456789',
+        ])->assertOk()->assertJsonPath('organization.inn', '123456789');
+
+        $this->actingAs($owner)->patchJson($endpoint, [
+            'name' => 'Invalid Rename', 'inn' => '234567890',
+        ])->assertUnprocessable()->assertJsonStructure(['error' => ['fields' => ['inn']]]);
+
+        $this->actingAs($owner)->patchJson($endpoint, [
+            'name' => 'Invalid Rename', 'inn' => null,
+        ])->assertUnprocessable()->assertJsonStructure(['error' => ['fields' => ['inn']]]);
+
+        $this->actingAs($viewer)->patchJson($endpoint, [
+            'name' => 'Unauthorized Rename', 'inn' => '345678901',
+        ])->assertForbidden()->assertJsonPath('error.code', 'FORBIDDEN');
+
+        $this->assertDatabaseHas('organizations', [
+            'id' => $organization->id, 'name' => 'Renamed Organization', 'inn' => '123456789',
+        ]);
+    }
+
+    public function test_inn_migration_preserves_legacy_organizations_and_allows_backfill(): void
+    {
+        $migration = require database_path('migrations/2026_10_25_000001_add_inn_to_organizations_table.php');
+        $migration->down();
+        $owner = User::factory()->create();
+        $organization = Organization::create(['name' => 'Legacy Organization', 'created_by' => $owner->id]);
+        $otherOrganization = Organization::create(['name' => 'Other Legacy Organization', 'created_by' => $owner->id]);
+        OrganizationMember::create([
+            'organization_id' => $organization->id, 'user_id' => $owner->id, 'role' => OrganizationRole::OWNER,
+        ]);
+
+        $migration->up();
+
+        $this->assertDatabaseHas('organizations', ['id' => $organization->id, 'inn' => null]);
+        $this->assertDatabaseHas('organizations', ['id' => $otherOrganization->id, 'inn' => null]);
+        $this->actingAs($owner)->getJson('/api/v1/auth/me')
+            ->assertOk()->assertJsonCount(1, 'organizations')
+            ->assertJsonPath('organizations.0.inn', null);
+
+        $this->patchJson("/api/v1/business/organizations/{$organization->id}", [
+            'name' => 'Legacy Organization', 'inn' => '001234567',
+        ])->assertOk()->assertJsonPath('organization.inn', '001234567');
+
+        $this->assertDatabaseCount('organizations', 2);
+    }
+
+    public function test_guest_cannot_create_an_organization(): void
+    {
+        $this->postJson('/api/v1/business/organizations', [
+            'name' => 'Organization', 'inn' => '123456789',
+        ])->assertUnauthorized()->assertJsonPath('error.code', 'UNAUTHORIZED');
+
+        $this->assertDatabaseCount('organizations', 0);
+    }
+
     public function test_user_can_only_view_organizations_they_belong_to(): void
     {
         $userA = User::factory()->create();
         $userB = User::factory()->create();
 
         $action = new CreateOrganizationAction;
-        $orgA = $action->execute('Org A', $userA);
-        $orgB = $action->execute('Org B', $userB);
+        $orgA = $action->execute('Org A', $userA, '123456789');
+        $orgB = $action->execute('Org B', $userB, '234567890');
 
         // User A views Org A -> allowed
         $this->actingAs($userA)->getJson("/api/v1/business/organizations/{$orgA->id}")
@@ -297,7 +491,7 @@ class IdentityAndOrganizationTest extends TestCase
         $viewer = User::factory()->create();
 
         $action = new CreateOrganizationAction;
-        $org = $action->execute('Original Org', $owner);
+        $org = $action->execute('Original Org', $owner, '123456789');
 
         OrganizationMember::create([
             'organization_id' => $org->id,
@@ -330,7 +524,7 @@ class IdentityAndOrganizationTest extends TestCase
         $user = User::factory()->create();
 
         $action = new CreateOrganizationAction;
-        $org = $action->execute('Private Org', $user);
+        $org = $action->execute('Private Org', $user, '123456789');
 
         // Platform admin can view
         $this->actingAs($admin)->getJson("/api/v1/business/organizations/{$org->id}")

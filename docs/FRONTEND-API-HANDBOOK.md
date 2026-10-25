@@ -1,8 +1,21 @@
 # Dialog: frontend uchun to‘liq API qo‘llanma
 
-**Tekshirilgan sana: 2026-10-20.** Ushbu hujjat hozirgi route, validation, action, response resource va testlarga asoslangan. Auth, tashkilot, survey builder, mantiq, moderatsiya, respondent va natijalar shu faylda jamlangan. Boshqa qo‘llanmani ochish shart emas.
+**Auth/organization yangilangan sana: 2026-10-25; qolgan API kontraktlari tekshiruvi: 2026-10-20.** Ushbu hujjat hozirgi route, validation, action, response resource va testlarga asoslangan. Auth, tashkilot, survey builder, mantiq, moderatsiya, respondent va natijalar shu faylda jamlangan. Boshqa qo‘llanmani ochish shart emas.
 
 Host, ID, sana, ism va tokenlar namunaviy. IDni haqiqiy create/start response’idan oling. JSON bloklari valid JSON. **Qisqartirilgan response** deb ko‘rsatilgan joyda qolgan fieldlar shu fayldagi umumiy kontraktga mos keladi.
+
+### 2026-10-25: frontendga kiritiladigan auth/organization o‘zgarishlari
+
+| Joy | Yangi kontrakt va frontend harakati |
+| --- | --- |
+| Register formasi | `organization_name` va `inn` fieldlarini ko‘rsatmang/yubormang. `POST /api/v1/auth/register` faqat user va token yaratadi. |
+| Business onboarding | Alohida formadan `POST /api/v1/business/organizations`ga `name` va string `inn` yuboring. Register bergan Bearer token ishlatiladi; qayta login shart emas. Respondent bu bosqichni o‘tkazib ketishi mumkin. |
+| Ilova ochilishi | `GET /api/v1/auth/me`dan `user` va top-level `organizations` massivini oling. Har bir element `{id, name, inn, current_user_role}`; bo‘sh massiv userning a’zoligi yo‘qligini bildiradi. |
+| INN maydoni | INNni numberga aylantirmang: yetakchi nollar saqlanishi kerak. Yangi tashkilot uchun majburiy va barcha organizationlar bo‘yicha unique. 422da `error.fields.inn`ni shu input yonida ko‘rsating. |
+| Create’dan keyingi state | 201 response’dagi `organization`ni organization state’ga qo‘shing va uning IDsi bilan business sahifalarini oching; yoki `/auth/me`ni qayta oling. `organization` object va `/auth/me`dagi `organizations` massivini aralashtirmang. |
+| Eski tashkilotlar | `inn: null` bo‘lishi mumkin; mavjud a’zolik va rol saqlanadi. Owner/manager INNni `PATCH /api/v1/business/organizations/{organization}`ga joriy `name` bilan yuborib to‘ldiradi. |
+
+To‘liq request/response misollari: [Auth](#auth) va [Organization](#organizations). Frontend so‘rovlarini boshqarish qoidalari [13-bo‘limda](#frontend-requests).
 
 ## Mundarija
 
@@ -18,7 +31,7 @@ Host, ID, sana, ism va tokenlar namunaviy. IDni haqiqiy create/start response’
 10. [Respondent: start, save, resume, Back, complete](#respondent)
 11. [Natijalar va CSV](#results)
 12. [Xatolar](#errors)
-13. [TypeScript va fetch](#frontend-code)
+13. [Frontend so‘rovlarini boshqarish](#frontend-requests)
 14. [Amaliy case’lar va checklist](#cases)
 15. [Barcha endpointlar](#endpoint-index)
 16. [Hozir mavjud bo‘lmagan imkoniyatlar](#limits)
@@ -45,22 +58,23 @@ Quyidagi qisqa yo‘llarning oldiga `/api/v1` qo‘shiladi.
 
 | Qadam | API | Frontend harakati |
 | --- | --- | --- |
-| 1 | `POST /auth/register` | `organization_name` bilan biznes akkaunt ochish, tokenni olish. |
-| 2 | `GET /business/organizations` | Organization ID va `current_user_role`ni olish. |
-| 3 | `POST /business/organizations/{organization}/surveys` | Tillar va title’lar bilan draft yaratish. Birinchi page avtomatik yaratiladi. |
-| 4 | `POST /business/organizations/{organization}/pages/{page}/questions` | Savollar yaratish. |
-| 5 | `POST /business/organizations/{organization}/questions/{question}/options` | Choice savollarga variantlar qo‘shish. |
-| 6 | `POST /business/organizations/{organization}/surveys/{survey}/pages` | Zarur qo‘shimcha sahifalar yaratish. |
-| 7 | `PUT .../surveys/{survey}/logic` | Zarur bo‘lsa qoidalarni saqlash. |
-| 8 | `GET .../surveys/{survey}/preview?locale=uz` | Preview va validate bilan sinash. |
-| 9 | `POST .../surveys/{survey}/submit-review` | Tekshiruvga yuborish. |
-| 10 | `POST /admin/moderation/surveys/{survey}/approve` | Alohida admin tokeni bilan tasdiqlash. |
-| 11 | `POST .../surveys/{survey}/publish` | Business tokeni bilan `active` qilish. |
-| 12 | `POST /auth/register` yoki `/auth/login` | Respondent tokenini olish. |
-| 13 | `POST /respondent/surveys/{survey}/participate` | Participation yaratish/davom ettirish. |
-| 14 | `PUT /respondent/participations/{participation}/pages/{page}` | Sahifa javoblarini saqlash; backend qaytargan keyingi sahifani ochish. |
-| 15 | `POST /respondent/participations/{participation}/complete` | `can_complete=true`dan keyin yakunlash. |
-| 16 | `GET .../surveys/{survey}/results/summary` | Business natijalarni ko‘rishi. |
+| 1 | `POST /auth/register` | Faqat user akkauntini ochish, tokenni olish; organization fieldlari yuborilmaydi. |
+| 2 | `POST /business/organizations` | Token bilan alohida onboarding: `name` va unique string `inn`; user avtomatik owner bo‘ladi. |
+| 3 | `GET /auth/me` | User va `organizations` ro‘yxatini, har biridagi `id`, `name`, `inn`, `current_user_role`ni olish. |
+| 4 | `POST /business/organizations/{organization}/surveys` | Tillar va title’lar bilan draft yaratish. Birinchi page avtomatik yaratiladi. |
+| 5 | `POST /business/organizations/{organization}/pages/{page}/questions` | Savollar yaratish. |
+| 6 | `POST /business/organizations/{organization}/questions/{question}/options` | Choice savollarga variantlar qo‘shish. |
+| 7 | `POST /business/organizations/{organization}/surveys/{survey}/pages` | Zarur qo‘shimcha sahifalar yaratish. |
+| 8 | `PUT .../surveys/{survey}/logic` | Zarur bo‘lsa qoidalarni saqlash. |
+| 9 | `GET .../surveys/{survey}/preview?locale=uz` | Preview va validate bilan sinash. |
+| 10 | `POST .../surveys/{survey}/submit-review` | Tekshiruvga yuborish. |
+| 11 | `POST /admin/moderation/surveys/{survey}/approve` | Alohida admin tokeni bilan tasdiqlash. |
+| 12 | `POST .../surveys/{survey}/publish` | Business tokeni bilan `active` qilish. |
+| 13 | `POST /auth/register` yoki `/auth/login` | Respondent tokenini olish; organization onboarding shart emas. |
+| 14 | `POST /respondent/surveys/{survey}/participate` | Participation yaratish/davom ettirish. |
+| 15 | `PUT /respondent/participations/{participation}/pages/{page}` | Sahifa javoblarini saqlash; backend qaytargan keyingi sahifani ochish. |
+| 16 | `POST /respondent/participations/{participation}/complete` | `can_complete=true`dan keyin yakunlash. |
+| 17 | `GET .../surveys/{survey}/results/summary` | Business natijalarni ko‘rishi. |
 
 ### 1.3. Misollardagi ID xaritasi
 
@@ -144,9 +158,8 @@ Local/testing’da `localhost`, `127.0.0.1`, `[::1]` HTTP/HTTPS originlari istal
 | `password` | Required string, min 8. |
 | `password_confirmation` | Optional; yuborilsa required string va password bilan bir xil. |
 | `locale` | Optional `uz`/`ru`/`en`, default `uz`; platforma UI tili. |
-| `organization_name` | Optional string, 2–255; organization va owner membership birga yaratiladi. |
 
-Business register body:
+Business va respondent uchun bir xil register body:
 
 ```json
 {
@@ -154,12 +167,11 @@ Business register body:
   "email":"owner@example.com",
   "password":"SecurePass123!",
   "password_confirmation":"SecurePass123!",
-  "locale":"uz",
-  "organization_name":"Dialog Research"
+  "locale":"uz"
 }
 ```
 
-Respondent uchun `organization_name`ni olib tashlang. `role=business/respondent` yuborilmaydi. `platform_role=admin` yuborish admin huquqini bermaydi.
+Registration formida organization nomi va INN kiritilmaydi. Register faqat user yaratadi; biznes uchun keyingi alohida onboarding formida organization yaratiladi (4.3-bo‘lim). `role=business/respondent` yuborilmaydi. `platform_role=admin` yuborish admin huquqini bermaydi.
 
 Response **201**:
 
@@ -174,7 +186,7 @@ Response **201**:
 }
 ```
 
-Organization bu response’da yo‘q; keyin `GET /business/organizations`dan ID/rolni oling. Register token bergani uchun qayta login shart emas.
+Organization bu response’da yo‘q va registerda yaratilmaydi. Register token bergani uchun qayta login shart emas: shu token bilan `POST /business/organizations`ga `name` va `inn` yuboring. Yaratilgandan so‘ng response’dagi organization bilan state’ni yangilang yoki `GET /auth/me`ni qayta chaqiring.
 
 ### 3.2. Login
 
@@ -198,11 +210,14 @@ Xatolar: `401 INVALID_CREDENTIALS`, `403 ACCOUNT_INACTIVE`, `422 VALIDATION_ERRO
     "id":8,"name":"Ali Karimov","email":"owner@example.com",
     "locale":"uz","platform_role":"user","status":"active",
     "created_at":"2026-10-20T15:00:00+00:00"
-  }
+  },
+  "organizations":[
+    {"id":7,"name":"Dialog Research","inn":"123456789","current_user_role":"owner"}
+  ]
 }
 ```
 
-Response **200**. Token bo‘lsa me chaqiring; business uchun keyin organizations oling. `401 UNAUTHORIZED`da lokal auth state’ni tozalab login ekraniga qayting.
+Response **200**. Token bo‘lsa me chaqiring: profil va organization konteksti bitta response’da keladi. `organizations` faqat userning a’zoliklari, eng yangi a’zolikdan boshlab; admin uchun ham shunday. A’zolik bo‘lmasa `organizations: []`. Har bir organizationdagi `current_user_role` shu userga tegishli; `user.platform_role` alohida. `inn` eski organizationlarda vaqtincha null bo‘lishi mumkin. `401 UNAUTHORIZED`da lokal auth state’ni tozalab login ekraniga qayting.
 
 ### 3.4. Logout
 
@@ -221,7 +236,7 @@ Faqat joriy token bekor qilinadi. UI token, user va organizationga bog‘liq cac
 
 ### 4.1. Rollar
 
-| Rol | Organization/survey/natijalarni o‘qish | Survey CRUD, logic, lifecycle | Organization nomini o‘zgartirish | Admin moderatsiya |
+| Rol | Organization/survey/natijalarni o‘qish | Survey CRUD, logic, lifecycle | Organization nomi/INNni o‘zgartirish | Admin moderatsiya |
 | --- | --- | --- | --- | --- |
 | `owner` | O‘z tashkilotida | Ha | Ha | Yo‘q |
 | `manager` | O‘z tashkilotida | Ha | Ha | Yo‘q |
@@ -239,7 +254,7 @@ Platform roli `user`/`admin`; organization roli alohida `current_user_role`. UI 
 ```json
 {
   "data":[{
-    "id":7,"name":"Dialog Research","status":"active","created_by":8,
+    "id":7,"name":"Dialog Research","inn":"123456789","status":"active","created_by":8,
     "current_user_role":"owner","created_at":"2026-10-20T15:00:00+00:00"
   }]
 }
@@ -249,31 +264,45 @@ Faqat user a’zo bo‘lgan tashkilotlar; admin uchun ham barcha tashkilotlar ka
 
 ### 4.3. Organization yaratish
 
-Registerda yaratmagan bo‘lsa yoki yangi tashkilot kerak bo‘lsa: **`POST /api/v1/business/organizations`**.
+Registerdan keyingi alohida organization onboarding: **`POST /api/v1/business/organizations`**, Bearer token kerak. Yangi organization faqat shu endpoint orqali yaratiladi.
 
 ```json
-{"name":"Dialog Research"}
+{"name":"Dialog Research","inn":"123456789"}
 ```
 
-`name` required string, max 255. Response **201**:
+`name` va `inn` required string, max 255. INN trim qilinadi va barcha organizationlar bo‘yicha unique. Uni JSON string sifatida yuboring: boshidagi nollar saqlanadi; number yuborish 422. Hozir mamlakatga xos qat’iy uzunlik tekshiruvi yo‘q. Response **201**:
 
 ```json
 {
   "organization":{
-    "id":7,"name":"Dialog Research","status":"active","created_by":8,
+    "id":7,"name":"Dialog Research","inn":"123456789","status":"active","created_by":8,
     "current_user_role":"owner","created_at":"2026-10-20T15:00:00+00:00"
   }
 }
 ```
 
-Creator avtomatik owner.
+Organization va owner membership bitta tranzaksiyada yaratiladi. Creator avtomatik owner; `organization.id`ni haqiqiy response’dan oling. Bir xil INN boshqa userning organizationida ham bo‘lsa, **422 `VALIDATION_ERROR`**, `error.fields.inn` keladi; qo‘shimcha organization/a’zolik yaratilmaydi. Masalan:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The inn has already been taken.",
+    "fields": {"inn": ["The inn has already been taken."]}
+  }
+}
+```
+
+Create’dan so‘ng organization switcher/state’ni shu response’dan yangilang yoki `/auth/me`ni qayta oling. Respondent uchun organization yaratish shart emas.
 
 ### 4.4. Read/update
 
 | So‘rov | Body | Response |
 | --- | --- | --- |
 | `GET /api/v1/business/organizations/{organization}` | Yo‘q | 200, `{"organization": Organization}`; yuqoridagi resource. |
-| `PATCH /api/v1/business/organizations/{organization}` | `{"name":"Yangi nom"}` | 200, yangilangan `{"organization": Organization}`; name required, max 255. |
+| `PATCH /api/v1/business/organizations/{organization}` | `{"name":"Yangi nom","inn":"123456789"}` | 200, yangilangan `{"organization": Organization}`; name required, inn optional; ikkalasi string, max 255. |
+
+INN yuborilmasa joriy qiymat saqlanadi. O‘z organizationining INNini qayta yuborish mumkin; boshqa organizationniki yoki null/bo‘sh replacement 422. Eski tashkilotlar migratsiyadan keyin `inn: null` bilan saqlanadi; owner/manager shu PATCH orqali haqiqiy INNni to‘ldiradi.
 
 Tashkilotga a’zolik/ruxsat yo‘q — 403. URLdagi survey/page/question/option tashkilotga mos kelmasa — 404. Har business URLda tanlangan organization ID bo‘lsin.
 
@@ -1363,176 +1392,16 @@ Tarjima xatosining misoli:
 
 Field errorsni faqat VALIDATION_ERROR uchun emas, INVALID_ANSWER/TRANSLATION_INCOMPLETE/INVALID_SURVEY_LOGIC/INVALID_QUESTION_SETTINGS uchun ham ko‘rsating. Survey validation birinchi bloklovchi xatoda to‘xtashi mumkin; bitta xato tuzatilgach boshqasi chiqishi normal.
 
-<a id="frontend-code"></a>
-## 13. Frameworkdan mustaqil TypeScript namunasi
+<a id="frontend-requests"></a>
+## 13. Frontend so‘rovlarini boshqarish
 
-Quyidagi kod browser fetch uchun. Tokenni saqlash usulini ilova tanlaydi; tokenni log/URLga yozmang. `API_BASE`ni environmentdan oling. Types response farqlarini aniq saqlaydi.
+Form submit paytida loading yoqing va takroriy yuborishni bloklang. Navigatsiyada backend qaytargan `next`, `next_step`, `current_step` va `can_complete` qiymatlaridan foydalaning. `can_complete=true` bo‘lganda yakunlash tugmasini ko‘rsating yoki alohida complete so‘rovini yuboring.
 
-```typescript
-type Locale = 'uz' | 'ru' | 'en';
-type SurveyStatus = 'draft' | 'pending_review' | 'changes_requested' | 'approved'
-  | 'active' | 'paused' | 'closed' | 'archived';
-type QuestionType = 'single_choice' | 'multiple_choice' | 'short_text' | 'long_text' | 'rating';
-type AnswerValue = string | number | number[] | null;
-type AnswersInput = Record<string, AnswerValue>;
-type Destination = { type: 'page'; id: number } | { type: 'completed' };
+Oldindan saqlangan javoblarni tiklash uchun participation GET qiling. Save response’dagi `next_step` javob qiymatlarini o‘z ichiga olmaydi. Formaga faqat joriy sahifaning ko‘rinadigan savollarini va ularga tegishli javoblarni tiklang.
 
-interface RespondentQuestion {
-  id: number;
-  type: QuestionType;
-  title: string;
-  description: string | null;
-  is_required: boolean;
-  position: number;
-  settings: Record<string, unknown> | [];
-  options: { id: number; position: number; label: string }[];
-}
-interface Step {
-  page: {
-    id: number; position: number; title: string | null; description: string | null;
-    questions: RespondentQuestion[];
-  };
-  progress: {
-    current_step: number; total_steps: number; percent: number;
-    is_first_page: boolean; is_last_page: boolean;
-  };
-  next: Destination;
-}
-interface SavedAnswer {
-  text_value: string | null;
-  number_value: number | null;
-  option_ids: number[];
-}
-type ReadParticipation = {
-  participation_id: number; status: 'in_progress'; locale: Locale;
-  current_step: Step; answers: Record<string, SavedAnswer> | [];
-} | {
-  participation_id: number; status: 'completed'; completed: true;
-};
-type StartParticipation = {
-  participation_id: number; status: 'in_progress'; locale: Locale;
-  survey: { id: number; title: string; welcome_message: string | null };
-  current_step: Step;
-} | {
-  participation_id: number; status: 'completed'; locale: Locale;
-  completed: true; thank_you_message: string | null;
-};
-type SavePageResult = {
-  next: { type: 'page'; id: number }; can_complete: false; next_step: Step;
-} | {
-  next: { type: 'completed' }; can_complete: true; current_step: Step;
-};
-interface CompleteResult {
-  completed: true; status: 'completed'; thank_you_message: string | null;
-}
-interface ErrorEnvelope {
-  error: { code: string; message: string; fields: Record<string, string[]> };
-}
-class ApiFailure extends Error {
-  constructor(
-    public status: number,
-    public envelope: ErrorEnvelope,
-    public retryAfter: string | null,
-  ) {
-    super(envelope.error.message);
-  }
-}
+Backend qaytargan `error.fields` xatolarini tegishli form maydonlari yonida ko‘rsating. Tarmoq xatosini API validation xatosidan alohida ko‘rsating. Tokenni to‘liq Bearer headerda yuboring; uni log yoki URLga yozmang.
 
-const API_BASE = 'http://localhost:8000/api/v1';
-
-async function requestRaw(
-  method: string, path: string, token?: string, body?: unknown,
-): Promise<Response> {
-  const headers: Record<string, string> = { Accept: 'application/json' };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
-  const response = await fetch(`${API_BASE}${path}`, {
-    method, headers, body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  if (!response.ok) {
-    const data: unknown = await response.json().catch(() => null);
-    const envelope = (data && typeof data === 'object' && 'error' in data)
-      ? data as ErrorEnvelope
-      : { error: { code: 'HTTP_ERROR', message: `HTTP ${response.status}`, fields: {} } };
-    throw new ApiFailure(response.status, envelope, response.headers.get('Retry-After'));
-  }
-  return response;
-}
-
-async function api<T>(method: string, path: string, token?: string, body?: unknown): Promise<T> {
-  return (await requestRaw(method, path, token, body)).json() as Promise<T>;
-}
-
-function restoreVisibleInputs(step: Step, saved: Record<string, SavedAnswer> | []): AnswersInput {
-  const map = saved as Record<string, SavedAnswer>;
-  const values: AnswersInput = {};
-  for (const q of step.page.questions) {
-    const answer = map[String(q.id)];
-    if (!answer) continue;
-    switch (q.type) {
-      case 'single_choice': values[String(q.id)] = answer.option_ids[0] ?? null; break;
-      case 'multiple_choice': values[String(q.id)] = [...answer.option_ids]; break;
-      case 'rating': values[String(q.id)] = answer.number_value; break;
-      default: values[String(q.id)] = answer.text_value;
-    }
-  }
-  return values;
-}
-
-async function startOrResume(surveyId: number, locale: Locale, token: string) {
-  const started = await api<StartParticipation>(
-    'POST', `/respondent/surveys/${surveyId}/participate`, token, { locale },
-  );
-  if (started.status === 'completed') return started;
-  // Start response saved answers bermaydi. GET yangi sessiyada ham ishlaydi.
-  return api<ReadParticipation>('GET', `/respondent/participations/${started.participation_id}`, token);
-}
-
-async function saveCurrentPage(id: number, step: Step, values: AnswersInput, token: string) {
-  // Faqat visible current-page savollari, ammo ularning barcha javoblari.
-  const answers: AnswersInput = {};
-  for (const q of step.page.questions) answers[String(q.id)] = values[String(q.id)] ?? null;
-  const result = await api<SavePageResult>(
-    'PUT', `/respondent/participations/${id}/pages/${step.page.id}`, token, { answers },
-  );
-  if (result.can_complete) return { kind: 'ready-to-complete' as const, step: result.current_step };
-  return { kind: 'page' as const, step: result.next_step };
-}
-
-async function goBack(id: number, token: string) {
-  const state = await api<ReadParticipation>('POST', `/respondent/participations/${id}/back`, token);
-  if (state.status === 'completed') return { kind: 'completed' as const };
-  return {
-    kind: 'page' as const, step: state.current_step,
-    values: restoreVisibleInputs(state.current_step, state.answers),
-  };
-}
-
-async function complete(id: number, token: string) {
-  return api<CompleteResult>('POST', `/respondent/participations/${id}/complete`, token);
-}
-
-async function downloadCsv(orgId: number, surveyId: number, token: string) {
-  const query = new URLSearchParams({ status: 'completed', participation_locale: 'ru', locale: 'uz' });
-  const response = await requestRaw(
-    'GET', `/business/organizations/${orgId}/surveys/${surveyId}/results/export?${query}`, token,
-  );
-  const disposition = response.headers.get('Content-Disposition') ?? '';
-  const filename = /filename="([^"]+)"/.exec(disposition)?.[1] ?? `survey_${surveyId}_results.csv`;
-  const objectUrl = URL.createObjectURL(await response.blob());
-  const link = document.createElement('a');
-  link.href = objectUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-}
-```
-
-Form submit paytida loading yoqing va tugmalarni bloklang. `saveCurrentPage` tugagach `kind=page` uchun yangi page render qiling. Oldindan saqlangan downstream javoblarni tiklash kerak bo‘lsa participation GET qiling; save next_step javob qiymatlarini o‘z ichiga olmaydi. `kind=ready-to-complete` uchun complete so‘rovini kuting yoki yakunlash tugmasini ko‘rsating.
-
-ApiFailure’da barcha `envelope.error.fields`ni formaga yozing. Network error alohida Error sifatida keladi. Non-idempotent create’ni network uzilganda avtomatik qaytarmang: list/detail orqali serverda yaratilganini tekshiring. Duplicate complete/publish xavfsizligi umumiy create idempotency kaliti mavjud degani emas.
+Non-idempotent create so‘rovini tarmoq uzilganda avtomatik takrorlamang: list/detail orqali resurs serverda yaratilganini tekshiring. Duplicate complete/publish xavfsizligi barcha create endpointlarida idempotency kaliti mavjudligini anglatmaydi.
 
 <a id="cases"></a>
 ## 14. Amaliy case’lar va qabul checklisti
@@ -1554,6 +1423,10 @@ ApiFailure’da barcha `envelope.error.fields`ni formaga yozing. Network error a
 | --- | --- |
 | Registerda takroriy email turli katta-kichik harf bilan | 422 email field xatosi; 500 emas. |
 | Password confirmation farq qiladi | 422, akkaunt yaratilmaydi. |
+| User register bo‘ldi | Faqat user/token; organization hali yaratilmaydi. |
+| Organization yaratishda INN yo‘q yoki number yuborildi | 422, `error.fields.inn`; INN string sifatida yuboriladi. |
+| INN boshqa tashkilotda band | 422, organization/a’zolik yaratilmaydi. |
+| Eski tashkilotda INN null | Owner/manager `name` va `inn` bilan PATCH qilib to‘ldiradi. |
 | Logoutdan keyin me | 401; eski token qayta ishlatilmaydi. |
 | Userning organizationi yo‘q | Onboarding; survey yaratish uchun org avval yaratiladi. |
 | Viewer builderga kirdi | O‘qish/preview mumkin, yozish/lifecycle tugmalari yo‘q. |

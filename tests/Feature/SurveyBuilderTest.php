@@ -55,7 +55,7 @@ class SurveyBuilderTest extends TestCase
 
         $this->user = User::factory()->create();
         $orgAction = new CreateOrganizationAction;
-        $this->organization = $orgAction->execute('Survey Org', $this->user);
+        $this->organization = $orgAction->execute('Survey Org', $this->user, '123456789');
     }
 
     public function test_can_create_survey_with_valid_locales_and_titles(): void
@@ -301,7 +301,7 @@ class SurveyBuilderTest extends TestCase
     {
         $otherUser = User::factory()->create();
         $orgAction = new CreateOrganizationAction;
-        $otherOrg = $orgAction->execute('Other Org', $otherUser);
+        $otherOrg = $orgAction->execute('Other Org', $otherUser, '234567890');
 
         $survey = Survey::create([
             'organization_id' => $otherOrg->id,

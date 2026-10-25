@@ -80,7 +80,7 @@ class LocalizationAndPreviewTest extends TestCase
 
         $this->user = User::factory()->create();
         $action = new CreateOrganizationAction;
-        $this->organization = $action->execute('Localization Org', $this->user);
+        $this->organization = $action->execute('Localization Org', $this->user, '123456789');
     }
 
     public function test_survey_with_only_uz_requires_only_uz(): void

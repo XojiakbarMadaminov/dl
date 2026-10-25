@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property string $name
+ * @property string|null $inn
  * @property int $created_by
  * @property OrganizationStatus $status
  * @property Carbon|null $created_at
@@ -26,6 +27,7 @@ class Organization extends Model
 
     protected $fillable = [
         'name',
+        'inn',
         'created_by',
         'status',
     ];

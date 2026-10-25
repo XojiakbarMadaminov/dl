@@ -8,9 +8,11 @@ use App\Modules\Identity\Actions\LoginUserAction;
 use App\Modules\Identity\Actions\RegisterUserAction;
 use App\Modules\Identity\Http\Requests\LoginRequest;
 use App\Modules\Identity\Http\Requests\RegisterRequest;
+use App\Modules\Identity\Http\Resources\UserOrganizationResource;
 use App\Modules\Identity\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Knuckles\Scribe\Attributes\ResponseField;
 
 /**
  * @group Authentication
@@ -22,7 +24,7 @@ class AuthController extends Controller
     /**
      * Register User
      *
-     * Create a new user account with email and password. Optionally supply `organization_name` to automatically provision a new business organization with the user as OWNER.
+     * Create only a user account with email and password. To create an organization, use the authenticated POST /api/v1/business/organizations endpoint with name and inn after registration.
      *
      * @unauthenticated
      *
@@ -106,7 +108,7 @@ class AuthController extends Controller
     /**
      * Current User Profile
      *
-     * Retrieve the currently authenticated user's profile and platform role.
+     * Retrieve the currently authenticated user's profile, platform role, and organizations with their membership roles. Organizations are ordered by most recent membership first; users without memberships receive an empty array.
      *
      * @authenticated
      *
@@ -119,7 +121,15 @@ class AuthController extends Controller
      *     "platform_role": "user",
      *     "status": "active",
      *     "created_at": "2026-10-17T12:00:00.000000Z"
-     *   }
+     *   },
+     *   "organizations": [
+     *     {
+     *       "id": 1,
+     *       "name": "Dialog Analytics Group",
+     *       "inn": "123456789",
+     *       "current_user_role": "owner"
+     *     }
+     *   ]
      * }
      * @response 401 {
      *   "error": {
@@ -129,13 +139,17 @@ class AuthController extends Controller
      *   }
      * }
      */
+    #[ResponseField('organizations.inn', type: 'string', description: 'Organization INN; null for legacy organizations until completed by an owner/manager.', nullable: true)]
     public function me(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();
 
+        $memberships = $user->memberships()->with('organization')->latest('joined_at')->latest('id')->get();
+
         return response()->json([
             'user' => new UserResource($user),
+            'organizations' => UserOrganizationResource::collection($memberships),
         ]);
     }
 

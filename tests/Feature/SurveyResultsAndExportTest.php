@@ -42,7 +42,7 @@ class SurveyResultsAndExportTest extends TestCase
 
         $this->businessUser = User::factory()->create();
         $orgAction = new CreateOrganizationAction;
-        $this->organization = $orgAction->execute('Results Org', $this->businessUser);
+        $this->organization = $orgAction->execute('Results Org', $this->businessUser, '123456789');
 
         $this->survey = Survey::create([
             'organization_id' => $this->organization->id,

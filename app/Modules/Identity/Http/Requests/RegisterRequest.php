@@ -31,7 +31,6 @@ class RegisterRequest extends FormRequest
             'password' => ['required', 'string', 'min:8'],
             'password_confirmation' => ['sometimes', 'required', 'string', 'same:password'],
             'locale' => ['nullable', 'string', Rule::in(PlatformLocale::values())],
-            'organization_name' => ['nullable', 'string', 'min:2', 'max:255'],
         ];
     }
 
@@ -53,13 +52,13 @@ class RegisterRequest extends FormRequest
                 'description' => 'Account password (minimum 8 characters).',
                 'example' => 'Secret123!',
             ],
+            'password_confirmation' => [
+                'description' => 'Optional password confirmation; must match the password when supplied.',
+                'example' => 'Secret123!',
+            ],
             'locale' => [
                 'description' => 'Preferred interface language (uz, ru, en). Default is uz.',
                 'example' => 'uz',
-            ],
-            'organization_name' => [
-                'description' => 'Optional organization name. When provided, automatically creates an organization with the registrant as OWNER.',
-                'example' => 'Dialog Analytics Group',
             ],
         ];
     }

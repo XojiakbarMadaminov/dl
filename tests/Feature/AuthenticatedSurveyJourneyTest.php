@@ -20,12 +20,11 @@ class AuthenticatedSurveyJourneyTest extends TestCase
         return $this->json($method, $url, $data, $token === null ? [] : ['Authorization' => "Bearer {$token}"]);
     }
 
-    private function registerAndLogin(string $email, ?string $organizationName = null): string
+    private function registerAndLogin(string $email): string
     {
         $registration = $this->api('POST', '/api/v1/auth/register', [
             'name' => 'API User', 'email' => $email, 'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!', 'locale' => 'en',
-            'organization_name' => $organizationName,
         ])->assertCreated()->assertJsonMissingPath('user.password');
         $token = $registration->json('token');
         $this->api('GET', '/api/v1/auth/me', token: $token)->assertOk()->assertJsonPath('user.email', $email);
@@ -39,9 +38,17 @@ class AuthenticatedSurveyJourneyTest extends TestCase
 
     public function test_real_tokens_cover_builder_logic_preview_moderation_and_respondent_paths(): void
     {
-        $businessToken = $this->registerAndLogin('owner@example.com', 'Journey Organization');
-        $organizationId = $this->api('GET', '/api/v1/business/organizations', token: $businessToken)
-            ->assertOk()->json('data.0.id');
+        $businessToken = $this->registerAndLogin('owner@example.com');
+        $this->api('GET', '/api/v1/auth/me', token: $businessToken)
+            ->assertOk()->assertJsonPath('organizations', []);
+        $organizationId = $this->api('POST', '/api/v1/business/organizations', [
+            'name' => 'Journey Organization', 'inn' => '123456789',
+        ], $businessToken)->assertCreated()->assertJsonPath('organization.current_user_role', 'owner')
+            ->json('organization.id');
+        $this->api('GET', '/api/v1/auth/me', token: $businessToken)
+            ->assertOk()->assertJsonPath('organizations.0.id', $organizationId)
+            ->assertJsonPath('organizations.0.inn', '123456789')
+            ->assertJsonPath('organizations.0.current_user_role', 'owner');
         $base = "/api/v1/business/organizations/{$organizationId}";
         $translations = fn (string $text) => ['uz' => "UZ {$text}", 'ru' => "RU {$text}", 'en' => "EN {$text}"];
         $survey = $this->api('POST', "{$base}/surveys", [

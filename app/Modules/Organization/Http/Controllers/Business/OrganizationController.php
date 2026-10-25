@@ -5,6 +5,7 @@ namespace App\Modules\Organization\Http\Controllers\Business;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Organization\Actions\CreateOrganizationAction;
+use App\Modules\Organization\Actions\UpdateOrganizationAction;
 use App\Modules\Organization\Http\Requests\CreateOrganizationRequest;
 use App\Modules\Organization\Http\Requests\UpdateOrganizationRequest;
 use App\Modules\Organization\Http\Resources\OrganizationResource;
@@ -12,6 +13,7 @@ use App\Modules\Organization\Models\Organization;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Knuckles\Scribe\Attributes\ResponseField;
 
 /**
  * @group Business
@@ -34,6 +36,7 @@ class OrganizationController extends Controller
      *     {
      *       "id": 1,
      *       "name": "Dialog Analytics Group",
+     *       "inn": "123456789",
      *       "status": "active",
      *       "created_by": 2,
      *       "current_user_role": "owner",
@@ -42,6 +45,7 @@ class OrganizationController extends Controller
      *   ]
      * }
      */
+    #[ResponseField('data.inn', type: 'string', description: 'Organization INN; null for legacy organizations until completed by an owner/manager.', nullable: true)]
     public function index(Request $request): AnonymousResourceCollection
     {
         /** @var User $user */
@@ -55,7 +59,7 @@ class OrganizationController extends Controller
     /**
      * Create Organization
      *
-     * Create a new organization. The authenticated user automatically becomes the OWNER.
+     * Create a new organization with a name and unique INN after user registration. The authenticated user automatically becomes the OWNER.
      *
      * @authenticated
      *
@@ -63,6 +67,7 @@ class OrganizationController extends Controller
      *   "organization": {
      *     "id": 1,
      *     "name": "Dialog Analytics Group",
+     *     "inn": "123456789",
      *     "status": "active",
      *     "created_by": 2,
      *     "current_user_role": "owner",
@@ -87,6 +92,7 @@ class OrganizationController extends Controller
         $organization = $action->execute(
             name: $request->validated('name'),
             creator: $user,
+            inn: $request->validated('inn'),
         );
 
         return response()->json([
@@ -107,6 +113,7 @@ class OrganizationController extends Controller
      *   "organization": {
      *     "id": 1,
      *     "name": "Dialog Analytics Group",
+     *     "inn": "123456789",
      *     "status": "active",
      *     "created_by": 2,
      *     "current_user_role": "owner",
@@ -121,6 +128,7 @@ class OrganizationController extends Controller
      *   }
      * }
      */
+    #[ResponseField('organization.inn', type: 'string', description: 'Organization INN; null for legacy organizations until completed by an owner/manager.', nullable: true)]
     public function show(Request $request, Organization $organization): JsonResponse
     {
         /** @var User $user */
@@ -146,6 +154,7 @@ class OrganizationController extends Controller
      *   "organization": {
      *     "id": 1,
      *     "name": "Dialog Analytics Worldwide",
+     *     "inn": "123456789",
      *     "status": "active",
      *     "created_by": 2,
      *     "current_user_role": "owner",
@@ -160,11 +169,10 @@ class OrganizationController extends Controller
      *   }
      * }
      */
-    public function update(UpdateOrganizationRequest $request, Organization $organization): JsonResponse
+    #[ResponseField('organization.inn', type: 'string', description: 'Organization INN; null for legacy organizations until completed by an owner/manager.', nullable: true)]
+    public function update(UpdateOrganizationRequest $request, Organization $organization, UpdateOrganizationAction $action): JsonResponse
     {
-        $organization->update([
-            'name' => $request->validated('name'),
-        ]);
+        $organization = $action->execute($organization, $request->validated());
 
         return response()->json([
             'organization' => new OrganizationResource($organization),

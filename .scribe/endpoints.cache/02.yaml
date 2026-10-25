@@ -42,6 +42,7 @@ endpoints:
               {
                 "id": 1,
                 "name": "Dialog Analytics Group",
+                "inn": "123456789",
                 "status": "active",
                 "created_by": 2,
                 "current_user_role": "owner",
@@ -51,7 +52,18 @@ endpoints:
           }
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      data.inn:
+        custom: []
+        name: data.inn
+        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     auth:
       - headers
       - Authorization
@@ -74,7 +86,7 @@ endpoints:
         Manage business organizations, memberships, and role assignments.
       subgroupDescription: ''
       title: 'Create Organization'
-      description: 'Create a new organization. The authenticated user automatically becomes the OWNER.'
+      description: 'Create a new organization with a name and unique INN after user registration. The authenticated user automatically becomes the OWNER.'
       authenticated: true
       deprecated: false
     headers:
@@ -97,8 +109,20 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      inn:
+        custom: []
+        name: inn
+        description: 'Unique organization INN, sent as a string (maximum 255 characters). Must not be greater than 255 characters.'
+        required: true
+        example: '123456789'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
       name: 'Dialog Analytics Group'
+      inn: '123456789'
     fileParameters: []
     responses:
       -
@@ -109,6 +133,7 @@ endpoints:
             "organization": {
               "id": 1,
               "name": "Dialog Analytics Group",
+              "inn": "123456789",
               "status": "active",
               "created_by": 2,
               "current_user_role": "owner",
@@ -202,6 +227,7 @@ endpoints:
             "organization": {
               "id": 1,
               "name": "Dialog Analytics Group",
+              "inn": "123456789",
               "status": "active",
               "created_by": 2,
               "current_user_role": "owner",
@@ -223,7 +249,18 @@ endpoints:
           }
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      organization.inn:
+        custom: []
+        name: organization.inn
+        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     auth:
       - headers
       - Authorization
@@ -293,8 +330,20 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      inn:
+        custom: []
+        name: inn
+        description: 'Optional replacement INN. Must be a non-empty string unique to this organization (maximum 255 characters). Must not be greater than 255 characters.'
+        required: false
+        example: '123456789'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
       name: 'Dialog Analytics Worldwide'
+      inn: '123456789'
     fileParameters: []
     responses:
       -
@@ -305,6 +354,7 @@ endpoints:
             "organization": {
               "id": 1,
               "name": "Dialog Analytics Worldwide",
+              "inn": "123456789",
               "status": "active",
               "created_by": 2,
               "current_user_role": "owner",
@@ -326,7 +376,18 @@ endpoints:
           }
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      organization.inn:
+        custom: []
+        name: organization.inn
+        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     auth:
       - headers
       - Authorization

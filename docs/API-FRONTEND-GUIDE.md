@@ -72,7 +72,7 @@ Run `php artisan migrate:fresh --seed` to initialize the database with predictab
 | **Respondent** | `respondent@dialog.uz` | `Secret123!` | Active survey respondent with completed participation |
 
 ### Pre-Seeded Survey Assets:
-- **Organization**: `Dialog Analytics Group` (ID: `1`)
+- **Organization**: `Dialog Analytics Group` (ID: `1`, INN: `"123456789"` for a fresh seed)
 - **Active Survey**: "Mijozlar qoniqishi so‘rovi" (ID: `1`, locales: `['uz', 'ru', 'en']`, 2 pages, multiple questions, active with 1 completed response)
 - **Draft Survey**: "Yangi mahsulot bo‘yicha fikrlar (Qoralama)" (ID: `2`, status: `draft`)
 
@@ -88,3 +88,19 @@ Run `php artisan migrate:fresh --seed` to initialize the database with predictab
    Draft surveys can be edited. As soon as a survey is submitted and published, structural modifications (deleting/reordering/adding questions) are permanently locked.
 4. **Localization is Object-Based**:
    Multilingual survey fields must be sent as dictionary objects keyed by ISO language code: `{"uz": "...", "ru": "...", "en": "..."}`.
+
+## 6. User registration and organization onboarding
+
+The registration form contains `name`, `email`, `password`, optional `password_confirmation`, and optional `locale`. Registration creates only the user and returns a Bearer token. Organization fields must be collected in a separate onboarding form after registration; respondents can skip this step.
+
+Use `POST /api/v1/business/organizations` with the returned token and this JSON body:
+
+```json
+{"name":"Dialog Research","inn":"123456789"}
+```
+
+`name` and `inn` are required strings, maximum 255 characters. INN is trimmed and unique across the entire platform; keep it as a string, including leading zeros. Display `error.fields.inn` for HTTP 422 `VALIDATION_ERROR` when it is missing, invalid, or already in use. A successful HTTP 201 response contains `organization` and sets `current_user_role` to `owner`.
+
+`GET /api/v1/auth/me` now returns `user` plus an `organizations` array of `{id, name, inn, current_user_role}`. Use this response to restore the organization switcher and permissions on startup. An empty array means the user has no memberships. `GET /api/v1/business/organizations` is still available to refresh the full organization resources separately. After creation, update the organization state from the response or reload `/auth/me`.
+
+Existing organizations may have `inn: null` after the forward migration. Owners/managers can supply it through `PATCH /api/v1/business/organizations/{organization}` with `name` and `inn`. The current INN can be retained; another organization's INN or a null/empty replacement is rejected. See [the frontend handbook](FRONTEND-API-HANDBOOK.md#organizations) for complete examples.

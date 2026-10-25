@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
         $org = Organization::firstOrCreate(
             ['name' => 'Dialog Analytics Group'],
             [
+                'inn' => '123456789',
                 'created_by' => $owner->id,
                 'status' => OrganizationStatus::ACTIVE,
             ]

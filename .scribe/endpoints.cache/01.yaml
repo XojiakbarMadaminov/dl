@@ -19,7 +19,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Register User'
-      description: 'Create a new user account with email and password. Optionally supply `organization_name` to automatically provision a new business organization with the user as OWNER.'
+      description: 'Create only a user account with email and password. To create an organization, use the authenticated POST /api/v1/business/organizations endpoint with name and inn after registration.'
       authenticated: false
       deprecated: false
     headers:
@@ -66,9 +66,9 @@ endpoints:
       password_confirmation:
         custom: []
         name: password_confirmation
-        description: 'The value and <code>password</code> must match.'
+        description: 'Optional password confirmation; must match the password when supplied. The value and <code>password</code> must match.'
         required: false
-        example: architecto
+        example: Secret123!
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -88,24 +88,12 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         deprecated: false
-      organization_name:
-        custom: []
-        name: organization_name
-        description: 'Optional organization name. When provided, automatically creates an organization with the registrant as OWNER. Must be at least 2 characters. Must not be greater than 255 characters.'
-        required: false
-        example: 'Dialog Analytics Group'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
     cleanBodyParameters:
       name: 'Dilshod Karimov'
       email: owner@dialog.uz
       password: Secret123!
-      password_confirmation: architecto
+      password_confirmation: Secret123!
       locale: uz
-      organization_name: 'Dialog Analytics Group'
     fileParameters: []
     responses:
       -
@@ -273,7 +261,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Current User Profile'
-      description: "Retrieve the currently authenticated user's profile and platform role."
+      description: "Retrieve the currently authenticated user's profile, platform role, and organizations with their membership roles. Organizations are ordered by most recent membership first; users without memberships receive an empty array."
       authenticated: true
       deprecated: false
     headers:
@@ -301,7 +289,15 @@ endpoints:
               "platform_role": "user",
               "status": "active",
               "created_at": "2026-10-17T12:00:00.000000Z"
-            }
+            },
+            "organizations": [
+              {
+                "id": 1,
+                "name": "Dialog Analytics Group",
+                "inn": "123456789",
+                "current_user_role": "owner"
+              }
+            ]
           }
         headers: []
         description: ''
@@ -318,7 +314,18 @@ endpoints:
           }
         headers: []
         description: ''
-    responseFields: []
+    responseFields:
+      organizations.inn:
+        custom: []
+        name: organizations.inn
+        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     auth:
       - headers
       - Authorization

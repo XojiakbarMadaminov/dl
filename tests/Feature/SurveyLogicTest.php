@@ -37,7 +37,7 @@ class SurveyLogicTest extends TestCase
         parent::setUp();
         $this->owner = User::factory()->create();
         $this->respondent = User::factory()->create();
-        $organization = (new CreateOrganizationAction)->execute('Logic Org', $this->owner);
+        $organization = (new CreateOrganizationAction)->execute('Logic Org', $this->owner, '123456789');
         $this->survey = Survey::create([
             'organization_id' => $organization->id, 'created_by' => $this->owner->id,
             'status' => SurveyStatus::DRAFT, 'default_locale' => 'uz', 'locales' => ['uz'],
@@ -117,7 +117,7 @@ class SurveyLogicTest extends TestCase
     {
         $this->actingAs($this->respondent)->getJson("{$this->builder}/logic")->assertForbidden();
         $this->putJson("{$this->builder}/logic", ['rules' => []])->assertForbidden();
-        $otherOrganization = (new CreateOrganizationAction)->execute('Other Org', $this->owner);
+        $otherOrganization = (new CreateOrganizationAction)->execute('Other Org', $this->owner, '234567890');
         $this->actingAs($this->owner)->getJson("/api/v1/business/organizations/{$otherOrganization->id}/surveys/{$this->survey->id}/logic")->assertNotFound();
         $this->survey->update(['status' => SurveyStatus::PENDING_REVIEW]);
         $this->putJson("{$this->builder}/logic", ['rules' => []])->assertUnprocessable()->assertJsonPath('error.code', 'SURVEY_NOT_EDITABLE');

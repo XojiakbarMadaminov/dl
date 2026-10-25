@@ -50,7 +50,7 @@ class RespondentParticipationTest extends TestCase
         $this->respondentB = User::factory()->create();
 
         $orgAction = new CreateOrganizationAction;
-        $org = $orgAction->execute('Participation Org', $this->businessUser);
+        $org = $orgAction->execute('Participation Org', $this->businessUser, '123456789');
 
         $this->activeSurvey = Survey::create([
             'organization_id' => $org->id,

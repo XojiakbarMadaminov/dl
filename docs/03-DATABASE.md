@@ -40,11 +40,14 @@ Notes:
 ```text
 id                  BIGINT PK
 name                varchar
+inn                 varchar unique nullable for legacy rows
 created_by          BIGINT FK -> users.id
 status              varchar default 'active'
 created_at
 updated_at
 ```
+
+New organizations require a non-empty string INN (maximum 255 characters), unique across the platform. The forward migration leaves existing organizations' INN as null until their owner/manager supplies the real value through the update endpoint. Do not generate fake INNs for existing data. Store INNs as strings to preserve leading zeros; this contract does not impose a country-specific length.
 
 ### organization_members
 

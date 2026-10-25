@@ -35,7 +35,7 @@ class ModerationAndPublishingTest extends TestCase
         $this->admin = User::factory()->admin()->create();
 
         $orgAction = new CreateOrganizationAction;
-        $this->organization = $orgAction->execute('Moderation Org', $this->user);
+        $this->organization = $orgAction->execute('Moderation Org', $this->user, '123456789');
     }
 
     private function createCompleteSurvey(): Survey

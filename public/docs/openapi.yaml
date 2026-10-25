@@ -36,7 +36,7 @@ paths:
     post:
       summary: 'Register User'
       operationId: registerUser
-      description: 'Create a new user account with email and password. Optionally supply `organization_name` to automatically provision a new business organization with the user as OWNER.'
+      description: 'Create only a user account with email and password. To create an organization, use the authenticated POST /api/v1/business/organizations endpoint with name and inn after registration.'
       parameters: []
       responses:
         201:
@@ -138,8 +138,8 @@ paths:
                   example: Secret123!
                 password_confirmation:
                   type: string
-                  description: 'The value and <code>password</code> must match.'
-                  example: architecto
+                  description: 'Optional password confirmation; must match the password when supplied. The value and <code>password</code> must match.'
+                  example: Secret123!
                 locale:
                   type: string
                   description: 'Preferred interface language (uz, ru, en). Default is uz.'
@@ -148,11 +148,6 @@ paths:
                     - uz
                     - ru
                     - en
-                  nullable: true
-                organization_name:
-                  type: string
-                  description: 'Optional organization name. When provided, automatically creates an organization with the registrant as OWNER. Must be at least 2 characters. Must not be greater than 255 characters.'
-                  example: 'Dialog Analytics Group'
                   nullable: true
               required:
                 - name
@@ -288,7 +283,7 @@ paths:
     get:
       summary: 'Current User Profile'
       operationId: currentUserProfile
-      description: "Retrieve the currently authenticated user's profile and platform role."
+      description: "Retrieve the currently authenticated user's profile, platform role, and organizations with their membership roles. Organizations are ordered by most recent membership first; users without memberships receive an empty array."
       parameters: []
       responses:
         200:
@@ -306,6 +301,12 @@ paths:
                     platform_role: user
                     status: active
                     created_at: '2026-10-17T12:00:00.000000Z'
+                  organizations:
+                    -
+                      id: 1
+                      name: 'Dialog Analytics Group'
+                      inn: '123456789'
+                      current_user_role: owner
                 properties:
                   user:
                     type: object
@@ -331,6 +332,33 @@ paths:
                       created_at:
                         type: string
                         example: '2026-10-17T12:00:00.000000Z'
+                  organizations:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        name: 'Dialog Analytics Group'
+                        inn: '123456789'
+                        current_user_role: owner
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: 'Dialog Analytics Group'
+                        inn:
+                          type: string
+                          example: '123456789'
+                          description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+                          nullable: true
+                        current_user_role:
+                          type: string
+                          example: owner
+                      required:
+                        - inn
         401:
           description: ''
           content:
@@ -396,6 +424,7 @@ paths:
                     -
                       id: 1
                       name: 'Dialog Analytics Group'
+                      inn: '123456789'
                       status: active
                       created_by: 2
                       current_user_role: owner
@@ -407,6 +436,7 @@ paths:
                       -
                         id: 1
                         name: 'Dialog Analytics Group'
+                        inn: '123456789'
                         status: active
                         created_by: 2
                         current_user_role: owner
@@ -420,6 +450,11 @@ paths:
                         name:
                           type: string
                           example: 'Dialog Analytics Group'
+                        inn:
+                          type: string
+                          example: '123456789'
+                          description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+                          nullable: true
                         status:
                           type: string
                           example: active
@@ -432,12 +467,14 @@ paths:
                         created_at:
                           type: string
                           example: '2026-10-17T12:00:00.000000Z'
+                      required:
+                        - inn
       tags:
         - Business
     post:
       summary: 'Create Organization'
       operationId: createOrganization
-      description: 'Create a new organization. The authenticated user automatically becomes the OWNER.'
+      description: 'Create a new organization with a name and unique INN after user registration. The authenticated user automatically becomes the OWNER.'
       parameters: []
       responses:
         201:
@@ -450,6 +487,7 @@ paths:
                   organization:
                     id: 1
                     name: 'Dialog Analytics Group'
+                    inn: '123456789'
                     status: active
                     created_by: 2
                     current_user_role: owner
@@ -464,6 +502,9 @@ paths:
                       name:
                         type: string
                         example: 'Dialog Analytics Group'
+                      inn:
+                        type: string
+                        example: '123456789'
                       status:
                         type: string
                         example: active
@@ -521,8 +562,13 @@ paths:
                   type: string
                   description: 'The legal or display name of the business organization. Must not be greater than 255 characters.'
                   example: 'Dialog Analytics Group'
+                inn:
+                  type: string
+                  description: 'Unique organization INN, sent as a string (maximum 255 characters). Must not be greater than 255 characters.'
+                  example: '123456789'
               required:
                 - name
+                - inn
   '/api/v1/business/organizations/{organization_id}':
     get:
       summary: 'Get Organization'
@@ -540,6 +586,7 @@ paths:
                   organization:
                     id: 1
                     name: 'Dialog Analytics Group'
+                    inn: '123456789'
                     status: active
                     created_by: 2
                     current_user_role: owner
@@ -554,6 +601,11 @@ paths:
                       name:
                         type: string
                         example: 'Dialog Analytics Group'
+                      inn:
+                        type: string
+                        example: '123456789'
+                        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+                        nullable: true
                       status:
                         type: string
                         example: active
@@ -566,6 +618,8 @@ paths:
                       created_at:
                         type: string
                         example: '2026-10-17T12:00:00.000000Z'
+                    required:
+                      - inn
         403:
           description: ''
           content:
@@ -608,6 +662,7 @@ paths:
                   organization:
                     id: 1
                     name: 'Dialog Analytics Worldwide'
+                    inn: '123456789'
                     status: active
                     created_by: 2
                     current_user_role: owner
@@ -622,6 +677,11 @@ paths:
                       name:
                         type: string
                         example: 'Dialog Analytics Worldwide'
+                      inn:
+                        type: string
+                        example: '123456789'
+                        description: 'Organization INN; null for legacy organizations until completed by an owner/manager.'
+                        nullable: true
                       status:
                         type: string
                         example: active
@@ -634,6 +694,8 @@ paths:
                       created_at:
                         type: string
                         example: '2026-10-17T12:00:00.000000Z'
+                    required:
+                      - inn
         403:
           description: ''
           content:
@@ -671,6 +733,10 @@ paths:
                   type: string
                   description: 'Updated display name for the organization. Must not be greater than 255 characters.'
                   example: 'Dialog Analytics Worldwide'
+                inn:
+                  type: string
+                  description: 'Optional replacement INN. Must be a non-empty string unique to this organization (maximum 255 characters). Must not be greater than 255 characters.'
+                  example: '123456789'
               required:
                 - name
     parameters:

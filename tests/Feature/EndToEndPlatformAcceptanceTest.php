@@ -31,6 +31,7 @@ class EndToEndPlatformAcceptanceTest extends TestCase
 
         $createOrgResponse = $this->postJson('/api/v1/business/organizations', [
             'name' => 'Tashkent Market Research LLC',
+            'inn' => '123456789',
         ]);
         $createOrgResponse->assertStatus(201);
         $orgId = $createOrgResponse->json('organization.id');

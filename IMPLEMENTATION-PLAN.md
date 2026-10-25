@@ -19,12 +19,14 @@ Agents should mark `[x]` only after the implementation and relevant tests are co
 
 - [x] Implement user registration with email/password.
 - [x] Implement login/logout/me.
+- [x] Include the current user's organizations and membership roles in `/auth/me`, with an empty list for users without memberships and organization-isolation tests.
 - [ ] Implement password reset if included by current product task. No reset endpoints/actions exist yet.
 - [x] Add platform locale (`uz`, `ru`, `en`).
 - [x] Add platform role (`user`, `admin`).
 - [x] Create organizations.
 - [x] Create organization membership model.
 - [x] Business onboarding creates organization + owner membership atomically.
+- [x] Separate user registration from organization onboarding; require a unique string INN for new organizations, preserve legacy records, and update frontend contracts and regression tests.
 - [x] Implement organization membership authorization/policies.
 - [x] Add tests for organization isolation and admin privilege.
 

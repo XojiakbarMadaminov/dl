@@ -331,7 +331,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: October 20, 2026</li>
+        <li>Last updated: October 25, 2026</li>
     </ul>
 </div>
 
@@ -366,7 +366,7 @@ Platform moderation queue for reviewing submitted business surveys, approving or
 <p>
 </p>
 
-<p>Create a new user account with email and password. Optionally supply <code>organization_name</code> to automatically provision a new business organization with the user as OWNER.</p>
+<p>Create only a user account with email and password. To create an organization, use the authenticated POST /api/v1/business/organizations endpoint with name and inn after registration.</p>
 
 <span id="example-requests-POSTapi-v1-auth-register">
 <blockquote>Example request:</blockquote>
@@ -381,9 +381,8 @@ Platform moderation queue for reviewing submitted business surveys, approving or
     \"name\": \"Dilshod Karimov\",
     \"email\": \"owner@dialog.uz\",
     \"password\": \"Secret123!\",
-    \"password_confirmation\": \"architecto\",
-    \"locale\": \"uz\",
-    \"organization_name\": \"Dialog Analytics Group\"
+    \"password_confirmation\": \"Secret123!\",
+    \"locale\": \"uz\"
 }"
 </code></pre></div>
 
@@ -402,9 +401,8 @@ let body = {
     "name": "Dilshod Karimov",
     "email": "owner@dialog.uz",
     "password": "Secret123!",
-    "password_confirmation": "architecto",
-    "locale": "uz",
-    "organization_name": "Dialog Analytics Group"
+    "password_confirmation": "Secret123!",
+    "locale": "uz"
 };
 
 fetch(url, {
@@ -567,10 +565,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password_confirmation"                data-endpoint="POSTapi-v1-auth-register"
-               value="architecto"
+               value="Secret123!"
                data-component="body">
     <br>
-<p>The value and <code>password</code> must match. Example: <code>architecto</code></p>
+<p>Optional password confirmation; must match the password when supplied. The value and <code>password</code> must match. Example: <code>Secret123!</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>locale</code></b>&nbsp;&nbsp;
@@ -585,18 +583,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Preferred interface language (uz, ru, en). Default is uz. Example: <code>uz</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>uz</code></li> <li><code>ru</code></li> <li><code>en</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>organization_name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="organization_name"                data-endpoint="POSTapi-v1-auth-register"
-               value="Dialog Analytics Group"
-               data-component="body">
-    <br>
-<p>Optional organization name. When provided, automatically creates an organization with the registrant as OWNER. Must be at least 2 characters. Must not be greater than 255 characters. Example: <code>Dialog Analytics Group</code></p>
         </div>
         </form>
 
@@ -810,7 +796,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-<p>Retrieve the currently authenticated user's profile and platform role.</p>
+<p>Retrieve the currently authenticated user's profile, platform role, and organizations with their membership roles. Organizations are ordered by most recent membership first; users without memberships receive an empty array.</p>
 
 <span id="example-requests-GETapi-v1-auth-me">
 <blockquote>Example request:</blockquote>
@@ -858,7 +844,15 @@ fetch(url, {
         &quot;platform_role&quot;: &quot;user&quot;,
         &quot;status&quot;: &quot;active&quot;,
         &quot;created_at&quot;: &quot;2026-10-17T12:00:00.000000Z&quot;
-    }
+    },
+    &quot;organizations&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Dialog Analytics Group&quot;,
+            &quot;inn&quot;: &quot;123456789&quot;,
+            &quot;current_user_role&quot;: &quot;owner&quot;
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -960,7 +954,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="authentication-POSTapi-v1-auth-logout">Logout</h2>
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>organizations</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Organization INN; null for legacy organizations until completed by an owner/manager.</p>
+                    </div>
+                                    </details>
+        </div>
+                        <h2 id="authentication-POSTapi-v1-auth-logout">Logout</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1152,6 +1168,7 @@ fetch(url, {
         {
             &quot;id&quot;: 1,
             &quot;name&quot;: &quot;Dialog Analytics Group&quot;,
+            &quot;inn&quot;: &quot;123456789&quot;,
             &quot;status&quot;: &quot;active&quot;,
             &quot;created_by&quot;: 2,
             &quot;current_user_role&quot;: &quot;owner&quot;,
@@ -1246,13 +1263,35 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="business-POSTapi-v1-business-organizations">Create Organization</h2>
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>data</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Organization INN; null for legacy organizations until completed by an owner/manager.</p>
+                    </div>
+                                    </details>
+        </div>
+                        <h2 id="business-POSTapi-v1-business-organizations">Create Organization</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-<p>Create a new organization. The authenticated user automatically becomes the OWNER.</p>
+<p>Create a new organization with a name and unique INN after user registration. The authenticated user automatically becomes the OWNER.</p>
 
 <span id="example-requests-POSTapi-v1-business-organizations">
 <blockquote>Example request:</blockquote>
@@ -1265,7 +1304,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"Dialog Analytics Group\"
+    \"name\": \"Dialog Analytics Group\",
+    \"inn\": \"123456789\"
 }"
 </code></pre></div>
 
@@ -1282,7 +1322,8 @@ const headers = {
 };
 
 let body = {
-    "name": "Dialog Analytics Group"
+    "name": "Dialog Analytics Group",
+    "inn": "123456789"
 };
 
 fetch(url, {
@@ -1303,6 +1344,7 @@ fetch(url, {
     &quot;organization&quot;: {
         &quot;id&quot;: 1,
         &quot;name&quot;: &quot;Dialog Analytics Group&quot;,
+        &quot;inn&quot;: &quot;123456789&quot;,
         &quot;status&quot;: &quot;active&quot;,
         &quot;created_by&quot;: 2,
         &quot;current_user_role&quot;: &quot;owner&quot;,
@@ -1424,6 +1466,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>The legal or display name of the business organization. Must not be greater than 255 characters. Example: <code>Dialog Analytics Group</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="inn"                data-endpoint="POSTapi-v1-business-organizations"
+               value="123456789"
+               data-component="body">
+    <br>
+<p>Unique organization INN, sent as a string (maximum 255 characters). Must not be greater than 255 characters. Example: <code>123456789</code></p>
+        </div>
         </form>
 
                     <h2 id="business-GETapi-v1-business-organizations--organization_id-">Get Organization</h2>
@@ -1475,6 +1529,7 @@ fetch(url, {
     &quot;organization&quot;: {
         &quot;id&quot;: 1,
         &quot;name&quot;: &quot;Dialog Analytics Group&quot;,
+        &quot;inn&quot;: &quot;123456789&quot;,
         &quot;status&quot;: &quot;active&quot;,
         &quot;created_by&quot;: 2,
         &quot;current_user_role&quot;: &quot;owner&quot;,
@@ -1606,7 +1661,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="business-PATCHapi-v1-business-organizations--organization_id-">Update Organization</h2>
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Organization INN; null for legacy organizations until completed by an owner/manager.</p>
+                    </div>
+                                    </details>
+        </div>
+                        <h2 id="business-PATCHapi-v1-business-organizations--organization_id-">Update Organization</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1625,7 +1702,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"Dialog Analytics Worldwide\"
+    \"name\": \"Dialog Analytics Worldwide\",
+    \"inn\": \"123456789\"
 }"
 </code></pre></div>
 
@@ -1642,7 +1720,8 @@ const headers = {
 };
 
 let body = {
-    "name": "Dialog Analytics Worldwide"
+    "name": "Dialog Analytics Worldwide",
+    "inn": "123456789"
 };
 
 fetch(url, {
@@ -1663,6 +1742,7 @@ fetch(url, {
     &quot;organization&quot;: {
         &quot;id&quot;: 1,
         &quot;name&quot;: &quot;Dialog Analytics Worldwide&quot;,
+        &quot;inn&quot;: &quot;123456789&quot;,
         &quot;status&quot;: &quot;active&quot;,
         &quot;created_by&quot;: 2,
         &quot;current_user_role&quot;: &quot;owner&quot;,
@@ -1805,9 +1885,43 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Updated display name for the organization. Must not be greater than 255 characters. Example: <code>Dialog Analytics Worldwide</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="inn"                data-endpoint="PATCHapi-v1-business-organizations--organization_id-"
+               value="123456789"
+               data-component="body">
+    <br>
+<p>Optional replacement INN. Must be a non-empty string unique to this organization (maximum 255 characters). Must not be greater than 255 characters. Example: <code>123456789</code></p>
+        </div>
         </form>
 
-                                <h2 id="business-surveys-manage-organization-surveys-metadata-localized-titles-and-lifecycles">Surveys
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>organization</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>inn</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Organization INN; null for legacy organizations until completed by an owner/manager.</p>
+                    </div>
+                                    </details>
+        </div>
+                                    <h2 id="business-surveys-manage-organization-surveys-metadata-localized-titles-and-lifecycles">Surveys
 
 Manage organization surveys, metadata, localized titles, and lifecycles.</h2>
                                                     <h2 id="business-GETapi-v1-business-organizations--organization_id--surveys">List Surveys</h2>

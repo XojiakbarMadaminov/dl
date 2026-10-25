@@ -45,10 +45,12 @@ The exact permission matrix should be centralized in policies/authorization rule
 Current decision:
 
 ```text
-Register business user
-  -> create organization
+Register user (POST /api/v1/auth/register, user only)
+  -> authenticated business onboarding (POST /api/v1/business/organizations, name + unique inn)
   -> creator becomes OWNER
 ```
+
+Registration does not accept organization details as part of its documented payload and never creates an organization. The organization and owner membership are created atomically by the separate business endpoint. New organizations require an INN string unique across the platform; legacy rows may retain null until an owner/manager fills it in. `/auth/me` returns only the caller's organizations with their INNs and membership roles, or an empty array.
 
 Survey ownership belongs to the organization, not directly to the creator.
 

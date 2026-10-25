@@ -42,9 +42,9 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"Dilshod Karimov\",\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\",\"password_confirmation\":\"architecto\",\"locale\":\"uz\",\"organization_name\":\"Dialog Analytics Group\"}"
+                            "raw": "{\"name\":\"Dilshod Karimov\",\"email\":\"owner@dialog.uz\",\"password\":\"Secret123!\",\"password_confirmation\":\"Secret123!\",\"locale\":\"uz\"}"
                         },
-                        "description": "Create a new user account with email and password. Optionally supply `organization_name` to automatically provision a new business organization with the user as OWNER.",
+                        "description": "Create only a user account with email and password. To create an organization, use the authenticated POST \/api\/v1\/business\/organizations endpoint with name and inn after registration.",
                         "auth": {
                             "type": "noauth"
                         }
@@ -135,13 +135,13 @@
                             }
                         ],
                         "body": null,
-                        "description": "Retrieve the currently authenticated user's profile and platform role."
+                        "description": "Retrieve the currently authenticated user's profile, platform role, and organizations with their membership roles. Organizations are ordered by most recent membership first; users without memberships receive an empty array."
                     },
                     "response": [
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n  \"user\": {\n    \"id\": 2,\n    \"name\": \"Dilshod Karimov\",\n    \"email\": \"owner@dialog.uz\",\n    \"locale\": \"uz\",\n    \"platform_role\": \"user\",\n    \"status\": \"active\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
+                            "body": "{\n  \"user\": {\n    \"id\": 2,\n    \"name\": \"Dilshod Karimov\",\n    \"email\": \"owner@dialog.uz\",\n    \"locale\": \"uz\",\n    \"platform_role\": \"user\",\n    \"status\": \"active\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  },\n  \"organizations\": [\n    {\n      \"id\": 1,\n      \"name\": \"Dialog Analytics Group\",\n      \"inn\": \"123456789\",\n      \"current_user_role\": \"owner\"\n    }\n  ]\n}",
                             "name": ""
                         },
                         {
@@ -221,7 +221,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Dialog Analytics Group\",\n      \"status\": \"active\",\n      \"created_by\": 2,\n      \"current_user_role\": \"owner\",\n      \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n    }\n  ]\n}",
+                                    "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Dialog Analytics Group\",\n      \"inn\": \"123456789\",\n      \"status\": \"active\",\n      \"created_by\": 2,\n      \"current_user_role\": \"owner\",\n      \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n    }\n  ]\n}",
                                     "name": ""
                                 }
                             ]
@@ -248,15 +248,15 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"name\":\"Dialog Analytics Group\"}"
+                                    "raw": "{\"name\":\"Dialog Analytics Group\",\"inn\":\"123456789\"}"
                                 },
-                                "description": "Create a new organization. The authenticated user automatically becomes the OWNER."
+                                "description": "Create a new organization with a name and unique INN after user registration. The authenticated user automatically becomes the OWNER."
                             },
                             "response": [
                                 {
                                     "header": [],
                                     "code": 201,
-                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Group\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
+                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Group\",\n    \"inn\": \"123456789\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
                                     "name": ""
                                 },
                                 {
@@ -308,7 +308,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Group\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
+                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Group\",\n    \"inn\": \"123456789\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
                                     "name": ""
                                 },
                                 {
@@ -355,7 +355,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"name\":\"Dialog Analytics Worldwide\"}"
+                                    "raw": "{\"name\":\"Dialog Analytics Worldwide\",\"inn\":\"123456789\"}"
                                 },
                                 "description": "Update organization details. Requires OWNER or MANAGER role in the organization."
                             },
@@ -363,7 +363,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Worldwide\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
+                                    "body": "{\n  \"organization\": {\n    \"id\": 1,\n    \"name\": \"Dialog Analytics Worldwide\",\n    \"inn\": \"123456789\",\n    \"status\": \"active\",\n    \"created_by\": 2,\n    \"current_user_role\": \"owner\",\n    \"created_at\": \"2026-10-17T12:00:00.000000Z\"\n  }\n}",
                                     "name": ""
                                 },
                                 {

@@ -34,7 +34,7 @@ A single account can be both a respondent and an organization member. `business`
 The first complete product flow must support:
 
 1. Register/login using email and password.
-2. Business onboarding creates an organization; the creator becomes owner.
+2. After registration, separate authenticated business onboarding creates an organization with a name and unique INN; the creator becomes owner. Registration itself creates only the user.
 3. Business creates a draft survey.
 4. Business chooses survey languages (`uz`, `ru`, `en`) and a default survey language.
 5. Business fills required survey titles for every selected language.

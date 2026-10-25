@@ -18,6 +18,7 @@ class CreateOrganizationRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'inn' => ['required', 'string', 'max:255', 'unique:organizations,inn'],
         ];
     }
 
@@ -30,6 +31,10 @@ class CreateOrganizationRequest extends FormRequest
             'name' => [
                 'description' => 'The legal or display name of the business organization.',
                 'example' => 'Dialog Analytics Group',
+            ],
+            'inn' => [
+                'description' => 'Unique organization INN, sent as a string (maximum 255 characters).',
+                'example' => '123456789',
             ],
         ];
     }
